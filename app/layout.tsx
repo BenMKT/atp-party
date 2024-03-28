@@ -1,6 +1,7 @@
-import type { Metadata } from "next";
-import { inter } from '@/app/ui/fonts';// import primary font from file
-import "@/app/ui/global.css";
+import type { Metadata } from 'next';
+import { inter } from '@/app/ui/fonts'; // import primary font from file
+import '@/app/ui/global.css';
+import NavBar from './ui/navbar';
 
 // export const metadata: Metadata = {
 //   title: "Create Next App",
@@ -10,7 +11,10 @@ import "@/app/ui/global.css";
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
-      <body className={`${inter.className} antialiased`}>{children}</body>
+      <body className={`${inter.className} antialiased`}>
+        <NavBar />
+        <main>{children}</main>
+      </body>
     </html>
   );
 };
