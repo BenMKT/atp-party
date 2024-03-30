@@ -1,43 +1,15 @@
-'use client';
-
-import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import Menu from './menu';
+import React from 'react';
 
 const NavBar = () => {
-  const currentPath = usePathname();
-
-  const links = [
-    { label: 'Home', href: '/' },
-    { label: 'Dashboard', href: '/dashboard' },
-    { label: 'News', href: '/news' },
-    { label: 'Vote', href: '/vote' },    
-    { label: 'About', href: '/about' },
-    { label: 'Contact', href: '/contact' },
-  ];
-
   return (
-    <nav className="mb-7 flex h-16 items-center justify-between space-x-6 border-b px-5">
+    <nav className="mb-7 flex h-16 items-center justify-between border-b px-5">
       <Link href="/">
         <Image src="/atplogo.png" alt="ATP party logo" width={50} height={50} />
       </Link>
-      <ul className="flex space-x-6">
-        {links.map((link) => (
-          <Link
-            key={link.href}
-            className={clsx(
-              'text-zinc-500 transition-colors hover:text-zinc-900',
-              {
-                'font-bold text-black': currentPath === link.href,
-              },
-            )}
-            href={link.href}
-          >
-            {link.label}
-          </Link>
-        ))}
-      </ul>
+      <Menu />
     </nav>
   );
 };
