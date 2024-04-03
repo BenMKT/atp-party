@@ -10,20 +10,29 @@ datasource db {
 
 // define your table models and push them to the database
 model Customers {
-  id        String @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  id        String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name      String @db.VarChar(255)
   email     String @db.VarChar(255)
   image_url String @db.VarChar(255)
 }
 
 model Invoices {
-  id          String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  customer_id String?  @db.Uuid
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  customer_id String   @db.Uuid
   amount      Int
   status      String   @db.VarChar(255)
   date        DateTime @db.Date
-  Member      Members? @relation(fields: [memberId], references: [id])
-  memberId    String?  @db.Uuid
+}
+
+model Bills {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  member_id String   @db.Uuid
+  amount    Int
+  status    String   @db.VarChar(255)
+  dueDate      DateTime? @db.Date
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime? @db.Timestamp(6)
 }
 
 model Revenue {
@@ -32,29 +41,28 @@ model Revenue {
 }
 
 model Users {
-  id       String @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  id       String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name     String @db.VarChar(255)
   email    String @unique
   password String
 }
 
 model Members {
-  id           String     @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  nationalId   Int        @unique
-  name         String     @db.VarChar(255)
-  dateOfBirth  DateTime   @db.Date
-  mobileNumber String     @db.VarChar(255)
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  nationalId   Int       @unique
+  name         String    @db.VarChar(255)
+  dateOfBirth  DateTime  @db.Date
+  mobileNumber String    @db.VarChar(255)
   gender       Gender
   isDisabled   Boolean
-  religion     String?    @db.VarChar(255)
-  county       String     @db.VarChar(255)
-  constituency String     @db.VarChar(255)
-  ward         String     @db.VarChar(255)
-  signature    String     @db.VarChar(255)
-  createdAt    DateTime   @default(now()) @db.Timestamp(6)
-  updatedAt    DateTime   @updatedAt
-  deletedAt    DateTime?  @db.Timestamp(6)
-  invoices     Invoices[]
+  religion     String?   @db.VarChar(255)
+  county       String    @db.VarChar(255)
+  constituency String    @db.VarChar(255)
+  ward         String    @db.VarChar(255)
+  signature    String    @db.VarChar(255)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime? @db.Timestamp(6)
 }
 
 enum Gender {
