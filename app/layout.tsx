@@ -16,7 +16,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
         <NavBar />
-        <main>{children}</main>
+        <main className='p-5 mt-16'>{children}</main>
       </body>
     </html>
   );
