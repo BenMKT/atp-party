@@ -1,9 +1,10 @@
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
+import registerMember from './actions';
 
 const RegistrationForm = () => {
   return (
-    <form>
+    <form action={registerMember}>
       <div className="form-control max-w-xl space-y-5 sm:mx-auto">
         {/* National ID */}
         <span className="label-text">Enter your National ID*</span>
