@@ -8,10 +8,10 @@ const RegistrationForm = () => {
       <div className="form-control max-w-xl space-y-5 sm:mx-auto">
         {/* National ID */}
         <span className="label-text">Enter your National ID*</span>
-        <label htmlFor="idNumber">
+        <label htmlFor="nationalId">
           <input
-            id="idNumber"
-            name="idNumber"
+            id="nationalId"
+            name="nationalId"
             type="number"
             placeholder="12345678"
             required
