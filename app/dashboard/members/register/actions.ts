@@ -1,6 +1,8 @@
 'use server';
 
+import { PrismaClient, Prisma } from '@prisma/client';
 import { z } from 'zod';
+
 
 // create a schema to validate the user input data
 const RegisterFormSchema = z.object({
@@ -29,6 +31,8 @@ const RegisterMember = RegisterFormSchema.omit({
   deletedAt: true,
 });
 
+const prisma = new PrismaClient();
+
 // create a Server function/Action that is going to be called when the form is submitted
 
 const registerMember = async (formData: FormData) => {
@@ -37,11 +41,13 @@ const registerMember = async (formData: FormData) => {
   // validate the user input data using the schema
   const validatedFields = RegisterMember.safeParse(rawFormData);
   // if the validation is successful, proceed to insert the data to the database or else display the error messages
-    const validatedData = validatedFields.success
-      ? validatedFields.data
-      : validatedFields.error.flatten().fieldErrors;
+  const validatedData = validatedFields.success
+    ? validatedFields.data
+    : validatedFields.error.flatten().fieldErrors;
   // insert the validated data to the database
-  console.log(validatedData);
-};
+  const createMember = await prisma.members.create({
+    data: validatedData,
+  });
+}
 
 export default registerMember;
