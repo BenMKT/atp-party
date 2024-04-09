@@ -75,12 +75,13 @@ const RegistrationForm = () => {
             required
             className="input input-bordered input-info w-full max-w-xl"
           >
+            <option disabled selected value="">Choose your Gender</option>
             <option value="MALE">MALE</option>
             <option value="FEMALE">FEMALE</option>
           </select>
         </label>
         {/* PWD */}
-        <span className="label-text">Person with Disability(PWD)*</span>
+        <span className="label-text">Person is with Disability(PWD)*</span>
         <label htmlFor="isDisabled">
           <select
             id="isDisabled"
@@ -88,6 +89,7 @@ const RegistrationForm = () => {
             required
             className="input input-bordered input-info w-full max-w-xl"
           >
+            <option disabled selected value="">Select One</option>
             <option value="TRUE">TRUE</option>
             <option value="FALSE">FALSE</option>
           </select>

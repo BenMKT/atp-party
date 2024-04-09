@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Members" ALTER COLUMN "nationalId" SET DATA TYPE VARCHAR(255);

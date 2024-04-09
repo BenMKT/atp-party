@@ -49,13 +49,13 @@ model Users {
 
 model Members {
   id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  nationalId   Int       @unique
+  nationalId   String    @db.VarChar(255) @unique
   name         String    @db.VarChar(255)
   dateOfBirth  DateTime  @db.Date
   mobileNumber String    @db.VarChar(255)
   email        String    @db.VarChar(255)
   gender       Gender
-  isDisabled   Boolean
+  isDisabled   Disabled
   religion     String?   @db.VarChar(255)
   county       String    @db.VarChar(255)
   constituency String    @db.VarChar(255)
@@ -69,4 +69,9 @@ model Members {
 enum Gender {
   MALE
   FEMALE
+}
+
+enum Disabled {
+  TRUE
+  FALSE
 }
