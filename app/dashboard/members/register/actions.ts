@@ -1,6 +1,8 @@
 'use server';
 
 import { PrismaClient} from '@prisma/client';
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
 
@@ -48,6 +50,12 @@ const registerMember = async (formData: FormData) => {
   // insert the validated data to the database using prisma
   await prisma.members.create({
     data: validatedData,
+  }).then(() => {
+    console.log('Member registered successfully');
+    // revalidate the members page to display the newly added member
+    revalidatePath('/dashboard/members');
+    // redirect the user to the members page after successful registration
+    redirect('/dashboard/members');
   });
 }
 
