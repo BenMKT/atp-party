@@ -1,7 +1,12 @@
-import React from "react";
+import EditMemberForm from "./edit-form";
 
-const UpdateMember = () => {
-  return <div>Update Member Details</div>;
+const UpdateMemberPage = () => {
+  return (
+    <main className="prose max-w-none">
+      <h2 className="text-center">Update Member Details</h2>
+      < EditMemberForm />
+    </main>
+  );
 };
 
-export default UpdateMember;
+export default UpdateMemberPage;
