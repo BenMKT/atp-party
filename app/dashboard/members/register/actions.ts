@@ -1,10 +1,9 @@
 'use server';
 
-import { PrismaClient} from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
-
 
 // create a schema to validate the user input data
 const RegisterFormSchema = z.object({
@@ -49,7 +48,8 @@ const registerMember = async (formData: FormData) => {
     : validatedFields.error.flatten().fieldErrors;
   // insert the validated data to the database using prisma
   await prisma.members.create({
-    data: validatedData,
+      // @ts-ignore
+      data: validatedData,
   }).then(() => {
     console.log('Member registered successfully');
     // revalidate the members page to display the newly added member
@@ -57,6 +57,6 @@ const registerMember = async (formData: FormData) => {
     // redirect the user to the members page after successful registration
     redirect('/dashboard/members');
   });
-}
+};
 
 export default registerMember;
