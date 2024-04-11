@@ -5,7 +5,7 @@ import React from 'react';
 
 const NavBar = () => {
   return (
-    <nav className="mb-7 flex h-16 items-center justify-between border-b px-5">
+    <nav className=" flex h-16 items-center justify-between border-b px-5 top-0 left-0 right-0 bottom-0 fixed bg-white">
       <Link href="/">
         <Image src="/atplogo.png" alt="ATP party logo" width={50} height={50} />
       </Link>
