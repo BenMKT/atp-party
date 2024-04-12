@@ -1,7 +1,9 @@
 import { Button } from '@/app/ui/button';
 import Link from 'next/link';
+import { Member } from './definitions';
 
-const EditMemberForm = () => {
+// receive the member object as a prop and prefill the form fields with the specific member details 
+const EditMemberForm = ({ member }: { member: Member }) => {
   return (
     <form>
       <div className="form-control max-w-xl space-y-5 sm:mx-auto">
@@ -12,7 +14,7 @@ const EditMemberForm = () => {
           id="name"
           name="name"
           readOnly
-          defaultValue="John Doe"
+          defaultValue={member.name}
           className="input input-bordered input-disabled w-full max-w-xl"
         />
         {/* Email */}
@@ -21,14 +23,16 @@ const EditMemberForm = () => {
           type="email"
           id="email"
           name="email"
+          defaultValue={member.email}
           className="input input-bordered input-info w-full max-w-xl"
         />
         {/* Mobile Number */}
         <label htmlFor="mobileNumber">Mobile Number</label>
         <input
-          type="tel"
+          type="text"
           id="mobileNumber"
           name="mobileNumber"
+          defaultValue={member.mobileNumber}
           className="input input-bordered input-info w-full max-w-xl"
         />
         {/* County */}
@@ -37,6 +41,7 @@ const EditMemberForm = () => {
           type="text"
           id="county"
           name="county"
+          defaultValue={member.county}
           className="input input-bordered input-info w-full max-w-xl"
         />
         {/* Constituncy */}
@@ -45,6 +50,7 @@ const EditMemberForm = () => {
           type="text"
           id="constituency"
           name="constituency"
+          defaultValue={member.constituency}
           className="input input-bordered input-info w-full max-w-xl"
         />
         {/* Ward */}
@@ -53,6 +59,7 @@ const EditMemberForm = () => {
           type="text"
           id="ward"
           name="ward"
+          defaultValue={member.ward}
           className="input input-bordered input-info w-full max-w-xl"
         />
       </div>
