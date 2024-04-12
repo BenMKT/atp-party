@@ -35,7 +35,7 @@ const UpdateMember = UpdateFormSchema.pick({
 
 const prisma = new PrismaClient();
 
-// create a Server function/Action that accepts 'id' and 'formData'as arguments
+// create an updateMember Server function/Action that accepts 'id' and 'formData'as arguments and updates database when called
 
 export const updateMember = async (id: string, formData: FormData) => {
   // extract user input from form
@@ -61,3 +61,13 @@ export const updateMember = async (id: string, formData: FormData) => {
       redirect('/dashboard/members');
     });
 }
+
+// create a deleteMember Server function/Action that accepts 'id' prop and deletes a specific member from database when called using prisma 'delete
+export const deleteMember = async (id: string) => {
+  await prisma.members.delete({
+    where: {id: id},
+  });
+  console.log('Member deleted successfully');
+  // revalidate the members page to reflect changes
+  revalidatePath('/dashboard/members');
+};

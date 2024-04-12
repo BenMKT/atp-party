@@ -1,6 +1,6 @@
 import Prisma from '@prisma/client';
 import Link from 'next/link';
-import UpdateMember from './buttons';
+import { DeleteMember, UpdateMember } from './buttons';
 
 const prisma = new Prisma.PrismaClient();
 
@@ -26,7 +26,7 @@ const MembersPage = async () => {
             <th>Constituency</th>
             <th>Ward</th>
             <th>Gender</th>
-            <th className='sr-only'>Edit</th>
+            <th className="sr-only">Edit</th>
           </tr>
         </thead>
         <tbody>
@@ -41,7 +41,8 @@ const MembersPage = async () => {
               <td>{member.ward}</td>
               <td>{member.gender}</td>
               <td className="flex justify-end gap-2">
-                    <UpdateMember id={member.id} />
+                <UpdateMember id={member.id} />
+                <DeleteMember id={member.id} />
               </td>
             </tr>
           ))}
