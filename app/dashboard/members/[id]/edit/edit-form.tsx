@@ -1,11 +1,16 @@
 import { Button } from '@/app/ui/button';
 import Link from 'next/link';
 import { Member } from './definitions';
+import { updateMember } from './actions';
 
-// receive the member object as a prop and prefill the form fields with the specific member details 
+// receive the member object as a prop and prefill the form fields with the specific member details
+
 const EditMemberForm = ({ member }: { member: Member }) => {
+  // pass id to the Server Action using JS bind ensuring any values passed to the Server Action are encoded
+  const updateMemberWithId = updateMember.bind(null, member.id);
+
   return (
-    <form>
+    <form action={updateMemberWithId}>
       <div className="form-control max-w-xl space-y-5 sm:mx-auto">
         {/* Name */}
         <label htmlFor="name">Name</label>
