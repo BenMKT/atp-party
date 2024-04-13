@@ -1,6 +1,7 @@
 import Prisma from '@prisma/client';
 import Link from 'next/link';
 import { DeleteMember, UpdateMember } from './buttons';
+import Search from '@/app/ui/search';
 
 const prisma = new Prisma.PrismaClient();
 
@@ -12,6 +13,7 @@ const MembersPage = async () => {
   return (
     <main className="prose flex flex-col sm:mx-auto sm:max-w-6xl">
       <h2>{`ATP Total Members: ${members.length}`}</h2>
+      <Search />
       <p className="text-center text-2xl text-violet-600 underline">
         ATP Membership List:
       </p>
