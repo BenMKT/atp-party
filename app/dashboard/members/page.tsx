@@ -1,55 +1,29 @@
-import Prisma from '@prisma/client';
 import Link from 'next/link';
-import { DeleteMember, UpdateMember } from './buttons';
+import members from './members-table';
 import Search from '@/app/ui/search';
+import MembersTable from './members-table';
 
-const prisma = new Prisma.PrismaClient();
+const MembersPage = async ({
+  searchParams,
+}: {
+  searchParams?: {
+    query?: string;
+    page?: string;
+  };
+}) => {
+  // display all the members in a table from the database based on the search query params if any exists in the URL
+  const query = searchParams?.query || '';
+  const currentPage = Number(searchParams?.page) || 1;
 
-const MembersPage = async () => {
-  // fetch all members from the database using prisma
-  const members = await prisma.members.findMany();
-
-  // display all the members in a table
   return (
     <main className="prose flex flex-col sm:mx-auto sm:max-w-6xl">
-      <h2>{`ATP Total Members: ${members.length}`}</h2>
-      <Search />
-      <p className="text-center text-2xl text-violet-600 underline">
-        ATP Membership List:
+      <h1>ATP Membership List</h1>
+      <Search placeholder="Search members..." />
+      <p className="text-md text-red-500">
+        N/B: This membership result list is based on the search criteria input
+        above, otherwise, it will display all members in the party database:
       </p>
-      <table className="table table-zebra overflow-x-auto">
-        <thead>
-          <tr>
-            <th></th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Mobile Number</th>
-            <th>County</th>
-            <th>Constituency</th>
-            <th>Ward</th>
-            <th>Gender</th>
-            <th className="sr-only">Edit</th>
-          </tr>
-        </thead>
-        <tbody>
-          {members.map((member, index) => (
-            <tr key={member.id}>
-              <td>{index + 1}</td>
-              <td>{member.name}</td>
-              <td>{member.email}</td>
-              <td>{member.mobileNumber}</td>
-              <td>{member.county}</td>
-              <td>{member.constituency}</td>
-              <td>{member.ward}</td>
-              <td>{member.gender}</td>
-              <td className="flex justify-end gap-2">
-                <UpdateMember id={member.id} />
-                <DeleteMember id={member.id} />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <MembersTable query={query} currentPage={currentPage} />
       <div className="flex justify-end">
         <button>
           <Link
