@@ -2,6 +2,7 @@
 
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useDebouncedCallback } from 'use-debounce';
 
 // create a search component to filter the members based on user input
 
@@ -12,8 +13,9 @@ const Search = ({ placeholder }: { placeholder: string }) => {
   const pathname = usePathname();
   // get the replace function from the useRouter hook
   const { replace } = useRouter();
-  // handle search input
-  const handlesearch = (term: string) => {
+  // handle search input and optimizing using a debounced callback to prevent multiple DB requests
+  const handlesearch = useDebouncedCallback((term: string) => {
+    console.log(term);
     // update or manipulate the URL query params using URLSearchParams web API
     const params = new URLSearchParams(searchParams);
     // set the search query param to the user input
@@ -25,7 +27,7 @@ const Search = ({ placeholder }: { placeholder: string }) => {
     }
     // update the URL with the new search query param
     replace(`${pathname}?${params.toString()}`);
-  };
+  }, 700);
 
   return (
     <div className="relative flex flex-1 flex-shrink-0">
