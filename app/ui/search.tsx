@@ -15,17 +15,18 @@ const Search = ({ placeholder }: { placeholder: string }) => {
   const { replace } = useRouter();
   // handle search input and optimizing using a debounced callback to prevent multiple DB requests
   const handlesearch = useDebouncedCallback((term: string) => {
-    console.log(term);
     // update or manipulate the URL query params using URLSearchParams web API
     const params = new URLSearchParams(searchParams);
-    // set the search query param to the user input
+    // reset the URL page param to 1 when the user types in the search input
+    params.set('page', '1');
+    // set the URL query param to the user input
     if (term) {
       params.set('query', term);
     } else {
-      // remove the search query param if the user input is empty
+      // remove the URL query param if the user input is empty
       params.delete('query');
     }
-    // update the URL with the new search query param
+    // update the full URL using the pathname and updated search parameters
     replace(`${pathname}?${params.toString()}`);
   }, 700);
 
