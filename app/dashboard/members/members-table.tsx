@@ -1,8 +1,7 @@
-import { PrismaClient } from '@prisma/client';
+import { Gender, PrismaClient } from '@prisma/client';
 import { UpdateMember, DeleteMember } from './buttons';
 import Link from 'next/link';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
-import clsx from 'clsx';
 
 const prisma = new PrismaClient();
 // create a members table component to display the members in a table
@@ -28,6 +27,7 @@ const MembersTable = async ({
           { county: { contains: query, mode: 'insensitive' } },
           { constituency: { contains: query, mode: 'insensitive' } },
           { ward: { contains: query, mode: 'insensitive' } },
+          { gender: Gender[query as keyof typeof Gender] },
         ],
       },
       skip: (Number(currentPage) - 1) * perPage,
@@ -43,6 +43,7 @@ const MembersTable = async ({
           { county: { contains: query, mode: 'insensitive' } },
           { constituency: { contains: query, mode: 'insensitive' } },
           { ward: { contains: query, mode: 'insensitive' } },
+          { gender: Gender[query as keyof typeof Gender] },
         ],
       },
     });
@@ -82,8 +83,10 @@ const MembersTable = async ({
           </tr>
         </thead>
         <tbody>
-          {/* Map through members and create table rows */}
-          {members.map((member, index) => (
+          {/* Map through members, create table rows and sort by newly registered first or by descending order */}
+          {members.sort(
+            (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          ).map((member, index) => (
             <tr key={member.id}>
               {/* Row cells */}
               <td>{startIndex + index}</td>
