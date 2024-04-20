@@ -28,6 +28,7 @@ model Bills {
   id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   member_id String    @db.Uuid
   amount    Int
+  description String  @db.VarChar(255)
   status    String    @db.VarChar(255)
   dueDate   DateTime  @db.Date
   createdAt DateTime  @default(now())

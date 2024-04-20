@@ -301,6 +301,7 @@ const bills = [
   {
     member_id: members[0].id,
     amount: 15795,
+    description: 'Electricity Bill',
     status: 'pending',
     dueDate: '2022-12-06T12:34:56Z',
     createdAt: '2022-11-06T12:34:56Z',
@@ -308,6 +309,7 @@ const bills = [
   {
     member_id: members[1].id,
     amount: 20348,
+    description: 'Water Bill',
     status: 'pending',
     dueDate: '2022-11-06T12:34:56Z',
     createdAt: '2022-10-06T12:34:56Z',
@@ -315,6 +317,7 @@ const bills = [
   {
     member_id: members[4].id,
     amount: 3040,
+    description: 'Gas Bill',
     status: 'paid',
     dueDate: '2022-10-06T12:34:56Z',
     createdAt: '2022-09-06T12:34:56Z',
@@ -323,6 +326,7 @@ const bills = [
   {
     member_id: members[3].id,
     amount: 44800,
+    description: 'Rent',
     status: 'paid',
     dueDate: '2022-09-06T12:34:56Z',
     createdAt: '2022-08-06T12:34:56Z',
@@ -331,6 +335,7 @@ const bills = [
   {
     member_id: members[5].id,
     amount: 34577,
+    description: 'Internet Bill',
     status: 'pending',
     dueDate: '2022-07-06T12:34:56Z',
     createdAt: '2022-06-06T12:34:56Z',
@@ -338,6 +343,7 @@ const bills = [
   {
     member_id: members[7].id,
     amount: 54246,
+    description: 'Phone Bill',
     status: 'pending',
     dueDate: '2022-06-06T12:34:56Z',
     createdAt: '2022-05-06T12:34:56Z',
@@ -345,6 +351,7 @@ const bills = [
   {
     member_id: members[6].id,
     amount: 666,
+    description: 'TV Bill',
     status: 'pending',
     dueDate: '2022-05-06T12:34:56Z',
     createdAt: '2022-04-06T12:34:56Z',
@@ -352,6 +359,7 @@ const bills = [
   {
     member_id: members[3].id,
     amount: 32545,
+    description: 'Security Bill',
     status: 'paid',
     dueDate: '2022-04-06T12:34:56Z',
     createdAt: '2022-03-06T12:34:56Z',
@@ -360,6 +368,7 @@ const bills = [
   {
     member_id: members[4].id,
     amount: 1250,
+    description: 'Cleaning Bill',
     status: 'paid',
     dueDate: '2022-03-06T12:34:56Z',
     createdAt: '2022-02-06T12:34:56Z',
@@ -368,6 +377,7 @@ const bills = [
   {
     member_id: members[5].id,
     amount: 8546,
+    description: 'Gardening Bill',
     status: 'paid',
     dueDate: '2022-02-06T12:34:56Z',
     createdAt: '2022-01-06T12:34:56Z',
@@ -376,6 +386,7 @@ const bills = [
   {
     member_id: members[1].id,
     amount: 500,
+    description: 'Pest Control Bill',
     status: 'paid',
     dueDate: '2022-01-06T12:34:56Z',
     createdAt: '2021-12-06T12:34:56Z',
@@ -384,6 +395,7 @@ const bills = [
   {
     member_id: members[5].id,
     amount: 8945,
+    description: 'Electricity Bill',
     status: 'paid',
     dueDate: '2021-12-06T12:34:56Z',
     createdAt: '2021-11-06T12:34:56Z',
@@ -392,6 +404,7 @@ const bills = [
   {
     member_id: members[2].id,
     amount: 8945,
+    description: 'Water Bill',
     status: 'paid',
     dueDate: '2021-11-06T12:34:56Z',
     createdAt: '2021-10-06T12:34:56Z',
@@ -400,6 +413,7 @@ const bills = [
   {
     member_id: members[0].id,
     amount: 8945,
+    description: 'Gas Bill',
     status: 'paid',
     dueDate: '2021-10-06T12:34:56Z',
     createdAt: '2021-09-06T12:34:56Z',
@@ -408,6 +422,7 @@ const bills = [
   {
     member_id: members[2].id,
     amount: 1000,
+    description: 'Rent',
     status: 'paid',
     dueDate: '2021-09-06T12:34:56Z',
     createdAt: '2021-08-06T12:34:56Z',

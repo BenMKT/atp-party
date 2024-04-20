@@ -6,6 +6,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { GiMoneyStack } from 'react-icons/gi';
 import { TbCalendarTime } from 'react-icons/tb';
+import { MdOutlineDescription } from 'react-icons/md';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
 import { createBill } from '../actions';
@@ -56,6 +57,24 @@ const BillsForm = ({ members }: { members: Member[] }) => {
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               />
               <GiMoneyStack className="pointer-events-none absolute ml-2 mt-2 size-5 text-gray-500 peer-focus:text-gray-900" />
+            </div>
+          </div>
+        </div>
+        {/* Bill Description */}
+        <div className="mb-4">
+          <label htmlFor="amount" className="mb-2 block text-sm font-medium">
+            Bill description
+          </label>
+          <div className="mt-2 rounded-md">
+            <div className="flex">
+              <input
+                id="description"
+                name="description"
+                type="text"
+                placeholder="Enter a brief description of the bill"
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+              />
+              <MdOutlineDescription className="pointer-events-none absolute ml-2 mt-2 size-5 text-gray-500 peer-focus:text-gray-900" />
             </div>
           </div>
         </div>
