@@ -8,11 +8,13 @@ import { GiMoneyStack } from 'react-icons/gi';
 import { TbCalendarTime } from 'react-icons/tb';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
+import { createBill } from '../actions';
+
+// create a form to capture the user's input and pass the form action to be called when the form is submitted
 
 const BillsForm = ({ members }: { members: Member[] }) => {
-  // create a form to capture the user's input
   return (
-    <form className="max-w-5xl sm:mx-auto">
+    <form action={createBill} className="max-w-5xl sm:mx-auto">
       <div className="form-control rounded-md bg-gray-50 p-4 md:p-6">
         {/* Member Name */}
         <div className="mb-4">
