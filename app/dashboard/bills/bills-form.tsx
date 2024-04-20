@@ -1,4 +1,4 @@
-import { Member } from '../../members/[id]/edit/definitions';
+import { Member } from '../members/[id]/edit/definitions';
 import {
   CheckIcon,
   ClockIcon,
@@ -6,10 +6,11 @@ import {
 } from '@heroicons/react/24/outline';
 import { GiMoneyStack } from 'react-icons/gi';
 import { TbCalendarTime } from 'react-icons/tb';
+import { FaHourglassEnd } from 'react-icons/fa6';
 import { MdOutlineDescription } from 'react-icons/md';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
-import { createBill } from '../actions';
+import { createBill } from './actions';
 
 // create a form to capture the user's input and pass the form action to be called when the form is submitted
 
@@ -26,7 +27,7 @@ const BillsForm = ({ members }: { members: Member[] }) => {
             <UserCircleIcon className="pointer-events-none absolute ml-2  mt-2 size-5 text-gray-500 peer-focus:text-gray-900" />
             <select
               id="member"
-              name="memberId"
+              name="member_id"
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               defaultValue=""
             >
@@ -52,7 +53,7 @@ const BillsForm = ({ members }: { members: Member[] }) => {
                 id="amount"
                 name="amount"
                 type="number"
-                step="10"
+                step="1"
                 placeholder="Enter KSH amount"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               />
@@ -62,7 +63,10 @@ const BillsForm = ({ members }: { members: Member[] }) => {
         </div>
         {/* Bill Description */}
         <div className="mb-4">
-          <label htmlFor="amount" className="mb-2 block text-sm font-medium">
+          <label
+            htmlFor="description"
+            className="mb-2 block text-sm font-medium"
+          >
             Bill description
           </label>
           <div className="mt-2 rounded-md">
@@ -70,7 +74,6 @@ const BillsForm = ({ members }: { members: Member[] }) => {
               <input
                 id="description"
                 name="description"
-                type="text"
                 placeholder="Enter a brief description of the bill"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               />
@@ -95,7 +98,7 @@ const BillsForm = ({ members }: { members: Member[] }) => {
                 />
                 <label
                   htmlFor="pending"
-                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
+                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-yellow-500 px-3 py-1.5 text-xs font-medium text-white"
                 >
                   Pending <ClockIcon className="h-4 w-4" />
                 </label>
@@ -113,6 +116,21 @@ const BillsForm = ({ members }: { members: Member[] }) => {
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white"
                 >
                   Paid <CheckIcon className="h-4 w-4" />
+                </label>
+              </div>
+              <div className="flex items-center">
+                <input
+                  id="overdue"
+                  name="status"
+                  type="radio"
+                  value="Overdue"
+                  className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
+                />
+                <label
+                  htmlFor="overdue"
+                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-red-500 px-3 py-1.5 text-xs font-medium text-white"
+                >
+                  Overdue <FaHourglassEnd className="h-4 w-4" />
                 </label>
               </div>
             </div>

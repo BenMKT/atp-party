@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import BillsForm from './bills-form';
+import BillsForm from '../bills-form';
 
 const prisma = new PrismaClient();
 
