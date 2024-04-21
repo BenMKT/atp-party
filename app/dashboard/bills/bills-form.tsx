@@ -18,6 +18,7 @@ const BillsForm = ({ members }: { members: Member[] }) => {
   return (
     <form action={createBill} className="max-w-5xl sm:mx-auto">
       <div className="form-control rounded-md bg-gray-50 p-4 md:p-6">
+
         {/* Member Name */}
         <div className="mb-4">
           <label htmlFor="member" className="mb-2 block text-sm font-medium">
@@ -27,9 +28,10 @@ const BillsForm = ({ members }: { members: Member[] }) => {
             <UserCircleIcon className="pointer-events-none absolute ml-2  mt-2 size-5 text-gray-500 peer-focus:text-gray-900" />
             <select
               id="member"
-              name="member_id"
+              name="memberId"
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               defaultValue=""
+              required
             >
               <option value="" disabled>
                 Select a member
@@ -42,6 +44,7 @@ const BillsForm = ({ members }: { members: Member[] }) => {
             </select>
           </div>
         </div>
+
         {/* Bill Amount */}
         <div className="mb-4">
           <label htmlFor="amount" className="mb-2 block text-sm font-medium">
@@ -55,12 +58,14 @@ const BillsForm = ({ members }: { members: Member[] }) => {
                 type="number"
                 step="1"
                 placeholder="Enter KSH amount"
+                required
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               />
               <GiMoneyStack className="pointer-events-none absolute ml-2 mt-2 size-5 text-gray-500 peer-focus:text-gray-900" />
             </div>
           </div>
         </div>
+
         {/* Bill Description */}
         <div className="mb-4">
           <label
@@ -75,12 +80,14 @@ const BillsForm = ({ members }: { members: Member[] }) => {
                 id="description"
                 name="description"
                 placeholder="Enter a brief description of the bill"
+                required
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               />
               <MdOutlineDescription className="pointer-events-none absolute ml-2 mt-2 size-5 text-gray-500 peer-focus:text-gray-900" />
             </div>
           </div>
         </div>
+
         {/* Bill Status */}
         <fieldset className="mb-4">
           <legend className="mb-2 block text-sm font-medium">
@@ -109,6 +116,7 @@ const BillsForm = ({ members }: { members: Member[] }) => {
                   name="status"
                   type="radio"
                   value="Paid"
+                  required
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                 />
                 <label
@@ -136,6 +144,7 @@ const BillsForm = ({ members }: { members: Member[] }) => {
             </div>
           </div>
         </fieldset>
+
         {/* Due Date */}
         <div>
           <label htmlFor="dueDate" className="mb-2 block text-sm font-medium">
@@ -147,6 +156,7 @@ const BillsForm = ({ members }: { members: Member[] }) => {
                 id="dueDate"
                 name="dueDate"
                 type="date"
+                required
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               />
               <TbCalendarTime className="pointer-events-none absolute ml-2 mt-2 size-5 text-gray-500 peer-focus:text-gray-900" />
@@ -154,6 +164,7 @@ const BillsForm = ({ members }: { members: Member[] }) => {
           </div>
         </div>
       </div>
+
       {/* Buttons */}
       <div className="mt-6 flex justify-end gap-4">
         <Link

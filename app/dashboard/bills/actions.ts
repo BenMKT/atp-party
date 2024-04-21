@@ -8,7 +8,7 @@ import { z } from 'zod';
 // create a schema to validate the user input data
 const BillFormSchema = z.object({
   id: z.string(),
-  member_id: z.string(),
+  memberId: z.string(),
   amount: z.coerce.number(),
   description: z.string(),
   status: z.enum(['Paid', 'Pending', 'Overdue']),
@@ -19,7 +19,7 @@ const BillFormSchema = z.object({
 });
 
 const CreateBillSchema = BillFormSchema.pick({
-  member_id: true,
+  memberId: true,
   amount: true,
   description: true,
   status: true,

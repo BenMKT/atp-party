@@ -299,7 +299,7 @@ const invoices = [
 
 const bills = [
   {
-    member_id: members[0].id,
+    memberId: members[0].id,
     amount: 15795,
     description: 'Electricity Bill',
     status: 'pending',
@@ -307,7 +307,7 @@ const bills = [
     createdAt: '2022-11-06T12:34:56Z',
   },
   {
-    member_id: members[1].id,
+    memberId: members[1].id,
     amount: 20348,
     description: 'Water Bill',
     status: 'pending',
@@ -315,7 +315,7 @@ const bills = [
     createdAt: '2022-10-06T12:34:56Z',
   },
   {
-    member_id: members[4].id,
+    memberId: members[4].id,
     amount: 3040,
     description: 'Gas Bill',
     status: 'paid',
@@ -324,7 +324,7 @@ const bills = [
     updatedAt: '2022-09-26T12:34:56Z',
   },
   {
-    member_id: members[3].id,
+    memberId: members[3].id,
     amount: 44800,
     description: 'Rent',
     status: 'paid',
@@ -333,7 +333,7 @@ const bills = [
     updatedAt: '2022-08-26T12:34:56Z',
   },
   {
-    member_id: members[5].id,
+    memberId: members[5].id,
     amount: 34577,
     description: 'Internet Bill',
     status: 'pending',
@@ -341,7 +341,7 @@ const bills = [
     createdAt: '2022-06-06T12:34:56Z',
   },
   {
-    member_id: members[7].id,
+    memberId: members[7].id,
     amount: 54246,
     description: 'Phone Bill',
     status: 'pending',
@@ -349,7 +349,7 @@ const bills = [
     createdAt: '2022-05-06T12:34:56Z',
   },
   {
-    member_id: members[6].id,
+    memberId: members[6].id,
     amount: 666,
     description: 'TV Bill',
     status: 'pending',
@@ -357,7 +357,7 @@ const bills = [
     createdAt: '2022-04-06T12:34:56Z',
   },
   {
-    member_id: members[3].id,
+    memberId: members[3].id,
     amount: 32545,
     description: 'Security Bill',
     status: 'paid',
@@ -366,7 +366,7 @@ const bills = [
     updatedAt: '2022-03-26T12:34:56Z',
   },
   {
-    member_id: members[4].id,
+    memberId: members[4].id,
     amount: 1250,
     description: 'Cleaning Bill',
     status: 'paid',
@@ -375,7 +375,7 @@ const bills = [
     updatedAt: '2022-02-26T12:34:56Z',
   },
   {
-    member_id: members[5].id,
+    memberId: members[5].id,
     amount: 8546,
     description: 'Gardening Bill',
     status: 'paid',
@@ -384,7 +384,7 @@ const bills = [
     updatedAt: '2022-01-26T12:34:56Z',
   },
   {
-    member_id: members[1].id,
+    memberId: members[1].id,
     amount: 500,
     description: 'Pest Control Bill',
     status: 'paid',
@@ -393,7 +393,7 @@ const bills = [
     updatedAt: '2021-12-28T12:34:56Z',
   },
   {
-    member_id: members[5].id,
+    memberId: members[5].id,
     amount: 8945,
     description: 'Electricity Bill',
     status: 'paid',
@@ -402,7 +402,7 @@ const bills = [
     updatedAt: '2021-11-26T12:34:56Z',
   },
   {
-    member_id: members[2].id,
+    memberId: members[2].id,
     amount: 8945,
     description: 'Water Bill',
     status: 'paid',
@@ -411,7 +411,7 @@ const bills = [
     updatedAt: '2021-10-26T12:34:56Z',
   },
   {
-    member_id: members[0].id,
+    memberId: members[0].id,
     amount: 8945,
     description: 'Gas Bill',
     status: 'paid',
@@ -420,7 +420,7 @@ const bills = [
     updatedAt: '2021-09-26T12:34:56Z',
   },
   {
-    member_id: members[2].id,
+    memberId: members[2].id,
     amount: 1000,
     description: 'Rent',
     status: 'paid',
