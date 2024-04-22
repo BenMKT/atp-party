@@ -20,3 +20,12 @@ export type Member = {
   updatedAt: Date | null;
   deletedAt: Date | null;
 };
+
+export type Bill = {
+  id: string;
+  amount: number;
+  description: string;
+  status: string;
+  dueDate: Date;
+  Member: Member;
+};

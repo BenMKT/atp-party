@@ -1,4 +1,4 @@
-import { Member } from '../members/[id]/edit/definitions';
+import { Member } from '@/app/lib/definitions';
 import {
   CheckIcon,
   ClockIcon,

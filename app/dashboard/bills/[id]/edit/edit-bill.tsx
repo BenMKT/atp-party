@@ -10,7 +10,7 @@ import { MdOutlineDescription } from 'react-icons/md';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
 import { updateBill } from '../../actions';
-import { Bill } from './definitions';
+import { Bill } from '@/app/lib/definitions';
 
 const EditBillForm = ({ bill }: { bill: Bill }) => {
   // pass id to the Server Action using JS bind ensuring any values passed to the Server Action are encoded
