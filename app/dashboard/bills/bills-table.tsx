@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { DeleteBill, UpdateBill } from './buttons';
 
 const prisma = new PrismaClient();
 
@@ -44,6 +45,10 @@ const BillsTable = async () => {
                 <td>{bill.description}</td>
                 <td>{bill.status}</td>
                 <td>{bill.dueDate.toISOString().split('T')[0]}</td>
+                <td className="flex justify-end gap-2 text-sm">
+                  <UpdateBill id={bill.id} />
+                  <DeleteBill id={bill.id} />
+                </td>
               </tr>
             ))}
         </tbody>

@@ -26,9 +26,16 @@ const CreateBillSchema = BillFormSchema.pick({
   dueDate: true,
 });
 
+const UpdateBillSchema = BillFormSchema.pick({
+  amount: true,
+  description: true,
+  status: true,
+  dueDate: true,
+});
+
 const prisma = new PrismaClient();
 
-// create a Server Action that is going to be called when the form is submitted
+// create a createBill Server Action that is going to be called when the form is submitted
 
 export const createBill = async (formData: FormData) => {
   // extract the user input data from the form and convert it to an object
@@ -51,4 +58,42 @@ export const createBill = async (formData: FormData) => {
   revalidatePath('/dashboard/bills');
   // redirect the user to the bills page after successful registration
   redirect('/dashboard/bills');
+};
+
+// create an updateBill Server function/Action that accepts 'id' and 'formData'as arguments and updates database when called using prisma 'update'
+
+export const updateBill = async (id: string, formData: FormData) => {
+  // extract user input from form
+  const rawFormData = Object.fromEntries(formData.entries());
+  // validate the data using Zod
+  const validatedFields = UpdateBillSchema.safeParse(rawFormData);
+  // if validation successful, proceed to update database or display error
+  const validatedData = validatedFields.success
+    ? validatedFields.data
+    : validatedFields.error.flatten().fieldErrors;
+
+  // update bill records in the database using prisma 'update'
+  await prisma.bills.update({
+      where: { id: id },
+      // @ts-ignore
+      data: validatedData,
+    })
+    .then(() => {
+      console.log('Bill updated successfully');
+      // revalidate the bills page to display the newly updated bill
+      revalidatePath('/dashboard/bills');
+      // redirect the user to the bills page after successful update
+      redirect('/dashboard/bills');
+    });
+};
+
+// create a deleteBill Server function/Action that accepts 'id' prop and deletes a specific bill from database when called using prisma 'delete
+
+export const deleteBill = async (id: string) => {
+  await prisma.bills.delete({
+    where: { id: id },
+  });
+  console.log('Bill deleted successfully');
+  // revalidate the bills page to reflect changes
+  revalidatePath('/dashboard/bills');
 };
