@@ -18,7 +18,7 @@ const MembersPage = async ({
   return (
     <main className="prose flex flex-col sm:mx-auto sm:max-w-6xl">
       <h1>ATP Membership List</h1>
-      <Search placeholder="Search members..." />
+      <Search placeholder="Filter Members..." />
       <p className="text-md text-red-500">
         N/B: This membership result list is based on the search criteria input
         above, otherwise, it will display all members in the party database:

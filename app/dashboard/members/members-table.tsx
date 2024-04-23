@@ -1,7 +1,6 @@
 import { Gender, PrismaClient } from '@prisma/client';
 import { UpdateMember, DeleteMember } from './buttons';
-import Link from 'next/link';
-import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
+import Pagination from '@/app/ui/pagination';
 
 const prisma = new PrismaClient();
 // create a members table component to display the members in a table
@@ -106,32 +105,7 @@ const MembersTable = async ({
         </tbody>
       </table>
       {/* Pagination controls */}
-      <div className="pagination join">
-        {/* Previous page button */}
-        <Link
-          href={`./members?query=${query}&page=${currentPage - 1}`}
-          className={`btn join-item ${currentPage === 1 ? 'disabled cursor-not-allowed' : ''}`}
-        >
-          <FaAngleLeft />
-        </Link>
-        {/* Page numbers */}
-        {Array.from({ length: totalPages }, (_, i) => (
-          <Link
-            key={i + 1}
-            href={`./members?query=${query}&page=${i + 1}`}
-            className={`btn join-item ${currentPage === i + 1 ? 'btn-active' : ''}`}
-          >
-            {i + 1}
-          </Link>
-        ))}
-        {/* Next page button */}
-        <Link
-          href={`./members?query=${query}&page=${currentPage + 1}`}
-          className={`btn join-item ${currentPage === totalPages ? 'disabled cursor-not-allowed' : ''}`}
-        >
-          <FaAngleRight />
-        </Link>
-      </div>
+      <Pagination totalPages={totalPages} />
     </main>
   );
 };

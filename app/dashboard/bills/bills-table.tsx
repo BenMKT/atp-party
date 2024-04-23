@@ -1,7 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { DeleteBill, UpdateBill } from './buttons';
-import Link from 'next/link';
-import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
+import Pagination from '@/app/ui/pagination';
 
 const prisma = new PrismaClient();
 
@@ -96,32 +95,7 @@ const startIndex = (Number(currentPage) - 1) * perPage + 1;
         </tbody>
       </table>
       {/* Pagination controls */}
-      <div className="pagination join">
-        {/* Previous page button */}
-        <Link
-          href={`./bills?query=${query}&page=${currentPage - 1}`}
-          className={`btn join-item ${currentPage === 1 ? 'disabled cursor-not-allowed' : ''}`}
-        >
-          <FaAngleLeft />
-        </Link>
-        {/* Page numbers */}
-        {Array.from({ length: totalPages }, (_, i) => (
-          <Link
-            key={i + 1}
-            href={`./bills?query=${query}&page=${i + 1}`}
-            className={`btn join-item ${currentPage === i + 1 ? 'btn-active' : ''}`}
-          >
-            {i + 1}
-          </Link>
-        ))}
-        {/* Next page button */}
-        <Link
-          href={`./bills?query=${query}&page=${currentPage + 1}`}
-          className={`btn join-item ${currentPage === totalPages ? 'disabled cursor-not-allowed' : ''}`}
-        >
-          <FaAngleRight />
-        </Link>
-      </div>
+      <Pagination totalPages={totalPages}/>
     </main>
   );
 };
