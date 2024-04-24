@@ -1,6 +1,6 @@
 import { Button } from '@/app/ui/button';
 import Link from 'next/link';
-import { Member } from './definitions';
+import { Member } from '@/app/lib/definitions';
 import { updateMember } from './actions';
 
 // receive the member object as a prop and prefill the form fields with the specific member details

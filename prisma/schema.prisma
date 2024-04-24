@@ -25,14 +25,16 @@ model Invoices {
 }
 
 model Bills {
-  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  member_id String    @db.Uuid
-  amount    Int
-  status    String    @db.VarChar(255)
-  dueDate   DateTime  @db.Date
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
-  deletedAt DateTime? @db.Timestamp(6)
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  amount      Int
+  description String    @db.VarChar(255)
+  status      String    @db.VarChar(255)
+  dueDate     DateTime  @db.Date
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+  deletedAt   DateTime? @db.Timestamp(6)
+  Member      Members   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  memberId    String    @db.Uuid
 }
 
 model Revenue {
@@ -49,7 +51,7 @@ model Users {
 
 model Members {
   id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  nationalId   String    @db.VarChar(255) @unique
+  nationalId   String    @unique @db.VarChar(255)
   name         String    @db.VarChar(255)
   dateOfBirth  DateTime  @db.Date
   mobileNumber String    @db.VarChar(255)
@@ -64,6 +66,7 @@ model Members {
   createdAt    DateTime  @default(now())
   updatedAt    DateTime? @updatedAt
   deletedAt    DateTime? @db.Timestamp(6)
+  bill         Bills[]
 }
 
 enum Gender {
