@@ -7,6 +7,7 @@ import { SlMenu } from 'react-icons/sl';
 import Link from 'next/link';
 import React from 'react';
 
+// create a top-nav links component with a dropdown menu for small screens
 const Menu = () => {
   const currentPath = usePathname(); // gets the current path of the page
 
@@ -41,8 +42,7 @@ const Menu = () => {
           className={clsx('text-zinc-500', {
             'font-bold text-black': currentPath === link.href,
           })}
-          onClick={closeDropdown}
-        >
+          onClick={closeDropdown}>
           {link.label}
         </Link>
       </li>
@@ -52,27 +52,21 @@ const Menu = () => {
   return (
     <main>
       <div className="dropdown dropdown-end sm:hidden">
-
         {/* button to toggle the dropdown menu */}
-        
         <button className="btn m-3" onClick={toggleDropdown}>
           <SlMenu />
         </button>
-
         {/* if the dropdown menu `isOpen`, render the menu links */}
-
         {isOpen && (
           <ul
             className="menu dropdown-content z-[1] w-52 rounded-box bg-emerald-200 p-2 shadow"
-            onClick={closeDropdown}
-          >
+            onClick={closeDropdown}>
             {renderMenuLinks()}
           </ul>
         )}
       </div>
       <div>
         {/* contains a list of links that is always visible on large screens and hidden on small screens  */}
-
         <ul className="hidden space-x-6 sm:flex">{renderMenuLinks()}</ul>
       </div>
     </main>
