@@ -49,6 +49,7 @@ const MembersTable = async ({
   } else {
     // get all members if there is no search query params
     members = await prisma.members.findMany({
+      orderBy: { createdAt: 'desc' },
       skip: (Number(currentPage) - 1) * perPage,
       take: perPage,
     });

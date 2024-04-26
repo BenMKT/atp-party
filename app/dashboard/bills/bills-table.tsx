@@ -37,7 +37,8 @@ bills = await prisma.bills.findMany({
 } else {
   // get all bills if there is no search query params
   bills = await prisma.bills.findMany({
-    include: {Member: true},
+    include: { Member: true },
+    orderBy: { createdAt: 'desc' },
     skip: (Number(currentPage) - 1) * perPage,
     take: perPage,
   });
