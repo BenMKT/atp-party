@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
-import registerMember from './actions';
+import { registerMember } from '@/app/lib/actions';
 
 const RegistrationForm = () => {
   return (
@@ -15,8 +15,7 @@ const RegistrationForm = () => {
             type="number"
             placeholder="12345678"
             required
-            className="input input-bordered input-info w-full max-w-xl"
-          />
+            className="input input-bordered input-info w-full max-w-xl" />
         </label>
         {/* Name */}
         <span className="label-text">What is your name?*</span>
@@ -27,8 +26,7 @@ const RegistrationForm = () => {
             type="text"
             placeholder="Full Names"
             required
-            className="input input-bordered input-info w-full max-w-xl"
-          />
+            className="input input-bordered input-info w-full max-w-xl" />
         </label>
         {/* Date of Birth */}
         <span className="label-text">Date of Birth*</span>
@@ -39,8 +37,7 @@ const RegistrationForm = () => {
             type="date"
             placeholder="Date of Birth"
             required
-            className="input input-bordered input-info w-full max-w-xl"
-          />
+            className="input input-bordered input-info w-full max-w-xl" />
         </label>
         {/* Mobile Number */}
         <span className="label-text">Enter your mobile number*</span>
@@ -51,8 +48,7 @@ const RegistrationForm = () => {
             type="text"
             placeholder="+254700000000"
             required
-            className="input input-bordered input-info w-full max-w-xl"
-          />
+            className="input input-bordered input-info w-full max-w-xl" />
         </label>
         {/* Email */}
         <span className="label-text">Email*</span>
@@ -73,9 +69,10 @@ const RegistrationForm = () => {
             id="gender"
             name="gender"
             required
-            className="input input-bordered input-info w-full max-w-xl"
-          >
-            <option disabled selected value="">Choose your Gender</option>
+            className="input input-bordered input-info w-full max-w-xl">
+            <option disabled selected value="">
+              Choose your Gender
+            </option>
             <option value="MALE">MALE</option>
             <option value="FEMALE">FEMALE</option>
           </select>
@@ -87,9 +84,10 @@ const RegistrationForm = () => {
             id="isDisabled"
             name="isDisabled"
             required
-            className="input input-bordered input-info w-full max-w-xl"
-          >
-            <option disabled selected value="">Select One</option>
+            className="input input-bordered input-info w-full max-w-xl">
+            <option disabled selected value="">
+              Select One
+            </option>
             <option value="TRUE">TRUE</option>
             <option value="FALSE">FALSE</option>
           </select>
