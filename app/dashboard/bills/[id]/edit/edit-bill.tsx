@@ -9,7 +9,7 @@ import { FaHourglassEnd } from 'react-icons/fa6';
 import { MdOutlineDescription } from 'react-icons/md';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
-import { updateBill } from '../../actions';
+import { updateBill } from '@/app/lib/actions';
 import { Bill } from '@/app/lib/definitions';
 
 const EditBillForm = ({ bill }: { bill: Bill }) => {

@@ -10,7 +10,7 @@ import { FaHourglassEnd } from 'react-icons/fa6';
 import { MdOutlineDescription } from 'react-icons/md';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
-import { createBill } from './actions';
+import { createBill } from '@/app/lib/actions';
 
 // create a form to capture the user's input and pass the form action to be called when the form is submitted
 

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
-import { deleteBill } from './actions';
+import { deleteBill } from '@/app/lib/actions';
 
 // create a button component that will render a link to the create page
 export const CreateBill = () => {

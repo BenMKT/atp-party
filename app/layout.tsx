@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { inter } from '@/app/ui/fonts'; // import primary font from file
 import '@/app/ui/global.css';
-import NavBar from './ui/navbar';
 
 // export const metadata: Metadata = {
 //   title: {
@@ -15,8 +14,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
-        <NavBar />
-        <main className='p-5 mt-16'>{children}</main>
+        <main>{children}</main>
       </body>
     </html>
   );

@@ -3,8 +3,6 @@ const bcrypt = require('bcrypt');
 
 const {
   users,
-  customers,
-  invoices,
   revenue,
   members,
   bills,
@@ -40,22 +38,6 @@ async function seedUsers() {
   }
 }
 
-async function seedInvoices() {
-  try {
-    const insertedInvoices = await prisma.invoices.createMany({
-      data: invoices,
-      skipDuplicates: true,
-    });
-
-    console.log(`Seeded ${insertedInvoices.count} invoices`);
-
-    return insertedInvoices;
-  } catch (error) {
-    console.error('Error seeding invoices:', error);
-    throw error;
-  }
-}
-
 async function seedBills() {
   try {
     const insertedBills = await prisma.bills.createMany({
@@ -68,22 +50,6 @@ async function seedBills() {
     return insertedBills;
   } catch (error) {
     console.error('Error seeding bills:', error);
-    throw error;
-  }
-}
-
-async function seedCustomers() {
-  try {
-    const insertedCustomers = await prisma.customers.createMany({
-      data: customers,
-      skipDuplicates: true,
-    });
-
-    console.log(`Seeded ${insertedCustomers.count} customers`);
-
-    return insertedCustomers;
-  } catch (error) {
-    console.error('Error seeding customers:', error);
     throw error;
   }
 }
@@ -104,30 +70,11 @@ async function seedMembers() {
   }
 }
 
-async function seedRevenue() {
-  try {
-    const insertedRevenue = await prisma.revenue.createMany({
-      data: revenue,
-      skipDuplicates: true,
-    });
-
-    console.log(`Seeded ${insertedRevenue.count} revenue`);
-
-    return insertedRevenue;
-  } catch (error) {
-    console.error('Error seeding revenue:', error);
-    throw error;
-  }
-}
-
 async function main() {
   try {
     await prisma.$connect();
 
     await seedUsers();
-    await seedCustomers();
-    await seedInvoices();
-    await seedRevenue();
     await seedMembers();
     await seedBills();
 

@@ -9,21 +9,6 @@ datasource db {
 }
 
 // define your table models and push them to the database
-model Customers {
-  id        String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name      String @db.VarChar(255)
-  email     String @db.VarChar(255)
-  image_url String @db.VarChar(255)
-}
-
-model Invoices {
-  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  customer_id String   @db.Uuid
-  amount      Int
-  status      String   @db.VarChar(255)
-  date        DateTime @db.Date
-}
-
 model Bills {
   id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   amount      Int
@@ -36,12 +21,6 @@ model Bills {
   Member      Members   @relation(fields: [memberId], references: [id], onDelete: Cascade)
   memberId    String    @db.Uuid
 }
-
-model Revenue {
-  month   String @unique @db.VarChar(4)
-  revenue Int
-}
-
 model Users {
   id       String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name     String @db.VarChar(255)
