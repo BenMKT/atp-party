@@ -3,18 +3,37 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useForm, ValidationError } from '@formspree/react';
+import { toast } from 'react-toastify';
 
 // create a contact form component to capture user input
 const ContactForm = () => {
   // use the useForm hook to handle form state, submission, validation, reset, and error handling
   const [state, handleSubmit, reset] = useForm('mdoqbndz');
 
-  // reset form after 3 seconds on successful submission
+  // display success messages to the user using react-toastify on successful form submission and reset the form 
   if (state.succeeded) {
-    setTimeout(() => {
-      reset();
-    }, 3000);
+    toast.success('Message Submitted Successfully!', {
+      position: 'bottom-center',
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+    reset();// reset form on successful submission
   }
+  // else if (state.errors) {
+  //   const errorMessage = Object.values(state.errors).join(', ');
+  //   toast.error(errorMessage, {
+  //     position: 'bottom-center',
+  //     autoClose: 3000, // Close after 3 seconds
+  //     hideProgressBar: false,
+  //     closeOnClick: true,
+  //     pauseOnHover: true,
+  //     draggable: true,
+  //   });
+  // }
 
   return (
     <main>
@@ -169,14 +188,7 @@ const ContactForm = () => {
                 </div>
                 {/* display succuss and error messages */}
                 <div>
-                {state.succeeded && (
-                  <div className="alert alert-success mx-auto -mt-4 w-fit text-white">
-                    Message Submitted Successfully!
-                  </div>
-                )}
-                {/* {errorMessage && (
-                  <div className="alert-danger alert">{errorMessage}</div>
-                )} */}
+
                 </div>
 
                 {/* submit button div  */}
