@@ -1,4 +1,4 @@
-import { Gender, PrismaClient } from '@prisma/client';
+import { Disabled, Gender, PrismaClient } from '@prisma/client';
 import { UpdateMember, DeleteMember } from './buttons';
 import Pagination from '@/app/ui/pagination';
 
@@ -21,12 +21,14 @@ const MembersTable = async ({
       where: {
         OR: [
           { name: { contains: query, mode: 'insensitive' } },
+          { nationalId: { contains: query, mode: 'insensitive' } },
           { email: { contains: query, mode: 'insensitive' } },
           { mobileNumber: { contains: query, mode: 'insensitive' } },
           { county: { contains: query, mode: 'insensitive' } },
           { constituency: { contains: query, mode: 'insensitive' } },
           { ward: { contains: query, mode: 'insensitive' } },
           { gender: Gender[query as keyof typeof Gender] },
+          { isDisabled: Disabled[query as keyof typeof Disabled] },
         ],
       },
       skip: (Number(currentPage) - 1) * perPage,
@@ -37,12 +39,14 @@ const MembersTable = async ({
       where: {
         OR: [
           { name: { contains: query, mode: 'insensitive' } },
+          { nationalId: { contains: query, mode: 'insensitive' } },
           { email: { contains: query, mode: 'insensitive' } },
           { mobileNumber: { contains: query, mode: 'insensitive' } },
           { county: { contains: query, mode: 'insensitive' } },
           { constituency: { contains: query, mode: 'insensitive' } },
           { ward: { contains: query, mode: 'insensitive' } },
           { gender: Gender[query as keyof typeof Gender] },
+          { isDisabled: Disabled[query as keyof typeof Disabled] },
         ],
       },
     });
