@@ -1,14 +1,5 @@
 // This file contains placeholder data that you'll be replacing with real data when Data Fetching
-const { Gender, Disabled } = require('@prisma/client');
-
-const users = [
-  {
-    id: '410544b2-4001-4271-9855-fec4b6a6442a',
-    name: 'User',
-    email: 'user@user.com',
-    password: '123456',
-  },
-];
+const { Gender, Disabled, Role } = require('@prisma/client');
 
 const members = [
   {
@@ -138,6 +129,119 @@ const members = [
     ward: 'Lodwar',
     signature: '/members/emil-kowalski.png',
     createdAt: '2020-12-06T12:34:56Z',
+  },
+  {
+    id: '9005dc9e-712f-4377-85e9-fec4b6a6882b',
+    nationalId: '23006400',
+    name: 'John Doe',
+    dateOfBirth: '1987-12-06T15:34:56Z',
+    mobileNumber: '+254712377008',
+    email: 'john@doe.com',
+    gender: Gender.MALE,
+    isDisabled: Disabled.FALSE,
+    religion: 'Christian',
+    county: 'Kilifi',
+    constituency: 'Kilifi Central',
+    ward: 'Kilifi Manenoz',
+    signature: 'J.Doe',
+    createdAt: '2020-12-06T08:34:56Z',
+  },
+  {
+    id: '8811dc9e-712f-4377-85e9-fec4b6a6987c',
+    nationalId: '23323711',
+    name: 'Jane Doe',
+    dateOfBirth: '1995-12-06T12:34:56Z',
+    mobileNumber: '+254745349008',
+    email: 'jane@doe.com',
+    gender: Gender.FEMALE,
+    isDisabled: Disabled.FALSE,
+    religion: 'Catholic',
+    county: 'Lamu',
+    constituency: 'Msambweni',
+    ward: 'Majoreni',
+    signature: 'J.Doez',
+    createdAt: '2020-12-06T11:34:56Z',
+  },
+];
+
+const users = [
+  {
+    id: '0ed219b4-895a-4fd9-a3ad-2d41fa500406',
+    name: 'John Doe',
+    email: 'john@doe.com',
+    password: '123456',
+    role: Role.ADMIN,
+    createdAt: '2018-01-06T12:00:00Z',
+    userId: members[8].id,
+  },
+  {
+    id: 'eaa96f8e-db40-47b7-a4f3-9446376313c7',
+    name: 'Jane Doe',
+    email: 'jane@doe.com',
+    password: '123456',
+    role: Role.MEMBER,
+    createdAt: '2020-01-06T12:00:00Z',
+    userId: members[9].id,
+  },
+];
+
+const polls = [
+  {
+    id: '83004bd6-7f9f-48a2-994a-a7ad93b44472',
+    title: 'Presidential Nominations 2027',
+    description: 'Vote for your prefered ATP Presidential flag bearer of 2027',
+    startDate: '2026-07-06T05:00:00Z',
+    endDate: '2026-07-06T15:00:00Z',
+    banner:
+      'https://th.bing.com/th/id/OIP.xRnPeInZJoIH-SEJPV_41AAAAA?w=331&h=166&c=7&r=0&o=5&pid=1.7',
+    createdAt: '2026-07-02T08:34:56Z',
+  },
+  {
+    id: 'dc88c84d-d292-4538-8249-372581997fd3',
+    title: 'MCAs Westlands Nominations 2027',
+    description: 'Vote for your prefered ATP Westlands MCA flag bearer of 2027',
+    startDate: '2026-07-07T05:00:00Z',
+    endDate: '2026-07-07T15:00:00Z',
+    banner:
+      'https://th.bing.com/th/id/OIP.NUHIKYUaIoSrI9M4M3-esgHaFj?w=234&h=180&c=7&r=0&o=5&pid=1.7',
+    createdAt: '2026-07-02T09:34:56Z',
+  },
+];
+
+const contestants = [
+  {
+    id: 'dc55c84d-d282-4538-8249-372581997ed4',
+    name: 'John Doe',
+    slogan: 'Vote for change',
+    avatar: '/john.png',
+    createdAt: '2026-07-02T08:40:56Z',
+    contestantsId: users[0].id,
+    pollsId: polls[0].id,
+  },
+  {
+    id: 'de23c84d-d232-4638-8249-372581997fc5',
+    name: 'Jane Doe',
+    slogan: 'Vote for peace',
+    avatar:
+      'https://th.bing.com/th/id/OIP.fei1AujY0FZkIleAmhK-GQHaLH?w=187&h=280&c=7&r=0&o=5&pid=1.7',
+    createdAt: '2026-07-02T09:40:56Z',
+    contestantsId: users[1].id,
+    pollsId: polls[1].id,
+  },
+];
+
+const votes = [
+  {
+    id: 'eb58c84d-d292-4538-8249-372581997fa8',
+    pollId: polls[0].id,
+    contestantId: contestants[0].id,
+    createdAt: '2026-07-06T12:34:56Z',
+  },
+  {
+    id: 'cd88c84d-d292-4538-4982-372581997fb7',
+    pollId: polls[1].id,
+    contestantId: contestants[1].id,
+    createdAt: '2026-07-07T12:34:56Z',
   },
 ];
 
@@ -272,10 +376,58 @@ const bills = [
     createdAt: '2021-08-06T12:34:56Z',
     updatedAt: '2021-08-26T12:34:56Z',
   },
+  {
+    memberId: members[9].id,
+    amount: 10000,
+    description: 'Annual Membership Fee',
+    status: 'Overdue',
+    dueDate: '2021-09-06T12:34:56Z',
+    createdAt: '2021-08-06T09:34:56Z',
+    updatedAt: '2021-08-26T10:44:56Z',
+  },
+  {
+    memberId: members[8].id,
+    amount: 1000,
+    description: 'Annual Membership Fee',
+    status: 'Overdue',
+    dueDate: '2021-09-06T12:34:56Z',
+    createdAt: '2021-08-06T10:34:56Z',
+    updatedAt: '2021-08-26T13:34:56Z',
+  },
+  {
+    memberId: members[7].id,
+    amount: 1000,
+    description: 'Annual Membership Fee',
+    status: 'Overdue',
+    dueDate: '2021-09-06T12:34:56Z',
+    createdAt: '2021-08-06T11:34:56Z',
+    updatedAt: '2021-08-26T12:34:56Z',
+  },
+  {
+    memberId: members[5].id,
+    amount: 1000,
+    description: 'Annual Membership Fee',
+    status: 'Overdue',
+    dueDate: '2021-09-06T12:34:56Z',
+    createdAt: '2021-08-06T13:34:56Z',
+    updatedAt: '2021-08-26T14:34:56Z',
+  },
+  {
+    memberId: members[3].id,
+    amount: 1000,
+    description: 'Annual Membership Fee',
+    status: 'Overdue',
+    dueDate: '2021-09-06T12:34:56Z',
+    createdAt: '2021-08-06T05:34:56Z',
+    updatedAt: '2021-08-26T06:34:56Z',
+  },
 ];
 
 module.exports = {
-  users,
   members,
+  users,
+  polls,
+  contestants,
+  votes,
   bills,
 };

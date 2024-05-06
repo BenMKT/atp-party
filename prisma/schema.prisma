@@ -1,11 +1,13 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
 }
 
 datasource db {
   provider  = "postgresql"
-  url       = env("POSTGRES_PRISMA_URL")
-  directUrl = env("POSTGRES_URL_NON_POOLING")
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+  schemas   = ["public", "auth"]
 }
 
 // define your table models and push them to the database
@@ -17,15 +19,25 @@ model Bills {
   dueDate     DateTime  @db.Date
   createdAt   DateTime  @default(now())
   updatedAt   DateTime? @updatedAt
-  deletedAt   DateTime? @db.Timestamp(6)
   Member      Members   @relation(fields: [memberId], references: [id], onDelete: Cascade)
   memberId    String    @db.Uuid
+
+  @@schema("public") // or @@schema("auth")
 }
+
 model Users {
-  id       String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name     String @db.VarChar(255)
-  email    String @unique
-  password String
+  id         String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name       String       @db.VarChar(255)
+  email      String       @unique
+  password   String       @unique @db.VarChar(255) // hashed password
+  role       Role
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime?    @updatedAt
+  userId     String       @unique @db.VarChar(255)
+  member     Members      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contestant Contestants?
+
+  @@schema("public") // or @@schema("auth")
 }
 
 model Members {
@@ -44,16 +56,72 @@ model Members {
   signature    String    @db.VarChar(255)
   createdAt    DateTime  @default(now())
   updatedAt    DateTime? @updatedAt
-  deletedAt    DateTime? @db.Timestamp(6)
   bill         Bills[]
+  user         Users?
+
+  @@schema("public") // or @@schema("auth")
+}
+
+model Polls {
+  id          String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title       String        @db.VarChar(255)
+  description String        @db.VarChar(255)
+  startDate   DateTime      @db.Timestamp(6)
+  endDate     DateTime      @db.Timestamp(6)
+  banner      String?       @db.VarChar(255)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime?     @updatedAt
+  vote        Votes[]
+  contestant  Contestants[]
+
+  @@schema("public") // or @@schema("auth")
+}
+
+model Votes {
+  id           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  pollId       String      @db.Uuid
+  contestantId String      @db.Uuid
+  createdAt    DateTime    @default(now())
+  poll         Polls       @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  contestant   Contestants @relation(fields: [contestantId], references: [id], onDelete: Cascade)
+
+  @@schema("public") // or @@schema("auth")
+}
+
+model Contestants {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name          String    @db.VarChar(255)
+  slogan        String?   @db.VarChar(255)
+  avatar        String    @db.VarChar(255)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime? @updatedAt
+  vote          Votes[]
+  user          Users     @relation(fields: [contestantsId], references: [id])
+  contestantsId String    @unique @db.Uuid
+  Polls         Polls     @relation(fields: [pollsId], references: [id])
+  pollsId       String    @db.Uuid
+
+  @@schema("public") // or @@schema("auth")
 }
 
 enum Gender {
   MALE
   FEMALE
+
+  @@schema("public") // or @@schema("auth")
 }
 
 enum Disabled {
   TRUE
   FALSE
+
+  @@schema("public") // or @@schema("auth")
+}
+
+enum Role {
+  ADMIN
+  STAFF
+  MEMBER
+
+  @@schema("public") // or @@schema("auth")
 }
