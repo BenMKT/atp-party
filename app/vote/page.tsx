@@ -14,14 +14,12 @@ const VotingPage = () => {
         before:z-[-1] before:h-full before:w-full
         before:bg-[url('/assets/images/bg.jpeg')] before:bg-cover before:bg-no-repeat before:blur-sm"
         />
-
         <section className="relative space-y-16 px-5 py-10 text-white sm:p-10">
           <NavBar />
           <Banner />
           <DisplayPolls />
           <Footer />
         </section>
-        <CreatePollModal />
       </div>
     </main>
   );
