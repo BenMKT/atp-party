@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 // create a component to display a list of polls
 const DisplayPolls = () => {
@@ -8,7 +9,7 @@ const DisplayPolls = () => {
       <h1 className="mb-5 text-center text-[34px] font-[550px]">
         Start Voting
       </h1>
-      {/* display all polls */}
+      {/* map through poll table to display all polls */}
       <div className="mx-auto grid grid-cols-1 gap-16 pb-7 sm:w-2/3 xl:grid-cols-2">
         <Poll />
         <Poll />
@@ -73,9 +74,11 @@ const Poll = () => {
           </div>
 
           {/* redirect button */}
-          <button className="h-[44px] w-full rounded-full bg-[#1B5CFE] transition-all duration-300 hover:bg-blue-500">
-            Enter
-          </button>
+          <Link href={'/vote/polls/id'}>
+            <button className="mt-5 h-[44px] w-full rounded-full bg-[#1B5CFE] transition-all duration-300 hover:bg-blue-500">
+              Enter
+            </button>
+          </Link>
         </div>
       </div>
     </div>
