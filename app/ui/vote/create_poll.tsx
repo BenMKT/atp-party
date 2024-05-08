@@ -11,7 +11,7 @@ const CreatePollModal = ({ onClose }: { onClose: () => void }) => {
         <div className="flex flex-col">
           {/* close button */}
           <div className="flex flex-row items-center justify-between">
-            <p className="font-semibold">Add Poll</p>
+            <p className="font-semibold">Fill Poll Details</p>
             <button
               onClick={onClose}
               className="border-0 bg-transparent focus:outline-none"
@@ -89,7 +89,7 @@ const CreatePollModal = ({ onClose }: { onClose: () => void }) => {
               className="mt-2 block h-[48px] w-full rounded-full bg-[#1B5CFE] px-3 text-sm
                 font-bold transition-all duration-300 hover:bg-blue-500"
             >
-              Create Poll
+              Submit
             </button>
           </form>
         </div>

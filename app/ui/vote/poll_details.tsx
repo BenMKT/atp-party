@@ -1,8 +1,36 @@
+'use client';
+
+import { useState } from 'react';
 import Image from 'next/image';
 import { MdModeEdit } from 'react-icons/md';
+import ContestantModal from './create_contestant';
+import CreatePollModal from './create_poll';
 
 // create a component to display specific poll details
 const PollDetails = () => {
+  // add state variables to track whether the modals should be shown
+   const [showCreatePollModal, setShowCreatePollModal] = useState(false);
+   const [showContestantModal, setShowContestantModal] = useState(false);
+
+  // when respective buttons are clicked, these state variables should be set to true and when the modals are closed, it should be set back to false
+
+  const openCreatePollModal = () => {
+    setShowCreatePollModal(true);
+  };
+
+  const closeCreatePollModal = () => {
+    setShowCreatePollModal(false);
+  };
+
+  const openContestantModal = () => {
+    setShowContestantModal(true);
+  };
+
+  const closeContestantModal = () => {
+    setShowContestantModal(false);
+  };
+
+  // use conditional rendering and add prop to be passed to modal component
   return (
     <main>
       {/* poll banner image */}
@@ -66,9 +94,10 @@ const PollDetails = () => {
               2 contestants
             </button>
             <button
+              onClick={openCreatePollModal}
               className="flex items-center 
                     justify-center gap-[8px] rounded-full border border-gray-400 
-                    bg-white bg-opacity-20 px-[12px] py-[6px] text-[12px] md:text-[16px]"
+                    bg-white bg-opacity-20 px-[12px] py-[6px] text-[12px] transition-all duration-300 hover:bg-white hover:text-[#1B5CFE] md:text-[16px] hover:bg-opacity-50"
             >
               <MdModeEdit size={20} className="text-[#1B5CFE]" />
               Edit poll
@@ -76,6 +105,7 @@ const PollDetails = () => {
           </div>
           {/* create contestant button */}
           <button
+            onClick={openContestantModal}
             className="h-[45px] w-[148px] rounded-full border border-gray-400 bg-[#1B5CFE] py-2
             text-white transition-all duration-300 hover:bg-blue-500"
           >
@@ -83,6 +113,13 @@ const PollDetails = () => {
           </button>
         </section>
       </div>
+      {/* contestant modal */}
+      {showContestantModal && (
+        <ContestantModal onClose={closeContestantModal} />
+      )}
+      {showCreatePollModal && (
+        <CreatePollModal onClose={closeCreatePollModal} />
+      )}
     </main>
   );
 };

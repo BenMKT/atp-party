@@ -1,7 +1,7 @@
 import { FaTimes } from 'react-icons/fa';
 
 // create a modal to capture the user's input and pass the form action to be called when the form is submitted
-const CreateContestantModal = () => {
+const ContestantModal = ({ onClose }: { onClose: () => void }) => {
   return (
     <div
       className="fixed left-0 top-0 z-50 flex h-screen w-screen transform
@@ -11,9 +11,9 @@ const CreateContestantModal = () => {
         <div className="flex flex-col">
           {/* close button */}
           <div className="flex flex-row items-center justify-between">
-            <p className="font-semibold">Become a Contestant</p>
+            <p className="font-semibold">Fill Contestant Details</p>
             <button
-              // onClick={onClose}
+              onClick={onClose}
               className="border-0 bg-transparent focus:outline-none"
             >
               <FaTimes />
@@ -24,8 +24,8 @@ const CreateContestantModal = () => {
             {/* contestant name field */}
             <div className="mb-3 mt-2 flex w-full items-center rounded-full border border-[#212D4A] px-4 py-4">
               <input
-                defaultValue="Contestant/User Name"
-                className="w-full bg-transparent cursor-not-allowed text-sm placeholder-[#929292] outline-none"
+                defaultValue="Contestant / Logged-in user name"
+                className="w-full cursor-not-allowed bg-transparent text-sm placeholder-[#929292] outline-none"
                 name="name"
                 disabled
               />
@@ -53,7 +53,7 @@ const CreateContestantModal = () => {
               className="mt-2 block h-[48px] w-full rounded-full bg-[#1B5CFE] px-3 text-sm
                 font-bold transition-all duration-300 hover:bg-blue-500"
             >
-              Contest Now
+              Submit
             </button>
           </form>
         </div>
@@ -62,4 +62,4 @@ const CreateContestantModal = () => {
   );
 };
 
-export default CreateContestantModal;
+export default ContestantModal;
