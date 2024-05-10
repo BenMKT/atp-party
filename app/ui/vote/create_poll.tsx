@@ -1,3 +1,4 @@
+import { createPoll } from '@/app/lib/actions';
 import { FaTimes } from 'react-icons/fa';
 
 // create a modal to capture the user's input and pass the form action to be called when the form is submitted
@@ -11,7 +12,7 @@ const CreatePollModal = ({ onClose }: { onClose: () => void }) => {
         <div className="flex flex-col">
           {/* close button */}
           <div className="flex flex-row items-center justify-between">
-            <p className="font-semibold">Fill Poll Details</p>
+            <p className="font-semibold">Add Poll</p>
             <button
               onClick={onClose}
               className="border-0 bg-transparent focus:outline-none"
@@ -20,13 +21,17 @@ const CreatePollModal = ({ onClose }: { onClose: () => void }) => {
             </button>
           </div>
           {/* form */}
-          <form className="mb-5 mt-5 flex flex-col items-start justify-center rounded-xl">
-            {/* poll name field */}
+          <form
+            action={createPoll}
+            className="mb-5 mt-5 flex flex-col items-start justify-center rounded-xl"
+          >
+            {/* poll title field */}
             <div className="mb-3 mt-2 flex w-full items-center rounded-full border border-[#212D4A] px-4 py-4">
               <input
-                placeholder="Poll Name"
+                id="title"
+                placeholder="Poll Title"
                 className="w-full bg-transparent text-sm placeholder-[#929292] outline-none"
-                name="name"
+                name="title"
                 required
               />
             </div>
@@ -41,8 +46,9 @@ const CreatePollModal = ({ onClose }: { onClose: () => void }) => {
               >.
               </span>
               <input
+                id="startDate"
                 className="w-full bg-transparent text-sm placeholder-transparent outline-none"
-                name="starts"
+                name="startDate"
                 type="datetime-local"
                 placeholder="Start Date and Time"
                 required
@@ -59,8 +65,10 @@ const CreatePollModal = ({ onClose }: { onClose: () => void }) => {
               >.
               </span>
               <input
+                id="endDate"
                 className="w-full bg-transparent text-sm placeholder-[#929292] outline-none"
-                name="ends"
+                name="endDate"
+                placeholder='End Date and Time'
                 type="datetime-local"
                 required
               />
@@ -68,8 +76,9 @@ const CreatePollModal = ({ onClose }: { onClose: () => void }) => {
             {/* banner field */}
             <div className="mb-3 mt-2 flex w-full items-center rounded-full border border-[#212D4A] px-4 py-4">
               <input
-                placeholder="Banner URL"
-                type="url"
+                id="banner"
+                type='file'
+                placeholder="Banner"
                 className="w-full bg-transparent text-sm placeholder-[#929292] outline-none"
                 name="banner"
                 required
@@ -78,18 +87,20 @@ const CreatePollModal = ({ onClose }: { onClose: () => void }) => {
             {/* description */}
             <div className="mt-2 flex h-20 w-full items-center rounded-xl border border-[#212D4A] px-4 py-4">
               <textarea
+                id="description"
                 placeholder="Poll Description"
                 className="w-full bg-transparent text-sm placeholder-[#929292] outline-none"
-                name="banner"
+                name="description"
                 required
               ></textarea>
             </div>
             {/* create poll button */}
             <button
+              type="submit"
               className="mt-2 block h-[48px] w-full rounded-full bg-[#1B5CFE] px-3 text-sm
                 font-bold transition-all duration-300 hover:bg-blue-500"
             >
-              Submit
+              Create Poll
             </button>
           </form>
         </div>

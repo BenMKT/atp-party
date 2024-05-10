@@ -109,3 +109,20 @@ export const fetchPendingBills = async () => {
     throw new Error('Failed to fetch pending bills data.');
   }
 };
+
+export const fetchPolls = async () => {
+  noStore();
+  try {
+    const polls = await prisma.polls.findMany({
+      include: {
+        contestant: true,
+        vote: true,
+      },
+    });
+
+    return polls;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch polls data.');
+  }
+};

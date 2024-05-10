@@ -193,7 +193,7 @@ const polls = [
     startDate: '2026-07-06T05:00:00Z',
     endDate: '2026-07-06T15:00:00Z',
     banner:
-      'https://th.bing.com/th/id/OIP.xRnPeInZJoIH-SEJPV_41AAAAA?w=331&h=166&c=7&r=0&o=5&pid=1.7',
+      '/kenyaflagbanner.jpg',
     createdAt: '2026-07-02T08:34:56Z',
   },
   {
@@ -203,7 +203,7 @@ const polls = [
     startDate: '2026-07-07T05:00:00Z',
     endDate: '2026-07-07T15:00:00Z',
     banner:
-      'https://th.bing.com/th/id/OIP.NUHIKYUaIoSrI9M4M3-esgHaFj?w=234&h=180&c=7&r=0&o=5&pid=1.7',
+      '/kenyaflagbanner.png',
     createdAt: '2026-07-02T09:34:56Z',
   },
 ];
@@ -213,7 +213,7 @@ const contestants = [
     id: 'dc55c84d-d282-4538-8249-372581997ed4',
     name: 'John Doe',
     slogan: 'Vote for change',
-    avatar: '/john.png',
+    avatar: '/pigbin.jpg',
     createdAt: '2026-07-02T08:40:56Z',
     contestantsId: users[0].id,
     pollsId: polls[0].id,
@@ -222,8 +222,7 @@ const contestants = [
     id: 'de23c84d-d232-4638-8249-372581997fc5',
     name: 'Jane Doe',
     slogan: 'Vote for peace',
-    avatar:
-      'https://th.bing.com/th/id/OIP.fei1AujY0FZkIleAmhK-GQHaLH?w=187&h=280&c=7&r=0&o=5&pid=1.7',
+    avatar:'/question.jpeg',
     createdAt: '2026-07-02T09:40:56Z',
     contestantsId: users[1].id,
     pollsId: polls[1].id,

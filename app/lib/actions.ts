@@ -75,6 +75,27 @@ const UpdateBillSchema = BillFormSchema.pick({
   dueDate: true,
 });
 
+// create a polls schema that matches database schema to validate the user input data
+const PollFormSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  description: z.string(),
+  startDate: z.coerce.date(),
+  endDate: z.coerce.date(),
+  banner: z.string().optional(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date().optional(),
+});
+
+// Derive a Create and update Poll schema from the PollFormSchema
+const CreatePollSchema = PollFormSchema.pick({
+  title: true,
+  description: true,
+  startDate: true,
+  endDate: true,
+  banner: true,
+});
+
 // define a function/Action to create a member record in the database
 export const registerMember = async (formData: FormData) => {
   // extract the user input data from the form using the formData object and convert it to a plain object
@@ -136,8 +157,6 @@ export const deleteMember = async (id: string) => {
   // revalidate the members page to reflect changes
   revalidatePath('/dashboard/members');
 };
-
-
 
 // define a function/Action to create a bill record in the database
 
@@ -201,4 +220,30 @@ export const deleteBill = async (id: string) => {
   console.log('Bill deleted successfully');
   // revalidate the bills page to reflect changes
   revalidatePath('/dashboard/bills');
+};
+
+// define a function/Action to create a poll record in the database
+
+export const createPoll = async (formData: FormData) => {
+  // extract the user input data from the form and convert it to an object
+  const rawFormData = Object.fromEntries(formData.entries());
+  // validate the user input data
+  const validatedFields = CreatePollSchema.safeParse(rawFormData);
+  // if validation is successful, proceed to insert the data to the database or else display the error messages
+  const validatedData = validatedFields.success
+    ? validatedFields.data
+    : validatedFields.error.flatten().fieldErrors;
+  // insert the data to the database
+  await prisma.polls
+    .create({
+      // @ts-ignore
+      data: validatedData,
+    })
+    .then(() => {
+      console.log('Poll created successfully!');
+    });
+  // revalidate the polls page to display the newly added poll
+  revalidatePath('@/app/vote');
+  // redirect the user to the polls page after successful registration
+  redirect('@/app/vote');
 };

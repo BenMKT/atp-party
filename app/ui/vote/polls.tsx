@@ -1,9 +1,14 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { fetchPolls } from '@/app/lib/data';
+import type { Poll } from '@/app/lib/definitions';
 
 // create a component to display a list of polls
-const DisplayPolls = () => {
+const DisplayPolls = async () => {
+  // get polls from the database
+  const polls = await fetchPolls();
+  
   return (
     <div>
       <h1 className="mb-5 text-center text-[34px] font-[550px]">
@@ -11,17 +16,16 @@ const DisplayPolls = () => {
       </h1>
       {/* map through poll table to display all polls */}
       <div className="mx-auto grid grid-cols-1 gap-16 pb-7 sm:w-2/3 xl:grid-cols-2">
-        <Poll />
-        <Poll />
-        <Poll />
-        <Poll />
+        {polls.map((poll: Poll) => (
+          <Poll key={poll.id} poll={poll} />
+        ))}
       </div>
     </div>
   );
 };
 
 // create poll cards
-const Poll = () => {
+const Poll = ({poll}: {poll:Poll}) => {
   return (
     <div className="mx-auto grid w-full grid-cols-1 md:grid-cols-2">
       <div
@@ -31,15 +35,8 @@ const Poll = () => {
         {/* poll images card */}
         <div className="flex w-full justify-between space-y-0 md:w-[217px] md:flex-col md:space-y-2">
           <Image
-            src="/question.jpeg"
-            alt=""
-            width={160}
-            height={165}
-            className="rounded-[20px] object-cover md:w-full"
-          />
-          <Image
-            src="/question.jpeg"
-            alt=""
+            src={ poll.banner || '/question.jpeg'}
+            alt="poll banner"
             width={160}
             height={165}
             className="rounded-[20px] object-cover md:w-full"
@@ -51,11 +48,10 @@ const Poll = () => {
                 bg-[#151515] px-[15px] py-[18px] text-white md:h-[280px] md:w-[352px] md:px-[22px]"
         >
           {/* poll title */}
-          <h1 className="text-[18px] font-[600px]">Beauty Pagentry</h1>
+          <h1 className="text-[18px] font-[600px]">{ poll.title}</h1>
           {/* poll description */}
           <p className="text-[14px] font-[400px]">
-            A beauty pageantry is a competition that has traditionally focused
-            on judging and ranking the physical...
+            { poll.description}
           </p>
 
           <div className="flex items-center justify-between gap-[8px]">
@@ -64,7 +60,7 @@ const Poll = () => {
               className="h-[26px] rounded-full bg-[#2c2c2c] px-[12px] py-[4px]
                 text-[12px] font-[400px]"
             >
-              Wed, Nov 23, 2023
+              { poll.startDate.toLocaleDateString()}
             </div>
             {/* user name */}
             <div className="flex h-[32px] w-[119px] items-center gap-[5px]">
