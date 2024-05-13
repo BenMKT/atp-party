@@ -42,3 +42,7 @@ export type Poll = {
   contestant: Contestants[];
   vote: Votes[];
 };
+
+export type Data = {
+  path: string;
+};

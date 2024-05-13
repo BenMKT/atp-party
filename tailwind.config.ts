@@ -13,6 +13,7 @@ const config: Config = {
     require('@tailwindcss/forms'),
     require('@tailwindcss/typography'),
     require('daisyui'),
+    require('@tailwindcss/aspect-ratio'),
   ],
   daisyui: {
     themes: ['corporate'],

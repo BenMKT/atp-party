@@ -4,6 +4,7 @@ import { PrismaClient } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
+import { Data } from './definitions';
 
 // instantiate PrismaClient
 const prisma = new PrismaClient();
@@ -88,12 +89,10 @@ const PollFormSchema = z.object({
 });
 
 // Derive a Create and update Poll schema from the PollFormSchema
-const CreatePollSchema = PollFormSchema.pick({
-  title: true,
-  description: true,
-  startDate: true,
-  endDate: true,
-  banner: true,
+const CreatePollSchema = PollFormSchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
 });
 
 // define a function/Action to create a member record in the database
@@ -224,26 +223,30 @@ export const deleteBill = async (id: string) => {
 
 // define a function/Action to create a poll record in the database
 
-export const createPoll = async (formData: FormData) => {
-  // extract the user input data from the form and convert it to an object
-  const rawFormData = Object.fromEntries(formData.entries());
-  // validate the user input data
-  const validatedFields = CreatePollSchema.safeParse(rawFormData);
-  // if validation is successful, proceed to insert the data to the database or else display the error messages
-  const validatedData = validatedFields.success
-    ? validatedFields.data
-    : validatedFields.error.flatten().fieldErrors;
+export const createPoll = async (data: Data, formData: FormData) => {
+  // extract user input data using destucturing from the form and validate it
+  const { title, description, startDate, endDate } = CreatePollSchema.parse({
+    title: formData.get('title'),
+    description: formData.get('description'),
+    startDate: formData.get('startDate'),
+    endDate: formData.get('endDate'),
+  });
+  // get the imageURL from supabase storage bucket
+  const bannerURL = `https://hgtovaupiuxajqlkjdfg.supabase.co/storage/v1/object/public/images/${data.path}`;
   // insert the data to the database
-  await prisma.polls
-    .create({
-      // @ts-ignore
-      data: validatedData,
-    })
-    .then(() => {
-      console.log('Poll created successfully!');
-    });
+  await prisma.polls.create({
+    data: {
+      title,
+      description,
+      startDate,
+      endDate,
+      banner: bannerURL,
+      userId: '0ed219b4-895a-4fd9-a3ad-2d41fa500406', // remove after adding authentication to get the user id from the session
+    },
+  });
+  console.log('Poll created successfully');
   // revalidate the polls page to display the newly added poll
-  revalidatePath('@/app/vote');
+  revalidatePath('/vote');
   // redirect the user to the polls page after successful registration
-  redirect('@/app/vote');
+  // redirect('/vote');
 };

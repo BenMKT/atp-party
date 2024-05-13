@@ -21,21 +21,26 @@ model Bills {
   updatedAt   DateTime? @updatedAt
   Member      Members   @relation(fields: [memberId], references: [id], onDelete: Cascade)
   memberId    String    @db.Uuid
+  user        Users?    @relation(fields: [userId], references: [id])
+  userId      String?   @db.Uuid
 
   @@schema("public") // or @@schema("auth")
 }
 
 model Users {
   id         String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name       String       @db.VarChar(255)
-  email      String       @unique
+  username   String?      @db.VarChar(255)
+  nationalId String       @unique @db.VarChar(255)
+  email      String?      @unique @db.VarChar(255)
   password   String       @unique @db.VarChar(255) // hashed password
-  role       Role
+  role       Role         @default(USER)
   createdAt  DateTime     @default(now())
   updatedAt  DateTime?    @updatedAt
-  userId     String       @unique @db.VarChar(255)
-  member     Members      @relation(fields: [userId], references: [id], onDelete: Cascade)
   contestant Contestants?
+  bill       Bills[]
+  vote       Votes[]
+  poll       Polls[]
+  member     Members?
 
   @@schema("public") // or @@schema("auth")
 }
@@ -57,7 +62,8 @@ model Members {
   createdAt    DateTime  @default(now())
   updatedAt    DateTime? @updatedAt
   bill         Bills[]
-  user         Users?
+  user         Users     @relation(fields: [userId], references: [id])
+  userId       String    @unique @db.Uuid
 
   @@schema("public") // or @@schema("auth")
 }
@@ -73,33 +79,37 @@ model Polls {
   updatedAt   DateTime?     @updatedAt
   vote        Votes[]
   contestant  Contestants[]
+  user        Users         @relation(fields: [userId], references: [id])
+  userId      String        @db.Uuid
 
   @@schema("public") // or @@schema("auth")
 }
 
 model Votes {
-  id           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id           String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   pollId       String      @db.Uuid
   contestantId String      @db.Uuid
   createdAt    DateTime    @default(now())
   poll         Polls       @relation(fields: [pollId], references: [id], onDelete: Cascade)
   contestant   Contestants @relation(fields: [contestantId], references: [id], onDelete: Cascade)
+  user         Users       @relation(fields: [userId], references: [id])
+  userId       String      @db.Uuid
 
   @@schema("public") // or @@schema("auth")
 }
 
 model Contestants {
-  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name          String    @db.VarChar(255)
-  slogan        String?   @db.VarChar(255)
-  avatar        String    @db.VarChar(255)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime? @updatedAt
-  vote          Votes[]
-  user          Users     @relation(fields: [contestantsId], references: [id])
-  contestantsId String    @unique @db.Uuid
-  Polls         Polls     @relation(fields: [pollsId], references: [id])
-  pollsId       String    @db.Uuid
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String    @db.VarChar(255)
+  slogan    String?   @db.VarChar(255)
+  avatar    String    @db.VarChar(255)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  vote      Votes[]
+  user      Users     @relation(fields: [userId], references: [id])
+  userId    String    @unique @db.Uuid
+  poll      Polls     @relation(fields: [pollId], references: [id])
+  pollId    String    @db.Uuid
 
   @@schema("public") // or @@schema("auth")
 }
@@ -121,7 +131,7 @@ enum Disabled {
 enum Role {
   ADMIN
   STAFF
-  MEMBER
+  USER
 
   @@schema("public") // or @@schema("auth")
 }

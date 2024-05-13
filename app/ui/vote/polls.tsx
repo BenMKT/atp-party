@@ -8,7 +8,7 @@ import type { Poll } from '@/app/lib/definitions';
 const DisplayPolls = async () => {
   // get polls from the database
   const polls = await fetchPolls();
-  
+
   return (
     <div>
       <h1 className="mb-5 text-center text-[34px] font-[550px]">
@@ -25,7 +25,7 @@ const DisplayPolls = async () => {
 };
 
 // create poll cards
-const Poll = ({poll}: {poll:Poll}) => {
+const Poll = ({ poll }: { poll: Poll }) => {
   return (
     <div className="mx-auto grid w-full grid-cols-1 md:grid-cols-2">
       <div
@@ -33,26 +33,24 @@ const Poll = ({poll}: {poll:Poll}) => {
             justify-start gap-[10px] md:flex md:h-[280px] md:w-[580px]"
       >
         {/* poll images card */}
-        <div className="flex w-full justify-between space-y-0 md:w-[217px] md:flex-col md:space-y-2">
+        <div className="aspect-h-0 aspect-w-1 flex w-full overflow-hidden md:aspect-h-1 md:aspect-w-16 md:w-56">
           <Image
-            src={ poll.banner || '/question.jpeg'}
+            src={poll.banner || '/flagke.jpg'}
             alt="poll banner"
             width={160}
             height={165}
-            className="rounded-[20px] object-cover md:w-full"
+            className="flex-1 rounded-[20px] object-cover"
           />
         </div>
         {/* poll details card */}
         <div
-          className="h-[257px] w-full gap-[14px] space-y-5 rounded-[24px]
+          className="h-fit w-full gap-[14px] space-y-5 rounded-[24px]
                 bg-[#151515] px-[15px] py-[18px] text-white md:h-[280px] md:w-[352px] md:px-[22px]"
         >
           {/* poll title */}
-          <h1 className="text-[18px] font-[600px]">{ poll.title}</h1>
+          <h1 className="text-[18px] font-[600px]">{poll.title}</h1>
           {/* poll description */}
-          <p className="text-[14px] font-[400px]">
-            { poll.description}
-          </p>
+          <p className="text-[14px] font-[400px]">{poll.description}</p>
 
           <div className="flex items-center justify-between gap-[8px]">
             {/* poll start date */}
@@ -60,7 +58,7 @@ const Poll = ({poll}: {poll:Poll}) => {
               className="h-[26px] rounded-full bg-[#2c2c2c] px-[12px] py-[4px]
                 text-[12px] font-[400px]"
             >
-              { poll.startDate.toLocaleDateString()}
+              {new Date(poll.startDate).toLocaleString()}
             </div>
             {/* user name */}
             <div className="flex h-[32px] w-[119px] items-center gap-[5px]">

@@ -124,8 +124,8 @@ async function main() {
   try {
     await prisma.$connect();
 
-    await seedMembers();
     await seedUsers();
+    await seedMembers();
     await seedPolls();
     await seedContestants();
     await seedVotes();
