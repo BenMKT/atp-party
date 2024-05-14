@@ -1,8 +1,14 @@
 /** @type {import('next').NextConfig} */
-// Add your domain here to allow images from this domain to be optimized by the next/image component
+// Add your domain here to allow lazy loading images from this domain and optimized by the next/image component
 const nextConfig = {
   images: {
-    domains: ['hgtovaupiuxajqlkjdfg.supabase.co'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'hgtovaupiuxajqlkjdfg.supabase.co',
+        pathname: '**',
+      },
+    ],
   },
 };
 
