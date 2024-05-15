@@ -1,19 +1,54 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { MdModeEdit } from 'react-icons/md';
 import ContestantModal from './create_contestant';
 import CreatePollModal from './create_poll';
+import {
+  totalPollContestants,
+  fetchPollById,
+  totalPollVotes,
+} from '@/app/lib/data';
 
-// create a component to display specific poll details
-const PollDetails = () => {
+// create a component to display specific poll details using id
+const PollDetails = ({ id }: { id: string }) => {
+  // add state variable to store the poll details
+  const [pollData, setPollData] = useState<any>({});
+  // add state variable to store the total number of poll contestants
+  const [totalContestants, setTotalContestants] = useState(0);
+  // add state variable to store the total number of poll votes
+  const [pollVotes, setPollVotes] = useState(0);
   // add state variables to track whether the modals should be shown
-   const [showCreatePollModal, setShowCreatePollModal] = useState(false);
-   const [showContestantModal, setShowContestantModal] = useState(false);
+  const [showCreatePollModal, setShowCreatePollModal] = useState(false);
+  const [showContestantModal, setShowContestantModal] = useState(false);
+  // fetch the poll details using the id passed to the component and set the poll state variable with the fetched data
+  useEffect(() => {
+    const fetchPoll = async () => {
+      const selectedPoll = await fetchPollById(id);
+      setPollData(selectedPoll);
+      console.log(selectedPoll);
+    };
+    fetchPoll();
+
+    // fetch the total number of contestants using poll id and set total contestants state variable with the fetched data
+    const fetchTotalContestants = async () => {
+      const fetchedCount = await totalPollContestants(id);
+      setTotalContestants(fetchedCount);
+      console.log(fetchedCount);
+    };
+    fetchTotalContestants();
+
+    // fetch the total number of votes using poll id and set total votes state variable with the fetched data
+    const fetchTotalVotes = async () => {
+      const fetchedVotes = await totalPollVotes(id);
+      setPollVotes(fetchedVotes);
+      console.log(fetchedVotes);
+    };
+    fetchTotalVotes();
+  }, [id]);
 
   // when respective buttons are clicked, these state variables should be set to true and when the modals are closed, it should be set back to false
-
   const openCreatePollModal = () => {
     setShowCreatePollModal(true);
   };
@@ -40,10 +75,10 @@ const PollDetails = () => {
       >
         <Image
           className="h-full w-full object-cover"
-          src="/kenyaflagbanner.png"
-          alt=""
-          width="100"
-          height="100"
+          src={pollData?.banner || '/flagke.jpg'}
+          alt={`${pollData?.title} poll banner`}
+          width={100}
+          height={100}
         />
       </div>
       {/* poll details */}
@@ -53,12 +88,11 @@ const PollDetails = () => {
       >
         {/* poll title */}
         <h1 className="text-center text-[47px] font-[600px] leading-none">
-          Presidential Nominations
+          {pollData?.title}
         </h1>
         {/* poll description */}
         <p className="text-center text-[16px] font-[500px]">
-          A beauty pageantry is a competition that has traditionally focused on
-          judging and ranking the physical...
+          {pollData?.description}
         </p>
 
         <section className=" mt-4 flex h-[136px] flex-col items-center gap-[16px]">
@@ -68,7 +102,7 @@ const PollDetails = () => {
                 bg-opacity-20 px-[12px] py-[6px]"
           >
             <p className="text-center text-[14px] font-[500px] md:text-[16px]">
-              Wed, Nov 23, 2026 - Fri, Dec 23, 2026
+              Voting Day: {new Date(pollData?.startDate).toLocaleString()}
             </p>
           </div>
           {/* user name */}
@@ -85,19 +119,19 @@ const PollDetails = () => {
               className="rounded-full border border-gray-400 bg-white bg-opacity-20 px-[12px]
               py-[6px] text-[12px] md:text-[16px]"
             >
-              1 Vote
+              {pollVotes} Votes
             </button>
             <button
               className="rounded-full border 
                     border-gray-400 bg-white bg-opacity-20 px-[12px] py-[6px] text-[12px] md:text-[16px]"
             >
-              2 contestants
+              {totalContestants} Contestants
             </button>
             <button
               onClick={openCreatePollModal}
               className="flex items-center 
                     justify-center gap-[8px] rounded-full border border-gray-400 
-                    bg-white bg-opacity-20 px-[12px] py-[6px] text-[12px] transition-all duration-300 hover:bg-white hover:text-[#1B5CFE] md:text-[16px] hover:bg-opacity-50"
+                    bg-white bg-opacity-20 px-[12px] py-[6px] text-[12px] transition-all duration-300 hover:bg-white hover:bg-opacity-50 hover:text-[#1B5CFE] md:text-[16px]"
             >
               <MdModeEdit size={20} className="text-[#1B5CFE]" />
               Edit poll

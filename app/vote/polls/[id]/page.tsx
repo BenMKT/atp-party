@@ -1,10 +1,12 @@
-import NavBar from "@/app/ui/top-navbar";
-import PollDetails from "@/app/ui/vote/poll_details";
-import Contestants from "@/app/ui/vote/contestants";
-import Footer from "@/app/ui/vote/footer";
+import NavBar from '@/app/ui/top-navbar';
+import PollDetails from '@/app/ui/vote/poll_details';
+import Contestants from '@/app/ui/vote/contestants';
+import Footer from '@/app/ui/vote/footer';
 
-// display specific poll details
-const PollDetailsPage = () => {
+// display specific poll details by pollId using page params
+const PollDetailsPage = ({ params }: { params: { id: string } }) => {
+  const id = params.id;
+
   return (
     <main>
       <div className="relative min-h-screen backdrop-blur">
@@ -16,7 +18,7 @@ const PollDetailsPage = () => {
 
         <section className="relative space-y-16 px-5 py-10 text-white sm:p-10">
           <NavBar />
-          <PollDetails />
+          <PollDetails id={id} />
           <Contestants />
           <Footer />
         </section>
