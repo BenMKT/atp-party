@@ -1,13 +1,10 @@
 'use server';
 
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/prisma/prisma';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { Data } from './definitions';
-
-// instantiate PrismaClient
-const prisma = new PrismaClient();
 
 // create a member schema that matches database schema to validate the user input data
 const MemberFormSchema = z.object({

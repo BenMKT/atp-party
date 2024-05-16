@@ -27,7 +27,6 @@ const PollDetails = ({ id }: { id: string }) => {
     const fetchPoll = async () => {
       const selectedPoll = await fetchPollById(id);
       setPollData(selectedPoll);
-      console.log(selectedPoll);
     };
     fetchPoll();
 
@@ -35,7 +34,6 @@ const PollDetails = ({ id }: { id: string }) => {
     const fetchTotalContestants = async () => {
       const fetchedCount = await totalPollContestants(id);
       setTotalContestants(fetchedCount);
-      console.log(fetchedCount);
     };
     fetchTotalContestants();
 
@@ -43,10 +41,11 @@ const PollDetails = ({ id }: { id: string }) => {
     const fetchTotalVotes = async () => {
       const fetchedVotes = await totalPollVotes(id);
       setPollVotes(fetchedVotes);
-      console.log(fetchedVotes);
     };
     fetchTotalVotes();
+    // TODO: add functionality here to subscribe and handle real-time updates of poll votes either with prisma pulse or supabase
   }, [id]);
+
 
   // when respective buttons are clicked, these state variables should be set to true and when the modals are closed, it should be set back to false
   const openCreatePollModal = () => {

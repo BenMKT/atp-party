@@ -1,9 +1,7 @@
 'use server';
 
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/prisma/prisma';
 import { unstable_noStore as noStore } from 'next/cache';
-
-const prisma = new PrismaClient();
 
 // fetch card data from the database
 export const fetchCardData = async () => {
@@ -163,6 +161,7 @@ export const totalPollContestants = async (id: string) => {
   }
 };
 
+// TODO: Refactor below function to subscribe and handle real-time updates of poll votes either with prisma pulse or supabase real-time subscriptions
 // count all votes from the database by poll id
 export const totalPollVotes = async (id: string) => {
   noStore();
@@ -173,6 +172,6 @@ export const totalPollVotes = async (id: string) => {
     return votes;
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error('Failed to count poll votes.');
+    throw new Error('Failed to count poll votes in real-time!!');
   }
 };
