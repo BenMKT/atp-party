@@ -58,6 +58,15 @@ const users = [
     role: Role.USER, // by default
     createdAt: '2020-01-06T12:00:00Z',
   },
+  {
+    id: 'cff96f8a-da40-47b7-a8f3-9446376376c9',
+    username: 'FloraW',
+    nationalId: '24623711',
+    email: 'flo@wambo.com',
+    password: '123456',
+    role: Role.STAFF,
+    createdAt: '2019-03-06T12:00:00Z',
+  },
 ];
 
 const polls = [

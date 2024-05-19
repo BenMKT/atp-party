@@ -2,6 +2,7 @@
 
 import prisma from '@/prisma/prisma';
 import { unstable_noStore as noStore } from 'next/cache';
+import { Data } from './definitions';
 
 // fetch card data from the database
 export const fetchCardData = async () => {
@@ -173,5 +174,38 @@ export const totalPollVotes = async (id: string) => {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to count poll votes in real-time!!');
+  }
+};
+
+// fetch all contestants by poll id from the database
+export const fetchContestants = async (id: string) => {
+  noStore();
+  try {
+    const contestants = await prisma.contestants.findMany({
+      where: { pollId: id },
+      include: {
+        poll: true,
+        vote: true,
+      },
+    });
+    return contestants;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch poll contestants.');
+  }
+};
+
+// TODO: Refactor to incoporate real time updates of contestant votes
+// count all votes by contestant id from the database
+export const totalContestantVotes = async (contestantid: string) => {
+  noStore();
+  try {
+    const votes = await prisma.votes.count({
+      where: { contestantId: contestantid },
+    });
+    return votes;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to count contestant votes.');
   }
 };

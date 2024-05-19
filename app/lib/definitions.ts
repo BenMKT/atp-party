@@ -46,3 +46,13 @@ export type Poll = {
 export type Data = {
   path: string;
 };
+
+export type PollContestant = {
+  id: string;
+  name: string;
+  slogan: string | null;
+  avatar: string;
+  pollId: string;
+  createdAt: Date;
+  updatedAt: Date | null;
+};

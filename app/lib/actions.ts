@@ -4,7 +4,7 @@ import prisma from '@/prisma/prisma';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
-import { Data } from './definitions';
+import { Data, PollContestant } from './definitions';
 
 // create a member schema that matches database schema to validate the user input data
 const MemberFormSchema = z.object({
@@ -87,6 +87,24 @@ const PollFormSchema = z.object({
 
 // Derive a Create and update Poll schema from the PollFormSchema
 const CreatePollSchema = PollFormSchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+// create a contestants schema that matches database schema to validate the user input data
+const ContestantFormSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  slogan: z.string().optional(),
+  avatar: z.string(),
+  pollId: z.string(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date().optional(),
+});
+
+// Derive a Create and update Contestant schema from the ContestantFormSchema
+const CreateContestantSchema = ContestantFormSchema.omit({
   id: true,
   createdAt: true,
   updatedAt: true,
@@ -238,7 +256,7 @@ export const createPoll = async (data: Data, formData: FormData) => {
       startDate,
       endDate,
       banner: bannerURL,
-      userId: '0ed219b4-895a-4fd9-a3ad-2d41fa500406', // remove after adding authentication to get the user id from the session
+      userId: '0ed219b4-895a-4fd9-a3ad-2d41fa500406', // TODO remove after adding authentication to get the user id from the session
     },
   });
   console.log('Poll created successfully');
@@ -246,4 +264,24 @@ export const createPoll = async (data: Data, formData: FormData) => {
   revalidatePath('/vote');
   // redirect the user to the polls page after successful registration
   // redirect('/vote');
+};
+
+// define a function/Action to create a contestant record in the database
+export const createContestant = async (contestant: PollContestant) => {
+  // insert the data to the database
+  await prisma.contestants.create({
+    data: contestant,
+  });
+  console.log('Contestant created successfully');
+  // redirect the user to the polls page after successful registration
+};
+
+// define a function/Action to delete a contestant record from the database
+export const deleteContestant = async (contestantid: string) => {
+  await prisma.contestants.delete({
+    where: { id: contestantid },
+  });
+  console.log('Contestant deleted successfully');
+  // revalidate the polls page to reflect changes
+  // revalidatePath('/vote');
 };
