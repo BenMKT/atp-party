@@ -56,3 +56,11 @@ export type PollContestant = {
   createdAt: Date;
   updatedAt: Date | null;
 };
+
+export type EditPoll = {
+  title: string;
+  description: string;
+  startDate: Date;
+  endDate: Date;
+  banner: string | null;
+};

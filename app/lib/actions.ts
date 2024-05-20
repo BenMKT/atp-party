@@ -4,7 +4,7 @@ import prisma from '@/prisma/prisma';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
-import { Data, PollContestant } from './definitions';
+import { Data, EditPoll, PollContestant } from './definitions';
 
 // create a member schema that matches database schema to validate the user input data
 const MemberFormSchema = z.object({
@@ -274,6 +274,7 @@ export const createContestant = async (contestant: PollContestant) => {
   });
   console.log('Contestant created successfully');
   // redirect the user to the polls page after successful registration
+  // TODO: add functionality here to subscribe and handle real-time updates of contestants table either with prisma pulse or supabase
 };
 
 // define a function/Action to delete a contestant record from the database
@@ -283,5 +284,31 @@ export const deleteContestant = async (contestantid: string) => {
   });
   console.log('Contestant deleted successfully');
   // revalidate the polls page to reflect changes
-  // revalidatePath('/vote');
+  // TODO: add functionality here to subscribe and handle real-time updates of contestants table either with prisma pulse or supabase
+};
+
+// define a function/Action to update/edit a poll record in the database
+export const updatePoll = async (poll_id: string, editPoll: EditPoll) => {
+  // update poll records in the database using prisma 'update'
+  await prisma.polls
+    .update({
+      where: { id: poll_id },
+
+      data: editPoll,
+    })
+    .then(() => {
+      console.log('Poll updated successfully');
+      // revalidate doesn't work for dynamic routes
+      // TODO: add functionality here to subscribe and handle real-time updates of polls table page either with prisma pulse or supabase
+    });
+};
+
+// define a function/action to delete a poll record from the database
+export const deletePoll = async (poll_id: string) => {
+  await prisma.polls.delete({
+    where: { id: poll_id },
+  });
+  console.log('Poll deleted successfully');
+  // revalidate the polls page to reflect changes
+  revalidatePath('/vote');
 };

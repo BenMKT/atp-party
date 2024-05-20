@@ -4,12 +4,12 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { MdModeEdit } from 'react-icons/md';
 import ContestantModal from './create_contestant';
-import CreatePollModal from './create_poll';
 import {
   totalPollContestants,
   fetchPollById,
   totalPollVotes,
 } from '@/app/lib/data';
+import UpdatePollModal from './update_poll';
 
 // create a component to display specific poll details using id
 const PollDetails = ({ id }: { id: string }) => {
@@ -20,8 +20,8 @@ const PollDetails = ({ id }: { id: string }) => {
   // add state variable to store the total number of poll votes
   const [pollVotes, setPollVotes] = useState(0);
   // add state variables to track whether the modals should be shown
-  const [showCreatePollModal, setShowCreatePollModal] = useState(false);
   const [showContestantModal, setShowContestantModal] = useState(false);
+  const [showUpdatepollModal, setShowUpdatePollModal] = useState(false);
   // fetch the poll details using the id passed to the component and set the poll state variable with the fetched data
   useEffect(() => {
     const fetchPoll = async () => {
@@ -46,15 +46,7 @@ const PollDetails = ({ id }: { id: string }) => {
     // TODO: add functionality here to subscribe and handle real-time updates of poll votes either with prisma pulse or supabase
   }, [id]);
 
-
   // when respective buttons are clicked, these state variables should be set to true and when the modals are closed, it should be set back to false
-  const openCreatePollModal = () => {
-    setShowCreatePollModal(true);
-  };
-
-  const closeCreatePollModal = () => {
-    setShowCreatePollModal(false);
-  };
 
   const openContestantModal = () => {
     setShowContestantModal(true);
@@ -62,6 +54,13 @@ const PollDetails = ({ id }: { id: string }) => {
 
   const closeContestantModal = () => {
     setShowContestantModal(false);
+  };
+  const openUpdatePollModal = () => {
+    setShowUpdatePollModal(true);
+  };
+
+  const closeUpdatePollModal = () => {
+    setShowUpdatePollModal(false);
   };
 
   // use conditional rendering and add prop to be passed to modal component
@@ -127,7 +126,7 @@ const PollDetails = ({ id }: { id: string }) => {
               {totalContestants} Contestants
             </button>
             <button
-              onClick={openCreatePollModal}
+              onClick={openUpdatePollModal}
               className="flex items-center 
                     justify-center gap-[8px] rounded-full border border-gray-400 
                     bg-white bg-opacity-20 px-[12px] py-[6px] text-[12px] transition-all duration-300 hover:bg-white hover:bg-opacity-50 hover:text-[#1B5CFE] md:text-[16px]"
@@ -150,8 +149,9 @@ const PollDetails = ({ id }: { id: string }) => {
       {showContestantModal && (
         <ContestantModal onClose={closeContestantModal} />
       )}
-      {showCreatePollModal && (
-        <CreatePollModal onClose={closeCreatePollModal} />
+      {/* update poll modal */}
+      {showUpdatepollModal && (
+        <UpdatePollModal poll_data={pollData} onClose={closeUpdatePollModal} />
       )}
     </main>
   );
