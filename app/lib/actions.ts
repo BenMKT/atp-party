@@ -9,6 +9,7 @@ import {
   EditPoll,
   PollContestant,
   UpdateContestant,
+  Vote,
 } from './definitions';
 
 // create a member schema that matches database schema to validate the user input data
@@ -333,4 +334,12 @@ export const updateContestant = async (
       console.log('Contestant updated successfully');
       // TODO revalidate doesn't work for dynamic routes so we need to add functionality here to subscribe and handle real-time updates of contestants table either with prisma pulse or supabase
     });
+};
+
+// define a function to create a vote record in the database
+export const createVote = async (vote: Vote) => {
+  // insert the data to the database
+  await prisma.votes.create({
+    data: vote,
+  });
 };

@@ -2,7 +2,6 @@
 
 import prisma from '@/prisma/prisma';
 import { unstable_noStore as noStore } from 'next/cache';
-import { Data } from './definitions';
 
 // fetch card data from the database
 export const fetchCardData = async () => {
@@ -195,7 +194,7 @@ export const fetchContestants = async (id: string) => {
   }
 };
 
-// TODO: Refactor to incoporate real time updates of contestant votes
+// TODO: Refactor to incorporate real time updates of contestant votes
 // count all votes by contestant id from the database
 export const totalContestantVotes = async (contestantid: string) => {
   noStore();

@@ -9,7 +9,7 @@ import { BsFillTrash3Fill } from 'react-icons/bs';
 import { fetchContestants, totalContestantVotes } from '@/app/lib/data';
 import { PollContestant } from '@/app/lib/definitions';
 import { useParams } from 'next/navigation';
-import { deleteContestant } from '@/app/lib/actions';
+import { createVote, deleteContestant } from '@/app/lib/actions';
 import { toast } from 'react-toastify';
 import UpdateContestantModal from './update_contestant';
 
@@ -59,6 +59,10 @@ const Contestant = ({ contestant }: { contestant: PollContestant }) => {
     useState(false);
   // get the contestant id from the contestant object
   const contestantid = contestant.id;
+  // get the id from the URL params
+  const pageParams = useParams();
+  // get the id from the URL params as a string
+  const id = pageParams.id as string;
   // fetch the total number of votes for the contestant using the contestant id
   useEffect(() => {
     const fetchTotalContestantVotes = async () => {
@@ -81,6 +85,26 @@ const Contestant = ({ contestant }: { contestant: PollContestant }) => {
         console.error(error);
       });
   };
+  // call the createVote action to create a vote for the contestant when vote button is clicked
+  const handleVote = (contestantid: string, id: string) => {
+    const vote = {
+      contestantId: contestantid,
+      pollId: id,
+      userId: 'cff96f8a-da40-47b7-a8f3-9446376376c9',
+    };
+
+    createVote(vote)
+      .then(() => {
+        toast.success('Vote submitted successfully!!');
+        // reload the page after 3.5 seconds to reflect the changes
+        setTimeout(() => window.location.reload(), 3500);
+      })
+      .catch((error: Error) => {
+        toast.error('Error submitting vote!');
+        console.error(error);
+      });
+  };
+
   // when button is clicked, this state variable should be set to true and when the modal is closed, it should be set back to false
   const openUpdateContestantModal = () => {
     setShowUpdateContestantModal(true);
@@ -139,7 +163,10 @@ const Contestant = ({ contestant }: { contestant: PollContestant }) => {
             <p className="text-[14px] font-[500px]">{contestant?.slogan}</p>
           </div>
           {/* vote button */}
-          <button className="mx-auto h-12 w-40 rounded-[30.5px] bg-[#1B5CFE] sm:w-52">
+          <button
+            onClick={() => handleVote(contestantid, id)}
+            className="mx-auto h-12 w-40 rounded-[30.5px] bg-[#1B5CFE] sm:w-52"
+          >
             Vote
           </button>
           {/* vote count */}

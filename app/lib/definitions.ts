@@ -70,3 +70,9 @@ export type UpdateContestant = {
   slogan: string;
   avatar: string;
 };
+
+export type Vote = {
+  pollId: string;
+  contestantId: string;
+  userId: string;
+};
