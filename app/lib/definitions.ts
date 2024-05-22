@@ -64,3 +64,9 @@ export type EditPoll = {
   endDate: Date;
   banner: string | null;
 };
+
+export type UpdateContestant = {
+  name: string;
+  slogan: string;
+  avatar: string;
+};

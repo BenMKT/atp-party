@@ -6,12 +6,12 @@ import { BiUpvote } from 'react-icons/bi';
 import { MdModeEdit } from 'react-icons/md';
 import { TfiAnnouncement } from 'react-icons/tfi';
 import { BsFillTrash3Fill } from 'react-icons/bs';
-import ContestantModal from './create_contestant';
 import { fetchContestants, totalContestantVotes } from '@/app/lib/data';
 import { PollContestant } from '@/app/lib/definitions';
 import { useParams } from 'next/navigation';
 import { deleteContestant } from '@/app/lib/actions';
 import { toast } from 'react-toastify';
+import UpdateContestantModal from './update_contestant';
 
 // display a list of contestants
 const Contestants = () => {
@@ -19,11 +19,8 @@ const Contestants = () => {
   const pageParams = useParams();
   // get the id from the URL params as a string
   const id = pageParams.id as string;
-  // add state variable to track whether the modal should be shown
-  const [showContestantModal, setShowContestantModal] = useState(false);
   // add state variable to store the list of contestants
   const [contestants, setContestants] = useState<PollContestant[]>([]);
-
   // fetch the list of contestants using the poll id passed to the component
   useEffect(() => {
     const fetchPollContestants = async () => {
@@ -33,15 +30,6 @@ const Contestants = () => {
 
     fetchPollContestants();
   }, [id]);
-
-  // when button is clicked, this state variable should be set to true and when the modal is closed, it should be set back to false
-  const openContestantModal = () => {
-    setShowContestantModal(true);
-  };
-
-  const closeContestantModal = () => {
-    setShowContestantModal(false);
-  };
 
   // use conditional rendering and add prop to be passed to modal component
   return (
@@ -54,29 +42,21 @@ const Contestants = () => {
             <Contestant
               key={i}
               contestant={contestant} // pass the contestant object
-              onOpen={openContestantModal}
             />
           ))}
         </div>
       </div>
-      {/* contestant modal */}
-      {showContestantModal && (
-        <ContestantModal onClose={closeContestantModal} />
-      )}
     </main>
   );
 };
 
 // create contestant cards
-const Contestant = ({
-  contestant,
-  onOpen,
-}: {
-  contestant: PollContestant;
-  onOpen: () => void;
-}) => {
+const Contestant = ({ contestant }: { contestant: PollContestant }) => {
   // add state variable to store the total number of contestant votes
   const [contestantVotes, setContestantVotes] = useState(0);
+  // add state variable to track whether the modal should be shown
+  const [showUpdateContestantModal, setShowUpdateContestantModal] =
+    useState(false);
   // get the contestant id from the contestant object
   const contestantid = contestant.id;
   // fetch the total number of votes for the contestant using the contestant id
@@ -100,6 +80,14 @@ const Contestant = ({
         toast.error('Error deleting Contestant!');
         console.error(error);
       });
+  };
+  // when button is clicked, this state variable should be set to true and when the modal is closed, it should be set back to false
+  const openUpdateContestantModal = () => {
+    setShowUpdateContestantModal(true);
+  };
+
+  const closeUpdateContestantModal = () => {
+    setShowUpdateContestantModal(false);
   };
 
   return (
@@ -125,9 +113,9 @@ const Contestant = ({
             <h1 className="mx-auto text-[16px] font-[600px] sm:text-[20px]">
               {contestant?.name}
             </h1>
-            <div className="flex gap-2">
+            <div className="flex gap-[2px]">
               {/* edit button */}
-              <button onClick={onOpen}>
+              <button onClick={openUpdateContestantModal}>
                 <MdModeEdit
                   size={20}
                   className="text-[#1B5CFE] transition-all duration-300 hover:scale-150 hover:text-indigo-400"
@@ -163,6 +151,13 @@ const Contestant = ({
           </div>
         </div>
       </div>
+      {/* update contestant modal */}
+      {showUpdateContestantModal && (
+        <UpdateContestantModal
+          contestant={contestant}
+          onClose={closeUpdateContestantModal}
+        />
+      )}
     </main>
   );
 };

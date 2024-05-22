@@ -4,7 +4,12 @@ import prisma from '@/prisma/prisma';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
-import { Data, EditPoll, PollContestant } from './definitions';
+import {
+  Data,
+  EditPoll,
+  PollContestant,
+  UpdateContestant,
+} from './definitions';
 
 // create a member schema that matches database schema to validate the user input data
 const MemberFormSchema = z.object({
@@ -311,4 +316,21 @@ export const deletePoll = async (poll_id: string) => {
   console.log('Poll deleted successfully');
   // revalidate the polls page to reflect changes
   revalidatePath('/vote');
+};
+
+// define a function/Action to update a contestant record from the database
+export const updateContestant = async (
+  contestant_id: string,
+  contestant: UpdateContestant,
+) => {
+  // update contestant records in the database using prisma 'update'
+  await prisma.contestants
+    .update({
+      where: { id: contestant_id },
+      data: contestant,
+    })
+    .then(() => {
+      console.log('Contestant updated successfully');
+      // TODO revalidate doesn't work for dynamic routes so we need to add functionality here to subscribe and handle real-time updates of contestants table either with prisma pulse or supabase
+    });
 };
