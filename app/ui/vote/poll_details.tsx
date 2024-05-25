@@ -10,6 +10,7 @@ import {
   totalPollVotes,
 } from '@/app/lib/data';
 import UpdatePollModal from './update_poll';
+import { subscribeToPollVotes } from '@/app/lib/realtime';
 
 // create a component to display specific poll details using id
 const PollDetails = ({ id }: { id: string }) => {
@@ -43,7 +44,17 @@ const PollDetails = ({ id }: { id: string }) => {
       setPollVotes(fetchedVotes);
     };
     fetchTotalVotes();
-    // TODO: add functionality here to subscribe and handle real-time updates of poll votes either with prisma pulse or supabase
+    // Subscribe to real-time updates for poll votes
+    const handleNewVote = () => {
+      setPollVotes((prevVotes) => prevVotes + 1);
+    };
+
+    const subscription = subscribeToPollVotes(id, handleNewVote);
+
+    // Cleanup subscription on unmount
+    return () => {
+      subscription.unsubscribe();
+    };
   }, [id]);
 
   // when respective buttons are clicked, these state variables should be set to true and when the modals are closed, it should be set back to false

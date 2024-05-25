@@ -161,7 +161,6 @@ export const totalPollContestants = async (id: string) => {
   }
 };
 
-// TODO: Refactor below function to subscribe and handle real-time updates of poll votes either with prisma pulse or supabase real-time subscriptions
 // count all votes from the database by poll id
 export const totalPollVotes = async (id: string) => {
   noStore();
@@ -194,7 +193,6 @@ export const fetchContestants = async (id: string) => {
   }
 };
 
-// TODO: Refactor to incorporate real time updates of contestant votes
 // count all votes by contestant id from the database
 export const totalContestantVotes = async (contestantid: string) => {
   noStore();

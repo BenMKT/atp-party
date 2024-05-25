@@ -12,6 +12,7 @@ import { useParams } from 'next/navigation';
 import { createVote, deleteContestant } from '@/app/lib/actions';
 import { toast } from 'react-toastify';
 import UpdateContestantModal from './update_contestant';
+import { subscribeToVotes } from '@/app/lib/realtime';
 
 // display a list of contestants
 const Contestants = () => {
@@ -69,9 +70,21 @@ const Contestant = ({ contestant }: { contestant: PollContestant }) => {
       const fetchedVotes = await totalContestantVotes(contestantid);
       setContestantVotes(fetchedVotes);
     };
-
+    // get initial votes count on page load
     fetchTotalContestantVotes();
-  }, [contestantid]);
+
+    // on new vote, update/refresh the initial votes count 
+    const handleNewVote = () => {
+      fetchTotalContestantVotes();
+    };
+    // call the subscribeToVotes function to subscribe to votes
+    const subscription = subscribeToVotes(contestantid, handleNewVote);
+
+    // Cleanup subscription on unmount
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [contestantid]);  
   // call the deleteContestant action to delete contestant when delete button is clicked
   const handleDeleteContestant = (contestantId: string) => {
     deleteContestant(contestantId)
@@ -96,8 +109,6 @@ const Contestant = ({ contestant }: { contestant: PollContestant }) => {
     createVote(vote)
       .then(() => {
         toast.success('Vote submitted successfully!!');
-        // reload the page after 3.5 seconds to reflect the changes
-        setTimeout(() => window.location.reload(), 3500);
       })
       .catch((error: Error) => {
         toast.error('Error submitting vote!');
@@ -170,7 +181,7 @@ const Contestant = ({ contestant }: { contestant: PollContestant }) => {
             Vote
           </button>
           {/* vote count */}
-          <div className="mx-auto flex h-[32px] w-24 items-center gap-2">
+          <div className="mx-auto flex h-[32px] items-center gap-2">
             <div className="h-[32px] w-[32px] rounded-[9px] bg-[#0E1933] px-[9px] py-[8px]">
               <BiUpvote size={20} className="text-[#1B5CFE]" />
             </div>
