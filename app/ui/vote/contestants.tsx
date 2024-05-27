@@ -12,7 +12,10 @@ import { useParams } from 'next/navigation';
 import { createVote, deleteContestant } from '@/app/lib/actions';
 import { toast } from 'react-toastify';
 import UpdateContestantModal from './update_contestant';
-import { subscribeToVotes } from '@/app/lib/realtime';
+import {
+  subscribeToPollContestants,
+  subscribeToVotes,
+} from '@/app/lib/realtime';
 
 // display a list of contestants
 const Contestants = () => {
@@ -22,21 +25,40 @@ const Contestants = () => {
   const id = pageParams.id as string;
   // add state variable to store the list of contestants
   const [contestants, setContestants] = useState<PollContestant[]>([]);
+  // add state variable to store the number of contestants
+  const [contestantCount, setContestantCount] = useState(0);
+
   // fetch the list of contestants using the poll id passed to the component
   useEffect(() => {
     const fetchPollContestants = async () => {
       const pollcontestants = await fetchContestants(id);
       setContestants(pollcontestants);
+      // set the contestantCount state to the length of the contestants array
+      setContestantCount(pollcontestants.length);
     };
-
+    // get initial list of contestants on page load
     fetchPollContestants();
-  }, [id]);
+
+    // on new contestant, update/revalidate the list of contestants
+    const handleNewContestant = () => {
+      fetchPollContestants();
+    };
+    // call subscribeToPollContestants function to subscribe to Contestants table
+    const subscription = subscribeToPollContestants(id, handleNewContestant);
+
+    // Cleanup subscription on unmount
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [id, contestantCount]);
 
   // use conditional rendering and add prop to be passed to modal component
   return (
     <main>
       <div className="space-y-2">
-        <h1 className="text-center text-[48px] font-[600px]">Contestants</h1>
+        <h1 className="text-center text-[48px] font-[600px]">
+          Contestants: {contestantCount}
+        </h1>
         {/* map through the list of contestants and display each contestant */}
         <div className="mx-auto grid grid-cols-1 items-center justify-between gap-10 py-2.5 pb-10 xl:flex">
           {contestants.map((contestant: PollContestant, i) => (
@@ -73,7 +95,7 @@ const Contestant = ({ contestant }: { contestant: PollContestant }) => {
     // get initial votes count on page load
     fetchTotalContestantVotes();
 
-    // on new vote, update/refresh the initial votes count 
+    // on new vote, update/revalidate the initial votes count
     const handleNewVote = () => {
       fetchTotalContestantVotes();
     };
@@ -84,13 +106,13 @@ const Contestant = ({ contestant }: { contestant: PollContestant }) => {
     return () => {
       subscription.unsubscribe();
     };
-  }, [contestantid]);  
+  }, [contestantid]);
   // call the deleteContestant action to delete contestant when delete button is clicked
   const handleDeleteContestant = (contestantId: string) => {
     deleteContestant(contestantId)
       .then(() => {
         toast.success('Contestant deleted successfully!');
-        // reload the page after 3.5 seconds to reflect the changes
+        // TODO refactor to use supabase real-time to reflect the changes
         setTimeout(() => window.location.reload(), 3500);
       })
       .catch((error: Error) => {

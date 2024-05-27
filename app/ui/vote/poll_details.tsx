@@ -4,11 +4,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { MdModeEdit } from 'react-icons/md';
 import ContestantModal from './create_contestant';
-import {
-  totalPollContestants,
-  fetchPollById,
-  totalPollVotes,
-} from '@/app/lib/data';
+import { fetchPollById, totalPollVotes } from '@/app/lib/data';
 import UpdatePollModal from './update_poll';
 import { subscribeToPollVotes } from '@/app/lib/realtime';
 
@@ -16,8 +12,6 @@ import { subscribeToPollVotes } from '@/app/lib/realtime';
 const PollDetails = ({ id }: { id: string }) => {
   // add state variable to store the poll details
   const [pollData, setPollData] = useState<any>({});
-  // add state variable to store the total number of poll contestants
-  const [totalContestants, setTotalContestants] = useState(0);
   // add state variable to store the total number of poll votes
   const [pollVotes, setPollVotes] = useState(0);
   // add state variables to track whether the modals should be shown
@@ -30,13 +24,6 @@ const PollDetails = ({ id }: { id: string }) => {
       setPollData(selectedPoll);
     };
     fetchPoll();
-
-    // fetch the total number of contestants using poll id and set total contestants state variable with the fetched data
-    const fetchTotalContestants = async () => {
-      const fetchedCount = await totalPollContestants(id);
-      setTotalContestants(fetchedCount);
-    };
-    fetchTotalContestants();
 
     // fetch the total number of votes using poll id and set total votes state variable with the fetched data
     const fetchTotalVotes = async () => {
@@ -128,13 +115,7 @@ const PollDetails = ({ id }: { id: string }) => {
               className="rounded-full border border-gray-400 bg-white bg-opacity-20 px-[12px]
               py-[6px] text-[12px] md:text-[16px]"
             >
-              {pollVotes} Votes
-            </button>
-            <button
-              className="rounded-full border 
-                    border-gray-400 bg-white bg-opacity-20 px-[12px] py-[6px] text-[12px] md:text-[16px]"
-            >
-              {totalContestants} Contestants
+              {pollVotes} Total Poll Votes
             </button>
             <button
               onClick={openUpdatePollModal}

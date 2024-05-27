@@ -67,8 +67,7 @@ const ContestantModal = ({ onClose }: { onClose: () => void }) => {
         toast.error('Error: You can contestant in only one poll.');
         console.error(error);
       });
-    // reload the page after 3.5 seconds to reflect the changes
-    setTimeout(() => window.location.reload(), 3500);
+    // revalidation done by supabase real-time subscription
   };
 
   return (

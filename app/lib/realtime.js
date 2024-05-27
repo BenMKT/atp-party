@@ -27,3 +27,17 @@ export const subscribeToPollVotes = (pollId, handleNewVote) => {
     )
     .subscribe();
 };
+
+// define a function to subscribe to the contestants table and listen for all events
+export const subscribeToPollContestants = (id, handleNewContestant) => {
+  return supabase
+    .channel(`public:Contestants:pollId=eq.${id}`)
+    .on(
+      'postgres_changes',
+      { event: '*', schema: 'public', table: 'Contestants' },
+      (payload) => {
+        handleNewContestant(payload.new);
+      },
+    )
+    .subscribe();
+};

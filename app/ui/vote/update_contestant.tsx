@@ -67,8 +67,6 @@ const UpdateContestantModal = ({
         toast.error('Error updating contestant!');
         console.error(error);
       });
-    // reload the page after 3.5 seconds to reflect the changes
-    setTimeout(() => window.location.reload(), 3500);
   };
 
   return (
