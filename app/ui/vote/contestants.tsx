@@ -52,6 +52,27 @@ const Contestants = () => {
     };
   }, [id, contestantCount]);
 
+  // call the deleteContestant action to delete contestant when delete button is clicked
+  const handleDeleteContestant = (contestantId: string) => {
+    deleteContestant(contestantId)
+      .then(() => {
+        if (contestants) {
+          // filter out the deleted contestant from the list of contestants
+          const updatedContestants = contestants.filter(
+            (contestant) => contestant.id !== contestantId,
+          );
+          // update the list of contestants and the contestant count states
+          setContestants(updatedContestants);
+          setContestantCount(updatedContestants.length);
+        }
+        toast.success('Contestant deleted successfully!');
+      })
+      .catch((error: Error) => {
+        toast.error('Error deleting Contestant!');
+        console.error(error);
+      });
+  };
+
   // use conditional rendering and add prop to be passed to modal component
   return (
     <main>
@@ -65,6 +86,7 @@ const Contestants = () => {
             <Contestant
               key={i}
               contestant={contestant} // pass the contestant object
+              onDelete={() => handleDeleteContestant(contestant.id)} // pass a function that calls handleDeleteContestant with the correct id
             />
           ))}
         </div>
@@ -74,7 +96,13 @@ const Contestants = () => {
 };
 
 // create contestant cards
-const Contestant = ({ contestant }: { contestant: PollContestant }) => {
+const Contestant = ({
+  contestant,
+  onDelete,
+}: {
+  contestant: PollContestant;
+  onDelete: () => void;
+}) => {
   // add state variable to store the total number of contestant votes
   const [contestantVotes, setContestantVotes] = useState(0);
   // add state variable to track whether the modal should be shown
@@ -107,19 +135,7 @@ const Contestant = ({ contestant }: { contestant: PollContestant }) => {
       subscription.unsubscribe();
     };
   }, [contestantid]);
-  // call the deleteContestant action to delete contestant when delete button is clicked
-  const handleDeleteContestant = (contestantId: string) => {
-    deleteContestant(contestantId)
-      .then(() => {
-        toast.success('Contestant deleted successfully!');
-        // TODO refactor to use supabase real-time to reflect the changes
-        setTimeout(() => window.location.reload(), 3500);
-      })
-      .catch((error: Error) => {
-        toast.error('Error deleting Contestant!');
-        console.error(error);
-      });
-  };
+
   // call the createVote action to create a vote for the contestant when vote button is clicked
   const handleVote = (contestantid: string, id: string) => {
     const vote = {
@@ -179,7 +195,7 @@ const Contestant = ({ contestant }: { contestant: PollContestant }) => {
                 />
               </button>
               {/* delete button */}
-              <button onClick={() => handleDeleteContestant(contestantid)}>
+              <button onClick={onDelete}>
                 <BsFillTrash3Fill
                   size={20}
                   className="text-[#1B5CFE] transition-all duration-300 hover:scale-150 hover:text-indigo-400"

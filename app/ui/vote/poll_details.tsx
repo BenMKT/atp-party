@@ -32,8 +32,8 @@ const PollDetails = ({ id }: { id: string }) => {
     };
     fetchTotalVotes();
     // Subscribe to real-time updates for poll votes
-    const handleNewVote = () => {
-      setPollVotes((prevVotes) => prevVotes + 1);
+    const handleNewVote = async () => {
+      fetchTotalVotes();
     };
 
     const subscription = subscribeToPollVotes(id, handleNewVote);
@@ -42,7 +42,7 @@ const PollDetails = ({ id }: { id: string }) => {
     return () => {
       subscription.unsubscribe();
     };
-  }, [id]);
+  }, [id, pollVotes]);
 
   // when respective buttons are clicked, these state variables should be set to true and when the modals are closed, it should be set back to false
 
@@ -98,7 +98,7 @@ const PollDetails = ({ id }: { id: string }) => {
                 bg-opacity-20 px-[12px] py-[6px]"
           >
             <p className="text-center text-[14px] font-[500px] md:text-[16px]">
-              Voting Day: {new Date(pollData?.startDate).toLocaleString()}
+              Voting Day: {new Date(pollData?.startDate).toLocaleString()};
             </p>
           </div>
           {/* user name */}

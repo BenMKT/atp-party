@@ -20,7 +20,7 @@ export const subscribeToPollVotes = (pollId, handleNewVote) => {
     .channel(`public:Votes:pollId=eq.${pollId}`)
     .on(
       'postgres_changes',
-      { event: 'INSERT', schema: 'public', table: 'Votes' },
+      { event: '*', schema: 'public', table: 'Votes' },
       (payload) => {
         handleNewVote(payload.new);
       },
