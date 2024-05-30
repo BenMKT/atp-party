@@ -81,7 +81,7 @@ const Contestants = () => {
           Contestants: {contestantCount}
         </h1>
         {/* map through the list of contestants and display each contestant */}
-        <div className="mx-auto grid grid-cols-1 items-center justify-between gap-10 py-2.5 pb-10 xl:flex">
+        <div className="mx-auto grid grid-cols-1 md:justify-between gap-10 py-2.5 pb-10 xl:flex">
           {contestants.map((contestant: PollContestant, i) => (
             <Contestant
               key={i}
@@ -165,25 +165,28 @@ const Contestant = ({
 
   return (
     <main>
-      <div className="mt-5 flex items-center justify-start space-x-2 md:mx-auto md:space-x-8">
+      <div className="mt-5 flex grow items-center space-x-2 md:mx-auto md:space-x-8">
         {/* contestant image */}
-        <div className="h-[229px] w-[187px] overflow-hidden rounded-[24px] sm:h-[180px] sm:w-[324px]">
+        <div className="h-[229px] w-[187px] overflow-hidden rounded-[24px] sm:h-[190px] sm:w-[234px]">
           <Image
-            className="h-full w-full object-cover"
+            className="h-auto w-auto object-cover "
             src={contestant?.avatar || '/question.jpeg'}
             alt="contestant image"
-            width="100"
-            height="100"
+            layout='responsive'
+            width={234}
+            height={229}
+            priority
+            sizes='(max-width: 640px) 187px, 234px'
           />
         </div>
         {/* contestant details */}
         <div
-          className="flex h-[229px] w-[186px] flex-col justify-center
+          className="flex h-[229px] w-[300px] flex-col justify-center
         space-y-2 rounded-[24px] bg-[#151515] px-3 pb-2 pt-2 sm:h-fit sm:w-[253px]"
         >
           {/* contestant name */}
           <div className="flex justify-between p-2">
-            <h1 className="mx-auto text-[16px] font-[600px] sm:text-[20px]">
+            <h1 className="text-[16px] font-[600px] sm:text-[20px]">
               {contestant?.name}
             </h1>
             <div className="flex gap-[2px]">
@@ -214,12 +217,12 @@ const Contestant = ({
           {/* vote button */}
           <button
             onClick={() => handleVote(contestantid, id)}
-            className="mx-auto h-12 w-40 rounded-[30.5px] bg-[#1B5CFE] sm:w-52"
+            className="mx-auto h-12 w-[95%] rounded-[30.5px] bg-[#1B5CFE] sm:w-52"
           >
             Vote
           </button>
           {/* vote count */}
-          <div className="mx-auto flex h-[32px] items-center gap-2">
+          <div className="mx-auto flex align-middle h-[32px] items-center gap-2">
             <div className="h-[32px] w-[32px] rounded-[9px] bg-[#0E1933] px-[9px] py-[8px]">
               <BiUpvote size={20} className="text-[#1B5CFE]" />
             </div>

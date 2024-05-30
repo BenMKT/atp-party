@@ -1,6 +1,5 @@
 // This file contains placeholder data that you'll be replacing with real data when Data Fetching
 const { Gender, Disabled, Role } = require('@prisma/client');
-const { use } = require('react');
 
 const members = [
   {
@@ -66,6 +65,33 @@ const users = [
     password: '123456',
     role: Role.STAFF,
     createdAt: '2019-03-06T12:00:00Z',
+  },
+  {
+    id: 'ffa96f8a-da40-47b7-8df3-94463763723e',
+    username: 'KarenB',
+    nationalId: '24626511',
+    email: 'kb@mbiro.com',
+    password: '123456',
+    role: Role.STAFF,
+    createdAt: '2019-07-06T17:00:00Z',
+  },
+  {
+    id: 'acc96f8a-da40-47d8-a8f3-9446376400c9',
+    username: 'WilliamK',
+    nationalId: '24139711',
+    email: 'will@wills.com',
+    password: '123456',
+    role: Role.USER,
+    createdAt: '2019-12-06T09:00:00Z',
+  },
+  {
+    id: 'ad296f8a-da40-43e8-a8f3-9446376488d9',
+    username: 'TamB',
+    nationalId: '24658711',
+    email: 'tammy@wills.com',
+    password: '123456',
+    role: Role.USER,
+    createdAt: '2019-12-06T06:00:00Z',
   },
 ];
 

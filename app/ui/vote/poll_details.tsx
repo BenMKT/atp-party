@@ -73,8 +73,11 @@ const PollDetails = ({ id }: { id: string }) => {
           className="h-full w-full object-cover"
           src={pollData?.banner || '/flagke.jpg'}
           alt={`${pollData?.title} poll banner`}
-          width={100}
-          height={100}
+          width={1950}
+          height={838}
+          priority
+          layout='responsive'
+          quality={100}
         />
       </div>
       {/* poll details */}

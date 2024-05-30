@@ -33,9 +33,11 @@ const PollCard = ({ poll }: { poll: Poll }) => {
           <Image
             src={poll.banner || '/flagke.jpg'}
             alt="poll banner"
-            width={160}
-            height={165}
+            width={180}
+            height={267}
+            priority
             className="flex-1 rounded-[20px] object-cover"
+            quality={100}
           />
         </div>
         {/* poll details card */}
