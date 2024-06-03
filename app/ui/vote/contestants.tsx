@@ -16,6 +16,8 @@ import {
   subscribeToPollContestants,
   subscribeToVotes,
 } from '@/app/lib/realtime';
+import ShimmerButton from '../magicui/shimmer-button';
+import { motion } from 'framer-motion';
 
 // display a list of contestants
 const Contestants = () => {
@@ -77,11 +79,21 @@ const Contestants = () => {
   return (
     <main>
       <div className="space-y-2">
-        <h1 className="text-center text-[48px] font-[600px]">
+        <motion.h1
+          className="text-center text-[48px] font-[600px]"
+          initial={{ x: '-100vw' }}
+          animate={{ x: 0 }}
+          transition={{
+            type: 'spring',
+            delay: 2,
+            duration: 10,
+            stiffness: 220,
+          }}
+        >
           Contestants: {contestantCount}
-        </h1>
+        </motion.h1>
         {/* map through the list of contestants and display each contestant */}
-        <div className="mx-auto grid grid-cols-1 md:justify-between gap-10 py-2.5 pb-10 xl:flex">
+        <div className="mx-auto grid grid-cols-1 gap-10 py-2.5 pb-10 md:justify-between xl:flex">
           {contestants.map((contestant: PollContestant, i) => (
             <Contestant
               key={i}
@@ -167,22 +179,22 @@ const Contestant = ({
     <main>
       <div className="mt-5 flex grow items-center space-x-2 md:mx-auto md:space-x-8">
         {/* contestant image */}
-        <div className="h-[229px] w-[187px] overflow-hidden rounded-[24px] sm:h-[190px] sm:w-[234px]">
+        <div className="min-h-[229px] w-[187px] overflow-hidden rounded-[24px] sm:h-[190px] sm:w-[234px]">
           <Image
             className="h-auto w-auto object-cover "
             src={contestant?.avatar || '/question.jpeg'}
             alt="contestant image"
-            layout='responsive'
+            layout="responsive"
             width={234}
             height={229}
             priority
-            sizes='(max-width: 640px) 187px, 234px'
+            sizes="(max-width: 640px) 187px, 234px"
           />
         </div>
         {/* contestant details */}
         <div
-          className="flex h-[229px] w-[300px] flex-col justify-center
-        space-y-2 rounded-[24px] bg-[#151515] px-3 pb-2 pt-2 sm:h-fit sm:w-[253px]"
+          className="flex min-h-[229px] w-[300px] flex-col justify-center
+        space-y-2 rounded-[24px] bg-[#151515] px-3 pb-2 pt-2 sm:h-fit"
         >
           {/* contestant name */}
           <div className="flex justify-between p-2">
@@ -214,15 +226,15 @@ const Contestant = ({
             <TfiAnnouncement className="size-6" />
             <p className="text-[14px] font-[500px]">{contestant?.slogan}</p>
           </div>
-          {/* vote button */}
-          <button
+          {/* magic-ui vote button */}
+          <ShimmerButton
             onClick={() => handleVote(contestantid, id)}
-            className="mx-auto h-12 w-[95%] rounded-[30.5px] bg-[#1B5CFE] sm:w-52"
+            className="z-10 flex h-10 w-[95%] items-center justify-center"
           >
-            Vote
-          </button>
+            <span className=" text-center text-white">Vote</span>
+          </ShimmerButton>
           {/* vote count */}
-          <div className="mx-auto flex align-middle h-[32px] items-center gap-2">
+          <div className="mx-auto flex h-[32px] items-center gap-2 align-middle">
             <div className="h-[32px] w-[32px] rounded-[9px] bg-[#0E1933] px-[9px] py-[8px]">
               <BiUpvote size={20} className="text-[#1B5CFE]" />
             </div>

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import CreatePollModal from './create_poll';
+import ShimmerButton from '../magicui/shimmer-button';
 
 // create a banner component to display the page title, a brief description and a button to create a poll
 const Banner = () => {
@@ -34,12 +35,13 @@ const Banner = () => {
           to craft the tomorrow you deserve.
         </p>
         {/* create poll button */}
-        <button
+        <ShimmerButton
           onClick={openModal}
-          className="h-[45px] w-[148px] rounded-full border border-gray-400 bg-[#1B5CFE]
-            text-white transition-all duration-300 hover:bg-blue-500">
-          Create poll
-        </button>
+          className="mx-auto h-[45px] w-[148px] rounded-full bg-[#1B5CFE]
+             transition-all duration-300 hover:text-xl"
+        >
+          <span className="text-white">Create Poll</span>
+        </ShimmerButton>
       </main>
       {showModal && <CreatePollModal onClose={closeModal} />}
     </>

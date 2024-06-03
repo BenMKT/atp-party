@@ -6,6 +6,7 @@ import { BsFillTrash3Fill } from 'react-icons/bs';
 import { deletePoll } from '@/app/lib/actions';
 import { toast } from 'react-toastify';
 import { Poll } from '@/app/lib/definitions';
+import ShimmerButton from '../magicui/shimmer-button';
 
 // create poll cards to display poll details in each card component
 const PollCard = ({ poll }: { poll: Poll }) => {
@@ -23,7 +24,7 @@ const PollCard = ({ poll }: { poll: Poll }) => {
   };
 
   return (
-    <div className="mx-auto grid w-full grid-cols-1 md:grid-cols-2">
+    <div className="mx-auto grid grid-cols-1 md:grid-cols-2">
       <div
         className="grid h-[392px] w-full grid-cols-1
             justify-start gap-[10px] md:flex md:h-[280px] md:w-[580px]"
@@ -42,7 +43,7 @@ const PollCard = ({ poll }: { poll: Poll }) => {
         </div>
         {/* poll details card */}
         <div
-          className="h-fit w-full gap-[14px] space-y-5 rounded-[24px]
+          className="h-fit max-w-80 gap-[14px] space-y-5 rounded-[24px]
                 bg-[#151515] px-[15px] py-[18px] text-white md:h-[280px] md:w-[352px] md:px-[22px]"
         >
           <div className="flex justify-between">
@@ -63,7 +64,7 @@ const PollCard = ({ poll }: { poll: Poll }) => {
           <div className="flex items-center justify-between gap-[8px]">
             {/* poll start date */}
             <div
-              className="h-[26px] rounded-full bg-[#2c2c2c] px-[12px] py-[4px]
+              className="rounded-full bg-[#2c2c2c] px-[12px] py-[4px]
                 text-[12px] font-[400px]"
             >
               {new Date(poll.startDate).toLocaleString()}
@@ -77,9 +78,9 @@ const PollCard = ({ poll }: { poll: Poll }) => {
 
           {/* redirect button */}
           <Link href={`/vote/polls/${poll.id}`}>
-            <button className="mt-5 h-[44px] w-full rounded-full bg-[#1B5CFE] transition-all duration-300 hover:bg-blue-500">
-              Enter
-            </button>
+            <ShimmerButton className="mt-5 h-[44px] w-full rounded-full bg-[#1B5CFE] transition-all duration-300 hover:bg-blue-500">
+              <span className=" text-center text-white">Enter</span>
+            </ShimmerButton>
           </Link>
         </div>
       </div>

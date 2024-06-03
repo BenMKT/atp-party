@@ -1,6 +1,5 @@
 import NavBar from '../ui/top-navbar';
 import Banner from '../ui/vote/banner';
-import CreatePollModal from '../ui/vote/create_poll';
 import DisplayPolls from '../ui/vote/polls';
 import Footer from '@/app/ui/vote/footer';
 

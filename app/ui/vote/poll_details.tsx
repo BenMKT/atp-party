@@ -7,6 +7,8 @@ import ContestantModal from './create_contestant';
 import { fetchPollById, totalPollVotes } from '@/app/lib/data';
 import UpdatePollModal from './update_poll';
 import { subscribeToPollVotes } from '@/app/lib/realtime';
+import { motion } from 'framer-motion';
+import ShimmerButton from '../magicui/shimmer-button';
 
 // create a component to display specific poll details using id
 const PollDetails = ({ id }: { id: string }) => {
@@ -76,14 +78,17 @@ const PollDetails = ({ id }: { id: string }) => {
           width={1950}
           height={838}
           priority
-          layout='responsive'
+          layout="responsive"
           quality={100}
         />
       </div>
       {/* poll details */}
-      <div
+      <motion.div
         className="mx-auto mt-5 flex w-full flex-col
             items-center justify-center space-y-6 md:max-w-[736px]"
+        initial={{ x: '100vw' }}
+        animate={{ x: 0 }}
+        transition={{ type: 'spring', duration: 8, stiffness: 220 }}
       >
         {/* poll title */}
         <h1 className="text-center text-[47px] font-[600px] leading-none">
@@ -101,7 +106,7 @@ const PollDetails = ({ id }: { id: string }) => {
                 bg-opacity-20 px-[12px] py-[6px]"
           >
             <p className="text-center text-[14px] font-[500px] md:text-[16px]">
-              Voting Day: {new Date(pollData?.startDate).toLocaleString()};
+              Voting Day: {new Date(pollData?.startDate).toLocaleString()}
             </p>
           </div>
           {/* user name */}
@@ -131,15 +136,15 @@ const PollDetails = ({ id }: { id: string }) => {
             </button>
           </div>
           {/* create contestant button */}
-          <button
+          <ShimmerButton
             onClick={openContestantModal}
-            className="h-[45px] w-[148px] rounded-full border border-gray-400 bg-[#1B5CFE] py-2
+            className="min-h-11 w-[148px] rounded-full border border-gray-400 bg-[#1B5CFE] py-2
             text-white transition-all duration-300 hover:bg-blue-500"
           >
-            Contest
-          </button>
+            <span className=" text-center text-white">Contest</span>
+          </ShimmerButton>
         </section>
-      </div>
+      </motion.div>
       {/* contestant modal */}
       {showContestantModal && (
         <ContestantModal onClose={closeContestantModal} />
