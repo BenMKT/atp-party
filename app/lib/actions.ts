@@ -279,8 +279,6 @@ export const createContestant = async (contestant: PollContestant) => {
     data: contestant,
   });
   console.log('Contestant created successfully');
-  // redirect the user to the polls page after successful registration
-  // TODO: add functionality here to subscribe and handle real-time updates of contestants table either with prisma pulse or supabase
 };
 
 // define a function/Action to delete a contestant record from the database
@@ -289,8 +287,6 @@ export const deleteContestant = async (contestantid: string) => {
     where: { id: contestantid },
   });
   console.log('Contestant deleted successfully');
-  // revalidate the polls page to reflect changes
-  // TODO: add functionality here to subscribe and handle real-time updates of contestants table either with prisma pulse or supabase
 };
 
 // define a function/Action to update/edit a poll record in the database
@@ -304,8 +300,6 @@ export const updatePoll = async (poll_id: string, editPoll: EditPoll) => {
     })
     .then(() => {
       console.log('Poll updated successfully');
-      // revalidate doesn't work for dynamic routes
-      // TODO: add functionality here to subscribe and handle real-time updates of polls table page either with prisma pulse or supabase
     });
 };
 
@@ -332,7 +326,6 @@ export const updateContestant = async (
     })
     .then(() => {
       console.log('Contestant updated successfully');
-      // TODO revalidate doesn't work for dynamic routes so we need to add functionality here to subscribe and handle real-time updates of contestants table either with prisma pulse or supabase
     });
 };
 

@@ -7,6 +7,7 @@ import { deletePoll } from '@/app/lib/actions';
 import { toast } from 'react-toastify';
 import { Poll } from '@/app/lib/definitions';
 import ShimmerButton from '../magicui/shimmer-button';
+import clsx from 'clsx';
 
 // create poll cards to display poll details in each card component
 const PollCard = ({ poll }: { poll: Poll }) => {
@@ -71,7 +72,16 @@ const PollCard = ({ poll }: { poll: Poll }) => {
             </div>
             {/* user name */}
             <div className="flex h-[32px] w-[119px] items-center gap-[5px]">
-              <div className="h-[32px] w-[32px] rounded-full bg-[#2c2c2c]"></div>
+              {/* TODO - replace with authenticated logged-in user name */}
+              <div
+                className={clsx('h-[32px] w-[32px] rounded-full bg-red-500', {
+                  'bg-[#47c760]':
+                    new Date().toLocaleString() >=
+                      new Date(poll.startDate).toLocaleString() &&
+                    new Date().toLocaleString() <=
+                      new Date(poll.endDate).toLocaleString(),
+                })}
+              />
               <p className="text-[12px] font-[400px]">user.name</p>
             </div>
           </div>

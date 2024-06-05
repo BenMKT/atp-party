@@ -6,9 +6,10 @@ import { MdModeEdit } from 'react-icons/md';
 import ContestantModal from './create_contestant';
 import { fetchPollById, totalPollVotes } from '@/app/lib/data';
 import UpdatePollModal from './update_poll';
-import { subscribeToPollVotes } from '@/app/lib/realtime';
+import { subscribeToPolls, subscribeToPollVotes } from '@/app/lib/realtime';
 import { motion } from 'framer-motion';
 import ShimmerButton from '../magicui/shimmer-button';
+import clsx from 'clsx';
 
 // create a component to display specific poll details using id
 const PollDetails = ({ id }: { id: string }) => {
@@ -33,16 +34,23 @@ const PollDetails = ({ id }: { id: string }) => {
       setPollVotes(fetchedVotes);
     };
     fetchTotalVotes();
-    // Subscribe to real-time updates for poll votes
+    // handle real-time updates for poll votes
     const handleNewVote = async () => {
       fetchTotalVotes();
     };
-
+    // handle real-time updates for poll data
+    const handleNewPoll = async () => {
+      fetchPoll();
+    };
+    // Subscribe to real-time updates for poll votes
     const subscription = subscribeToPollVotes(id, handleNewVote);
+    // Subscribe to updates in the polls data
+    const pollsSubscription = subscribeToPolls(handleNewPoll);
 
     // Cleanup subscription on unmount
     return () => {
       subscription.unsubscribe();
+      pollsSubscription.unsubscribe();
     };
   }, [id, pollVotes]);
 
@@ -65,7 +73,7 @@ const PollDetails = ({ id }: { id: string }) => {
 
   // use conditional rendering and add prop to be passed to modal component
   return (
-    <main>
+    <main className='mb-5'>
       {/* poll banner image */}
       <div
         className="flex h-[240px] w-full
@@ -101,12 +109,18 @@ const PollDetails = ({ id }: { id: string }) => {
 
         <section className=" mt-4 flex h-[136px] flex-col items-center gap-[16px]">
           {/* poll dates */}
-          <div
-            className="h-[36px] gap-[4px] rounded-full border border-gray-400 bg-white 
-                bg-opacity-20 px-[12px] py-[6px]"
-          >
-            <p className="text-center text-[14px] font-[500px] md:text-[16px]">
-              Voting Day: {new Date(pollData?.startDate).toLocaleString()}
+          <div className=" flex flex-col gap-4">
+            <p
+              className="h-[36px] gap-[4px] rounded-full border border-gray-400 bg-lime-400 bg-opacity-20 px-[12px] py-[6px] text-center 
+                text-[14px] font-[500px] md:text-[16px]"
+            >
+              Voting Starts: {new Date(pollData?.startDate).toLocaleString()}
+            </p>
+            <p
+              className="h-[36px] gap-[4px] rounded-full border border-gray-400 bg-red-400 bg-opacity-20 px-[12px] py-[6px] text-center 
+                text-[14px] font-[500px] md:text-[16px]"
+            >
+              Voting Ends: {new Date(pollData?.endDate).toLocaleString()}
             </p>
           </div>
           {/* user name */}
@@ -114,7 +128,15 @@ const PollDetails = ({ id }: { id: string }) => {
             className="flex h-[32px] w-[133px] items-center justify-center
                  gap-[12px] rounded-[10px] py-[20px]"
           >
-            <div className="h-[32px] w-[32px] rounded-full bg-[#1B5CFE]" />
+            <div
+              className={clsx('h-[32px] w-[32px] rounded-full bg-red-500', {
+                'bg-[#47c760]':
+                  new Date().toLocaleString() >=
+                    new Date(pollData?.startDate).toLocaleString() &&
+                  new Date().toLocaleString() <=
+                    new Date(pollData?.endDate).toLocaleString(),
+              })}
+            />
             <p className="text-[14px] font-[500px]">user.name</p>
           </div>
           {/* poll contestant votes info */}

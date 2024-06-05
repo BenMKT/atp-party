@@ -78,7 +78,7 @@ const Contestants = () => {
   // use conditional rendering and add prop to be passed to modal component
   return (
     <main>
-      <div className="space-y-2">
+      <div className="space-y-2 mt-36">
         <motion.h1
           className="text-center text-[48px] font-[600px]"
           initial={{ x: '-100vw' }}
