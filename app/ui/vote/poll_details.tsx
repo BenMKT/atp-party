@@ -8,7 +8,6 @@ import { fetchPollById, totalPollVotes } from '@/app/lib/data';
 import UpdatePollModal from './update_poll';
 import { subscribeToPolls, subscribeToPollVotes } from '@/app/lib/realtime';
 import { motion } from 'framer-motion';
-import ShimmerButton from '../magicui/shimmer-button';
 import clsx from 'clsx';
 
 // create a component to display specific poll details using id
@@ -20,6 +19,14 @@ const PollDetails = ({ id }: { id: string }) => {
   // add state variables to track whether the modals should be shown
   const [showContestantModal, setShowContestantModal] = useState(false);
   const [showUpdatepollModal, setShowUpdatePollModal] = useState(false);
+  // Calculate the difference in days between now and the poll's start date
+  const daysToStartDate = Math.ceil(
+    (new Date(pollData?.startDate).getTime() - new Date().getTime()) /
+      (1000 * 60 * 60 * 24),
+  );
+  // Determine when the contest button should be disabled based on the days to the poll's start date
+  const isDisabled = daysToStartDate <= 3;
+
   // fetch the poll details using the id passed to the component and set the poll state variable with the fetched data
   useEffect(() => {
     const fetchPoll = async () => {
@@ -73,7 +80,7 @@ const PollDetails = ({ id }: { id: string }) => {
 
   // use conditional rendering and add prop to be passed to modal component
   return (
-    <main className='mb-5'>
+    <main className="mb-5">
       {/* poll banner image */}
       <div
         className="flex h-[240px] w-full
@@ -129,12 +136,12 @@ const PollDetails = ({ id }: { id: string }) => {
                  gap-[12px] rounded-[10px] py-[20px]"
           >
             <div
-              className={clsx('h-[32px] w-[32px] rounded-full bg-red-500', {
-                'bg-[#47c760]':
-                  new Date().toLocaleString() >=
-                    new Date(pollData?.startDate).toLocaleString() &&
-                  new Date().toLocaleString() <=
-                    new Date(pollData?.endDate).toLocaleString(),
+              className={clsx('h-[32px] w-[32px] rounded-full', {
+                'bg-yellow-500': new Date() < new Date(pollData?.startDate),
+                'bg-green-500':
+                  new Date() >= new Date(pollData?.startDate) &&
+                  new Date() <= new Date(pollData?.endDate),
+                'bg-red-500': new Date() > new Date(pollData?.endDate),
               })}
             />
             <p className="text-[14px] font-[500px]">user.name</p>
@@ -158,13 +165,16 @@ const PollDetails = ({ id }: { id: string }) => {
             </button>
           </div>
           {/* create contestant button */}
-          <ShimmerButton
+          <button
             onClick={openContestantModal}
-            className="min-h-11 w-[148px] rounded-full border border-gray-400 bg-[#1B5CFE] py-2
-            text-white transition-all duration-300 hover:bg-blue-500"
+            disabled={isDisabled}
+            className={clsx(
+              'min-h-11 w-[148px] rounded-full border border-gray-400 bg-green-500 py-2 text-white transition-all duration-300 hover:text-xl',
+              { 'cursor-not-allowed bg-red-500': isDisabled },
+            )}
           >
             <span className=" text-center text-white">Contest</span>
-          </ShimmerButton>
+          </button>
         </section>
       </motion.div>
       {/* contestant modal */}

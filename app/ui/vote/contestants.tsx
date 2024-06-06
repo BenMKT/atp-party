@@ -6,8 +6,12 @@ import { BiUpvote } from 'react-icons/bi';
 import { MdModeEdit } from 'react-icons/md';
 import { TfiAnnouncement } from 'react-icons/tfi';
 import { BsFillTrash3Fill } from 'react-icons/bs';
-import { fetchContestants, totalContestantVotes } from '@/app/lib/data';
-import { PollContestant } from '@/app/lib/definitions';
+import {
+  fetchContestants,
+  fetchPollById,
+  totalContestantVotes,
+} from '@/app/lib/data';
+import { Poll, PollContestant } from '@/app/lib/definitions';
 import { useParams } from 'next/navigation';
 import { createVote, deleteContestant } from '@/app/lib/actions';
 import { toast } from 'react-toastify';
@@ -16,8 +20,8 @@ import {
   subscribeToPollContestants,
   subscribeToVotes,
 } from '@/app/lib/realtime';
-import ShimmerButton from '../magicui/shimmer-button';
 import { motion } from 'framer-motion';
+import clsx from 'clsx';
 
 // display a list of contestants
 const Contestants = () => {
@@ -29,6 +33,8 @@ const Contestants = () => {
   const [contestants, setContestants] = useState<PollContestant[]>([]);
   // add state variable to store the number of contestants
   const [contestantCount, setContestantCount] = useState(0);
+  // add state variable to track whether the user has voted
+  const [hasVoted, setHasVoted] = useState(false);
 
   // fetch the list of contestants using the poll id passed to the component
   useEffect(() => {
@@ -78,7 +84,7 @@ const Contestants = () => {
   // use conditional rendering and add prop to be passed to modal component
   return (
     <main>
-      <div className="space-y-2 mt-36">
+      <div className="mt-36 space-y-2">
         <motion.h1
           className="text-center text-[48px] font-[600px]"
           initial={{ x: '-100vw' }}
@@ -99,6 +105,8 @@ const Contestants = () => {
               key={i}
               contestant={contestant} // pass the contestant object
               onDelete={() => handleDeleteContestant(contestant.id)} // pass a function that calls handleDeleteContestant with the correct id
+              hasVoted={hasVoted}
+              setHasVoted={setHasVoted}
             />
           ))}
         </div>
@@ -111,15 +119,21 @@ const Contestants = () => {
 const Contestant = ({
   contestant,
   onDelete,
+  hasVoted,
+  setHasVoted,
 }: {
   contestant: PollContestant;
   onDelete: () => void;
+  hasVoted: boolean;
+  setHasVoted: (value: boolean) => void;
 }) => {
   // add state variable to store the total number of contestant votes
   const [contestantVotes, setContestantVotes] = useState(0);
   // add state variable to track whether the modal should be shown
   const [showUpdateContestantModal, setShowUpdateContestantModal] =
     useState(false);
+  // add state variable to store the poll object
+  const [poll, setPoll] = useState<Poll | undefined>(undefined);
   // get the contestant id from the contestant object
   const contestantid = contestant.id;
   // get the id from the URL params
@@ -127,6 +141,7 @@ const Contestant = ({
   // get the id from the URL params as a string
   const id = pageParams.id as string;
   // fetch the total number of votes for the contestant using the contestant id
+
   useEffect(() => {
     const fetchTotalContestantVotes = async () => {
       const fetchedVotes = await totalContestantVotes(contestantid);
@@ -134,6 +149,13 @@ const Contestant = ({
     };
     // get initial votes count on page load
     fetchTotalContestantVotes();
+
+    const fetchPoll = async () => {
+      const fetchedPoll = await fetchPollById(id);
+      setPoll(fetchedPoll);
+    };
+    // get initial poll on page load
+    fetchPoll();
 
     // on new vote, update/revalidate the initial votes count
     const handleNewVote = () => {
@@ -146,7 +168,7 @@ const Contestant = ({
     return () => {
       subscription.unsubscribe();
     };
-  }, [contestantid]);
+  }, [id, contestantid]);
 
   // call the createVote action to create a vote for the contestant when vote button is clicked
   const handleVote = (contestantid: string, id: string) => {
@@ -159,12 +181,18 @@ const Contestant = ({
     createVote(vote)
       .then(() => {
         toast.success('Vote submitted successfully!!');
+        setHasVoted(true);
       })
       .catch((error: Error) => {
         toast.error('Error submitting vote!');
         console.error(error);
       });
   };
+
+  const isDisabled =
+    hasVoted ||
+    (poll && new Date() < new Date(poll.startDate)) ||
+    (poll && new Date() > new Date(poll.endDate));
 
   // when button is clicked, this state variable should be set to true and when the modal is closed, it should be set back to false
   const openUpdateContestantModal = () => {
@@ -181,10 +209,9 @@ const Contestant = ({
         {/* contestant image */}
         <div className="min-h-[229px] w-[187px] overflow-hidden rounded-[24px] sm:h-[190px] sm:w-[234px]">
           <Image
-            className="h-auto w-auto object-cover "
+            className="min-h-[229px] min-w-[187px] object-cover "
             src={contestant?.avatar || '/question.jpeg'}
             alt="contestant image"
-            layout="responsive"
             width={234}
             height={229}
             priority
@@ -226,13 +253,19 @@ const Contestant = ({
             <TfiAnnouncement className="size-6" />
             <p className="text-[14px] font-[500px]">{contestant?.slogan}</p>
           </div>
-          {/* magic-ui vote button */}
-          <ShimmerButton
+          {/* vote button */}
+          <button
+            disabled={isDisabled}
             onClick={() => handleVote(contestantid, id)}
-            className="z-10 flex h-10 w-[95%] items-center justify-center"
+            className={clsx(
+              'z-10 flex h-10 w-[95%] items-center justify-center rounded-full bg-green-500 hover:text-xl',
+              {
+                'cursor-not-allowed bg-red-500 ': isDisabled,
+              },
+            )}
           >
             <span className=" text-center text-white">Vote</span>
-          </ShimmerButton>
+          </button>
           {/* vote count */}
           <div className="mx-auto flex h-[32px] items-center gap-2 align-middle">
             <div className="h-[32px] w-[32px] rounded-[9px] bg-[#0E1933] px-[9px] py-[8px]">

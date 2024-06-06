@@ -74,12 +74,12 @@ const PollCard = ({ poll }: { poll: Poll }) => {
             <div className="flex h-[32px] w-[119px] items-center gap-[5px]">
               {/* TODO - replace with authenticated logged-in user name */}
               <div
-                className={clsx('h-[32px] w-[32px] rounded-full bg-red-500', {
-                  'bg-[#47c760]':
-                    new Date().toLocaleString() >=
-                      new Date(poll.startDate).toLocaleString() &&
-                    new Date().toLocaleString() <=
-                      new Date(poll.endDate).toLocaleString(),
+                className={clsx('h-[32px] w-[32px] rounded-full', {
+                  'bg-yellow-500': new Date() < new Date(poll.startDate),
+                  'bg-green-500':
+                    new Date() >= new Date(poll.startDate) &&
+                    new Date() <= new Date(poll.endDate),
+                  'bg-red-500': new Date() > new Date(poll.endDate),
                 })}
               />
               <p className="text-[12px] font-[400px]">user.name</p>
