@@ -18,7 +18,6 @@ export type Member = {
   signature: string;
   createdAt: Date;
   updatedAt: Date | null;
-  deletedAt: Date | null;
 };
 
 export type Bill = {
