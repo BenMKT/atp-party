@@ -209,7 +209,7 @@ const Contestant = ({
         initial={{opacity: 0}}
         animate={{ opacity: 1}}
         transition={{
-          delay: 15,
+          delay: 5,
           duration: 10,
         }}
       >
