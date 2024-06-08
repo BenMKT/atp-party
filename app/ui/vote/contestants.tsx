@@ -91,7 +91,7 @@ const Contestants = () => {
           animate={{ x: 0 }}
           transition={{
             type: 'spring',
-            delay: 2,
+            delay: 5,
             duration: 10,
             stiffness: 220,
           }}
@@ -205,7 +205,14 @@ const Contestant = ({
 
   return (
     <main>
-      <div className="mt-5 flex grow items-center space-x-2 md:mx-auto md:space-x-8">
+      <motion.div className="mt-5 flex grow items-center space-x-2 md:mx-auto md:space-x-8"
+        initial={{opacity: 0}}
+        animate={{ opacity: 1}}
+        transition={{
+          delay: 15,
+          duration: 10,
+        }}
+      >
         {/* contestant image */}
         <div className="min-h-[229px] w-[187px] overflow-hidden rounded-[24px] sm:h-[190px] sm:w-[234px]">
           <Image
@@ -274,7 +281,7 @@ const Contestant = ({
             <p className="text-[14px] font-[600px]">{contestantVotes} Votes</p>
           </div>
         </div>
-      </div>
+      </motion.div>
       {/* update contestant modal */}
       {showUpdateContestantModal && (
         <UpdateContestantModal

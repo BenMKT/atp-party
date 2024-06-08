@@ -108,7 +108,7 @@ model Contestants {
   vote      Votes[]
   user      Users     @relation(fields: [userId], references: [id])
   userId    String    @unique @db.Uuid
-  poll      Polls     @relation(fields: [pollId], references: [id])
+  poll      Polls     @relation(fields: [pollId], references: [id], onDelete: Cascade)
   pollId    String    @db.Uuid
 
   @@schema("public") // or @@schema("auth")
