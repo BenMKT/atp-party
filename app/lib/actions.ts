@@ -1,12 +1,16 @@
 'use server';
 
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/prisma/prisma';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
-
-// instantiate PrismaClient
-const prisma = new PrismaClient();
+import {
+  Data,
+  EditPoll,
+  PollContestant,
+  UpdateContestant,
+  Vote,
+} from './definitions';
 
 // create a member schema that matches database schema to validate the user input data
 const MemberFormSchema = z.object({
@@ -75,6 +79,43 @@ const UpdateBillSchema = BillFormSchema.pick({
   dueDate: true,
 });
 
+// create a polls schema that matches database schema to validate the user input data
+const PollFormSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  description: z.string(),
+  startDate: z.coerce.date(),
+  endDate: z.coerce.date(),
+  banner: z.string().optional(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date().optional(),
+});
+
+// Derive a Create and update Poll schema from the PollFormSchema
+const CreatePollSchema = PollFormSchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+// create a contestants schema that matches database schema to validate the user input data
+const ContestantFormSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  slogan: z.string().optional(),
+  avatar: z.string(),
+  pollId: z.string(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date().optional(),
+});
+
+// Derive a Create and update Contestant schema from the ContestantFormSchema
+const CreateContestantSchema = ContestantFormSchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 // define a function/Action to create a member record in the database
 export const registerMember = async (formData: FormData) => {
   // extract the user input data from the form using the formData object and convert it to a plain object
@@ -136,8 +177,6 @@ export const deleteMember = async (id: string) => {
   // revalidate the members page to reflect changes
   revalidatePath('/dashboard/members');
 };
-
-
 
 // define a function/Action to create a bill record in the database
 
@@ -201,4 +240,99 @@ export const deleteBill = async (id: string) => {
   console.log('Bill deleted successfully');
   // revalidate the bills page to reflect changes
   revalidatePath('/dashboard/bills');
+};
+
+// define a function/Action to create a poll record in the database
+
+export const createPoll = async (data: Data, formData: FormData) => {
+  // extract user input data using destucturing from the form and validate it
+  const { title, description, startDate, endDate } = CreatePollSchema.parse({
+    title: formData.get('title'),
+    description: formData.get('description'),
+    startDate: formData.get('startDate'),
+    endDate: formData.get('endDate'),
+  });
+  // get the imageURL from supabase storage bucket
+  const bannerURL = `https://hgtovaupiuxajqlkjdfg.supabase.co/storage/v1/object/public/images/${data.path}`;
+  // insert the data to the database
+  await prisma.polls.create({
+    data: {
+      title,
+      description,
+      startDate,
+      endDate,
+      banner: bannerURL,
+      userId: '0ed219b4-895a-4fd9-a3ad-2d41fa500406', // TODO remove after adding authentication to get the user id from the session
+    },
+  });
+  console.log('Poll created successfully');
+  // revalidate the polls page to display the newly added poll
+  revalidatePath('/vote');
+  // redirect the user to the polls page after successful registration
+  // redirect('/vote');
+};
+
+// define a function/Action to create a contestant record in the database
+export const createContestant = async (contestant: PollContestant) => {
+  // insert the data to the database
+  await prisma.contestants.create({
+    data: contestant,
+  });
+  console.log('Contestant created successfully');
+};
+
+// define a function/Action to delete a contestant record from the database
+export const deleteContestant = async (contestantid: string) => {
+  await prisma.contestants.delete({
+    where: { id: contestantid },
+  });
+  console.log('Contestant deleted successfully');
+};
+
+// define a function/Action to update/edit a poll record in the database
+export const updatePoll = async (poll_id: string, editPoll: EditPoll) => {
+  // update poll records in the database using prisma 'update'
+  await prisma.polls
+    .update({
+      where: { id: poll_id },
+
+      data: editPoll,
+    })
+    .then(() => {
+      console.log('Poll updated successfully');
+    });
+};
+
+// define a function/action to delete a poll record from the database
+export const deletePoll = async (poll_id: string) => {
+  await prisma.polls.delete({
+    where: { id: poll_id },
+  });
+  console.log('Poll deleted successfully');
+  // revalidate the polls page to reflect changes
+  revalidatePath('/vote');
+};
+
+// define a function/Action to update a contestant record from the database
+export const updateContestant = async (
+  contestant_id: string,
+  contestant: UpdateContestant,
+) => {
+  // update contestant records in the database using prisma 'update'
+  await prisma.contestants
+    .update({
+      where: { id: contestant_id },
+      data: contestant,
+    })
+    .then(() => {
+      console.log('Contestant updated successfully');
+    });
+};
+
+// define a function to create a vote record in the database
+export const createVote = async (vote: Vote) => {
+  // insert the data to the database
+  await prisma.votes.create({
+    data: vote,
+  });
 };

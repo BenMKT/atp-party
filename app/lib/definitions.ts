@@ -1,6 +1,6 @@
 // This file contains type definitions for your data.
 // It describes the shape of the data, and what data type each property should accept.
-import { Gender, Disabled } from '@prisma/client';
+import { Gender, Disabled, Contestants, Votes } from '@prisma/client';
 
 export type Member = {
   id: string;
@@ -18,7 +18,6 @@ export type Member = {
   signature: string;
   createdAt: Date;
   updatedAt: Date | null;
-  deletedAt: Date | null;
 };
 
 export type Bill = {
@@ -28,4 +27,51 @@ export type Bill = {
   status: string;
   dueDate: Date;
   Member: Member;
+};
+
+export type Poll = {
+  id: string;
+  title: string;
+  description: string;
+  startDate: Date;
+  endDate: Date;
+  banner: string | null;
+  createdAt: Date;
+  updatedAt: Date | null;
+  contestant: Contestants[];
+  vote: Votes[];
+};
+
+export type Data = {
+  path: string;
+};
+
+export type PollContestant = {
+  id: string;
+  name: string;
+  slogan: string | null;
+  avatar: string;
+  pollId: string;
+  createdAt: Date;
+  updatedAt: Date | null;
+};
+
+export type EditPoll = {
+  title: string;
+  description: string;
+  startDate: Date;
+  endDate: Date;
+  banner: string | null;
+};
+
+export type UpdateContestant = {
+  name: string;
+  slogan: string;
+  avatar: string;
+};
+
+export type Vote = {
+  pollId: string;
+  contestantId: string;
+  userId: string;
 };

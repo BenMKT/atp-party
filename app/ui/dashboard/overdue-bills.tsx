@@ -7,6 +7,7 @@ import {
 import { lusitana } from '@/app/ui/fonts';
 import clsx from 'clsx';
 import { LuCalendarClock } from 'react-icons/lu';
+import { Bill } from '@/app/lib/definitions';
 
 // component to display overdue bills on the dashboard page
 
@@ -22,7 +23,7 @@ const OverdueBills = async () => {
         </h2>
         <div className="flex grow flex-col justify-between rounded-xl bg-red-300 p-4">
           <div className="bg-white px-6">
-            {overdueBills.map((bill, i) => {
+            {overdueBills.map((bill: Bill, i: number) => {
               return (
                 <div
                   key={bill.id}

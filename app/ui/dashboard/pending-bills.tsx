@@ -7,6 +7,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { lusitana } from '@/app/ui/fonts';
 import clsx from 'clsx';
+import { Bill } from '@/app/lib/definitions';
 
 // component to display pending bills on the dashboard page
 
@@ -17,12 +18,13 @@ const PendingBills = async () => {
     <main>
       <div className="flex flex-col ">
         <h2
-          className={`${lusitana.className} my-4 text-xl font-semibold md:text-2xl`}>
+          className={`${lusitana.className} my-4 text-xl font-semibold md:text-2xl`}
+        >
           Pending Invoices
         </h2>
         <div className="flex grow flex-col justify-between rounded-xl bg-amber-300 p-4">
           <div className="bg-white px-6">
-            {pendingBills.map((bill, i) => {
+            {pendingBills.map((bill: Bill, i: number) => {
               return (
                 <div
                   key={bill.id}
@@ -31,7 +33,8 @@ const PendingBills = async () => {
                     {
                       'border-t': i !== 0,
                     },
-                  )}>
+                  )}
+                >
                   <div className="flex items-center">
                     <UserIcon className="size-16" />
                     <div className="flex min-w-0 flex-col">
@@ -46,7 +49,8 @@ const PendingBills = async () => {
                       </p>
                       {/* due date */}
                       <p
-                        className={`${lusitana.className} inline-flex gap-1 truncate align-text-bottom text-sm font-semibold md:text-base`}>
+                        className={`${lusitana.className} inline-flex gap-1 truncate align-text-bottom text-sm font-semibold md:text-base`}
+                      >
                         <ClockIcon className="h-5 w-4 text-gray-500 sm:hidden" />
                         <span className="hidden sm:inline">Due Date:</span>
                         {bill.dueDate.toLocaleDateString()}
