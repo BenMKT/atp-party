@@ -8,9 +8,13 @@ import { toast } from 'react-toastify';
 import { Poll } from '@/app/lib/definitions';
 import ShimmerButton from '../magicui/shimmer-button';
 import clsx from 'clsx';
+import { useSession } from 'next-auth/react';
 
 // create poll cards to display poll details in each card component
 const PollCard = ({ poll }: { poll: Poll }) => {
+  // get the session data from the useSession hook
+  const session = useSession().data;
+
   const poll_id = poll.id;
   // call the deletePoll function when the delete button is clicked
   const handleDeletePoll = (poll_id: string) => {
@@ -82,7 +86,7 @@ const PollCard = ({ poll }: { poll: Poll }) => {
                   'bg-red-500': new Date() > new Date(poll.endDate),
                 })}
               />
-              <p className="text-[12px] font-[400px]">user.name</p>
+              <p className="text-[12px] font-[400px]">{session?.user?.name}</p>
             </div>
           </div>
 

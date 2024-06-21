@@ -9,9 +9,12 @@ import UpdatePollModal from './update_poll';
 import { subscribeToPolls, subscribeToPollVotes } from '@/app/lib/realtime';
 import { motion } from 'framer-motion';
 import clsx from 'clsx';
+import { useSession } from 'next-auth/react';
 
 // create a component to display specific poll details using id
 const PollDetails = ({ id }: { id: string }) => {
+  // get the session data from the useSession hook
+  const session = useSession().data;
   // add state variable to store the poll details
   const [pollData, setPollData] = useState<any>({});
   // add state variable to store the total number of poll votes
@@ -144,7 +147,7 @@ const PollDetails = ({ id }: { id: string }) => {
                 'bg-red-500': new Date() > new Date(pollData?.endDate),
               })}
             />
-            <p className="text-[14px] font-[500px]">user.name</p>
+            <p className="text-[14px] font-[500px]">{session?.user?.name}</p>
           </div>
           {/* poll contestant votes info */}
           <div className="flex h-[36px] items-center justify-center gap-[4px]">

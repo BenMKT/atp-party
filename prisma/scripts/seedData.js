@@ -4,27 +4,30 @@ const { Gender, Disabled, Role } = require('@prisma/client');
 const members = [
   {
     id: '9005dc9e-712f-4377-85e9-fec4b6a6882b',
-    nationalId: '23006400',
-    name: 'John Doe',
-    dateOfBirth: '1987-12-06T15:34:56Z',
-    mobileNumber: '+254712377008',
-    email: 'john@doe.com',
+    nationalId: '24629125',
+    name: 'Benson Kiai',
+    dateOfBirth: '1986-04-23T08:34:56Z',
+    phone: '254712991125',
+    password: '123456',
+    role: Role.ADMIN,
+    email: 'benson.kiai86@gmail.com',
     gender: Gender.MALE,
     isDisabled: Disabled.FALSE,
-    religion: 'Christian',
-    county: 'Kilifi',
-    constituency: 'Kilifi Central',
-    ward: 'Kilifi Manenoz',
-    signature: 'J.Doe',
+    religion: 'Catholic',
+    county: 'Mombasa',
+    constituency: 'Jomvu',
+    ward: 'Mikindani',
+    signature: 'B.Kiai',
     createdAt: '2020-12-06T08:34:56Z',
-    userId: '0ed219b4-895a-4fd9-a3ad-2d41fa500406',
   },
   {
     id: '8811dc9e-712f-4377-85e9-fec4b6a6987c',
     nationalId: '23323711',
-    name: 'Jane Doe',
+    name: 'Karen Mbiro',
     dateOfBirth: '1995-12-06T12:34:56Z',
-    mobileNumber: '+254745349008',
+    phone: '254745349008',
+    password: '456789',
+    role: Role.STAFF,
     email: 'jane@doe.com',
     gender: Gender.FEMALE,
     isDisabled: Disabled.FALSE,
@@ -34,64 +37,6 @@ const members = [
     ward: 'Majoreni',
     signature: 'J.Doez',
     createdAt: '2020-12-06T11:34:56Z',
-    userId: 'eaa96f8e-db40-47b7-a4f3-9446376313c7',
-  },
-];
-
-const users = [
-  {
-    id: '0ed219b4-895a-4fd9-a3ad-2d41fa500406',
-    username: 'JohnD',
-    nationalId: '23006400',
-    email: 'john@doe.com',
-    password: '123456',
-    role: Role.ADMIN,
-    createdAt: '2018-01-06T12:00:00Z',
-  },
-  {
-    id: 'eaa96f8e-db40-47b7-a4f3-9446376313c7',
-    username: 'JaneD',
-    nationalId: '23323711',
-    email: 'jane@doe.com',
-    password: '123456',
-    role: Role.USER, // by default
-    createdAt: '2020-01-06T12:00:00Z',
-  },
-  {
-    id: 'cff96f8a-da40-47b7-a8f3-9446376376c9',
-    username: 'FloraW',
-    nationalId: '24623711',
-    email: 'flo@wambo.com',
-    password: '123456',
-    role: Role.STAFF,
-    createdAt: '2019-03-06T12:00:00Z',
-  },
-  {
-    id: 'ffa96f8a-da40-47b7-8df3-94463763723e',
-    username: 'KarenB',
-    nationalId: '24626511',
-    email: 'kb@mbiro.com',
-    password: '123456',
-    role: Role.STAFF,
-    createdAt: '2019-07-06T17:00:00Z',
-  },
-  {
-    id: 'acc96f8a-da40-47d8-a8f3-9446376400c9',
-    username: 'WilliamK',
-    nationalId: '24139711',
-    email: 'will@wills.com',
-    password: '123456',
-    role: Role.USER,
-    createdAt: '2019-12-06T09:00:00Z',
-  },
-  {
-    id: 'ad296f8a-da40-43e8-a8f3-9446376488d9',
-    username: 'TamB',
-    nationalId: '24658711',
-    email: 'tammy@wills.com',
-    password: '123456',
-    role: Role.USER,
-    createdAt: '2019-12-06T06:00:00Z',
   },
 ];
 
@@ -104,7 +49,6 @@ const polls = [
     endDate: '2026-07-06T15:00:00Z',
     banner: '/kenyaflagbanner.jpg',
     createdAt: '2026-07-02T08:34:56Z',
-    userId: users[0].id,
   },
   {
     id: 'dc88c84d-d292-4538-8249-372581997fd3',
@@ -114,7 +58,6 @@ const polls = [
     endDate: '2026-07-07T15:00:00Z',
     banner: '/kenyaflagbanner.png',
     createdAt: '2026-07-02T09:34:56Z',
-    userId: users[0].id,
   },
 ];
 
@@ -125,7 +68,7 @@ const contestants = [
     slogan: 'Vote for change',
     avatar: '/pigbin.jpg',
     createdAt: '2026-07-02T08:40:56Z',
-    userId: users[0].id,
+    userId: 'ErdKiu7tf',
     pollId: polls[0].id,
   },
   {
@@ -134,7 +77,7 @@ const contestants = [
     slogan: 'Vote for peace',
     avatar: '/question.jpeg',
     createdAt: '2026-07-02T09:40:56Z',
-    userId: users[1].id,
+    userId: 'Jiu5eCf9NH',
     pollId: polls[1].id,
   },
 ];
@@ -145,14 +88,14 @@ const votes = [
     pollId: polls[0].id,
     contestantId: contestants[0].id,
     createdAt: '2026-07-06T12:34:56Z',
-    userId: users[0].id,
+    userId: '9005dc9e-712f-4377-85e9-fec4b6a6882b',
   },
   {
     id: 'cd88c84d-d292-4538-4982-372581997fb7',
     pollId: polls[1].id,
     contestantId: contestants[1].id,
     createdAt: '2026-07-07T12:34:56Z',
-    userId: users[0].id,
+    userId: '8811dc9e-712f-4377-85e9-fec4b6a6987c',
   },
 ];
 
@@ -335,7 +278,6 @@ const bills = [
 ];
 
 module.exports = {
-  users,
   members,
   polls,
   contestants,

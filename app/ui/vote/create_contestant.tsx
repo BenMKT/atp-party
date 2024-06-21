@@ -7,11 +7,14 @@ import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'react-toastify';
 import { createContestant } from '@/app/lib/actions';
 import { useParams } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 // create a modal to capture the user's input and pass the form action to be called when the form is submitted
 const ContestantModal = ({ onClose }: { onClose: () => void }) => {
   const paramsId = useParams();
   const poll_id = paramsId.id as string;
+  // get the session data from the useSession hook
+  const session = useSession().data;
 
   // create a state to hold the file object from the file form input field
   const [file, setFile] = useState<File | null>(null);
@@ -55,7 +58,7 @@ const ContestantModal = ({ onClose }: { onClose: () => void }) => {
       pollId: poll_id as string,
       createdAt: new Date() as Date,
       updatedAt: new Date() as Date,
-      userId: 'cff96f8a-da40-47b7-a8f3-9446376376c9' as string, // TODO remove after adding authentication to get the user id from the session
+      userId: session?.user?.id as string,
     };
     // call the createContestant action and pass contestant object
     createContestant(contestant)
@@ -91,13 +94,13 @@ const ContestantModal = ({ onClose }: { onClose: () => void }) => {
           <form
             id="contestantForm"
             className="mb-5 mt-5 flex flex-col items-start justify-center rounded-xl"
-            onSubmit={handleSubmit}
-          >
+            onSubmit={handleSubmit}>
             {/* contestant name field */}
             <div className="mb-3 mt-2 flex w-full items-center rounded-full border border-[#212D4A] px-4 py-4">
               <input
                 id="name"
-                placeholder="username"
+                readOnly
+                defaultValue={session?.user?.name as string}
                 className="w-full bg-transparent text-sm placeholder-[#929292] outline-none"
                 name="name"
               />

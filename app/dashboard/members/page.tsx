@@ -1,7 +1,8 @@
 import Link from 'next/link';
-import members from './members-table';
 import Search from '@/app/ui/search';
 import MembersTable from './members-table';
+import { auth } from '@/auth';
+import { redirect } from 'next/navigation';
 
 const MembersPage = async ({
   searchParams,
@@ -11,6 +12,9 @@ const MembersPage = async ({
     page?: string;
   };
 }) => {
+  // authenticate the user before rendering the protected members page
+  const session = await auth();
+  if (!session?.user) redirect('/login');
   // display all the members in a table from the database based on the search query params if any exists in the URL
   const query = searchParams?.query || '';
   const currentPage = Number(searchParams?.page) || 1;

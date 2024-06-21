@@ -1,4 +1,4 @@
-import { Disabled, Gender, PrismaClient } from '@prisma/client';
+import { Disabled, Gender, Role, PrismaClient } from '@prisma/client';
 import { UpdateMember, DeleteMember } from './buttons';
 import Pagination from '@/app/ui/pagination';
 
@@ -23,11 +23,12 @@ const MembersTable = async ({
           { name: { contains: query, mode: 'insensitive' } },
           { nationalId: { contains: query, mode: 'insensitive' } },
           { email: { contains: query, mode: 'insensitive' } },
-          { mobileNumber: { contains: query, mode: 'insensitive' } },
+          { phone: { contains: query, mode: 'insensitive' } },
           { county: { contains: query, mode: 'insensitive' } },
           { constituency: { contains: query, mode: 'insensitive' } },
           { ward: { contains: query, mode: 'insensitive' } },
           { gender: Gender[query as keyof typeof Gender] },
+          { role: Role[query as keyof typeof Role] },
           { isDisabled: Disabled[query as keyof typeof Disabled] },
         ],
       },
@@ -41,11 +42,12 @@ const MembersTable = async ({
           { name: { contains: query, mode: 'insensitive' } },
           { nationalId: { contains: query, mode: 'insensitive' } },
           { email: { contains: query, mode: 'insensitive' } },
-          { mobileNumber: { contains: query, mode: 'insensitive' } },
+          { phone: { contains: query, mode: 'insensitive' } },
           { county: { contains: query, mode: 'insensitive' } },
           { constituency: { contains: query, mode: 'insensitive' } },
           { ward: { contains: query, mode: 'insensitive' } },
           { gender: Gender[query as keyof typeof Gender] },
+          { role: Role[query as keyof typeof Role] },
           { isDisabled: Disabled[query as keyof typeof Disabled] },
         ],
       },
@@ -78,35 +80,41 @@ const MembersTable = async ({
             <th></th>
             <th>Name</th>
             <th>Email</th>
-            <th>Mobile Number</th>
+            <th>Phone</th>
             <th>County</th>
             <th>Constituency</th>
             <th>Ward</th>
             <th>Gender</th>
+            <th>Role</th>
             <th className="sr-only">Edit</th>
           </tr>
         </thead>
         <tbody>
           {/* Map through members, create table rows and sort by newly registered first or by descending order */}
-          {members.sort(
-            (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-          ).map((member, index) => (
-            <tr key={member.id}>
-              {/* Row cells */}
-              <td>{startIndex + index}</td>
-              <td>{member.name}</td>
-              <td>{member.email}</td>
-              <td>{member.mobileNumber}</td>
-              <td>{member.county}</td>
-              <td>{member.constituency}</td>
-              <td>{member.ward}</td>
-              <td>{member.gender}</td>
-              <td className="flex justify-end gap-2">
-                <UpdateMember id={member.id} />
-                <DeleteMember id={member.id} />
-              </td>
-            </tr>
-          ))}
+          {members
+            .sort(
+              (a, b) =>
+                new Date(b.createdAt).getTime() -
+                new Date(a.createdAt).getTime(),
+            )
+            .map((member, index) => (
+              <tr key={member.id}>
+                {/* Row cells */}
+                <td>{startIndex + index}</td>
+                <td>{member.name}</td>
+                <td>{member.email}</td>
+                <td>{member.phone}</td>
+                <td>{member.county}</td>
+                <td>{member.constituency}</td>
+                <td>{member.ward}</td>
+                <td>{member.gender}</td>
+                <td>{member.role}</td>
+                <td className="flex justify-end gap-2">
+                  <UpdateMember id={member.id} />
+                  <DeleteMember id={member.id} />
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
       {/* Pagination controls */}
