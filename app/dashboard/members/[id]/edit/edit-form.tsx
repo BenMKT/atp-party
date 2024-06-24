@@ -2,12 +2,22 @@ import { Button } from '@/app/ui/button';
 import Link from 'next/link';
 import { Member } from '@/app/lib/definitions';
 import { updateMember } from '@/app/lib/actions';
+import { auth } from '@/auth';
+import { redirect } from 'next/navigation';
 
 // receive the member object as a prop and prefill the form fields with the specific member details
 
-const EditMemberForm = ({ member }: { member: Member }) => {
+const EditMemberForm = async ({ member }: { member: Member }) => {
   // pass id to the Server Action using JS bind ensuring any values passed to the Server Action are encoded
   const updateMemberWithId = updateMember.bind(null, member.id);
+  const session = await auth();
+
+  // Check if session is null
+  if (!session) {
+    // Handle the case where session is null
+    // For example, redirect the user to a login page or display an error message
+    redirect('/login');
+  }
 
   return (
     <form action={updateMemberWithId}>
@@ -50,6 +60,24 @@ const EditMemberForm = ({ member }: { member: Member }) => {
           defaultValue={member.phone}
           className="input input-bordered input-info w-full max-w-xl"
         />
+        {/* Role */}
+        <span className="label-text">Role*</span>
+        <label htmlFor="role">
+          <select
+            id="role"
+            name="role"
+            required
+            defaultValue={member.role}
+            className="input input-bordered input-info w-full max-w-xl"
+          >
+            <option disabled selected value="">
+              Please select an option
+            </option>
+            <option value="ADMIN">ADMIN</option>
+            <option value="STAFF">STAFF</option>
+            <option value="MEMBER">MEMBER</option>
+          </select>
+        </label>
         {/* County */}
         <label htmlFor="county">County</label>
         <input

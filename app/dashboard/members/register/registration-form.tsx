@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Button } from '@/app/ui/button';
 import { registerMember } from '@/app/lib/actions';
 
+// create a registration form component to capture user registration details
 const RegistrationForm = () => {
   return (
     <form action={registerMember}>
@@ -104,26 +105,30 @@ const RegistrationForm = () => {
             className="input input-bordered input-info w-full max-w-xl"
           >
             <option disabled selected value="">
-              Select One
+              Please select an option
             </option>
             <option value="TRUE">TRUE</option>
             <option value="FALSE">FALSE</option>
           </select>
         </label>
         {/* Role */}
-        <span className="label-text">Role</span>
+        <span className="label-text">Role*</span>
         <label htmlFor="role">
           <select
             id="role"
             name="role"
-            defaultValue={'MEMBER'}
+            required
             className="input input-bordered input-info w-full max-w-xl"
           >
             <option disabled selected value="">
-              Select One
+              Please select an option
             </option>
-            <option value="ADMIN">ADMIN</option>
-            <option value="STAFF">STAFF</option>
+            <option disabled value="ADMIN">
+              ADMIN
+            </option>
+            <option disabled value="STAFF">
+              STAFF
+            </option>
             <option value="MEMBER">MEMBER</option>
           </select>
         </label>

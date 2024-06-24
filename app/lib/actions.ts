@@ -13,6 +13,7 @@ import {
 } from './definitions';
 import { signIn, signOut } from '@/auth';
 import { AuthError } from 'next-auth';
+import bcrypt from 'bcryptjs';
 
 // create a member schema that matches database schema to validate the user input data
 const MemberFormSchema = z.object({
@@ -20,7 +21,7 @@ const MemberFormSchema = z.object({
   nationalId: z.string(),
   name: z.string(),
   dateOfBirth: z.coerce.date().max(new Date('2008-01-01')),
-  phone: z.string().min(13),
+  phone: z.string().min(12),
   password: z.string().min(6),
   email: z.string().email(),
   gender: z.enum(['MALE', 'FEMALE']),
@@ -129,10 +130,14 @@ export const registerMember = async (formData: FormData) => {
   const rawFormData = Object.fromEntries(formData.entries());
   // validate the user input data using the schema
   const validatedFields = RegisterMember.safeParse(rawFormData);
-  // if the validation is successful, proceed to insert the data to the database or else display the error messages
-  const validatedData = validatedFields.success
-    ? validatedFields.data
-    : validatedFields.error.flatten().fieldErrors;
+
+  if (!validatedFields.success) {
+    return validatedFields.error.flatten().fieldErrors;
+  }
+  // Hash the password
+  const hashedPassword = bcrypt.hashSync(validatedFields.data.password, 10);
+  // if the validation is successful, proceed to insert the data to the database with hashed password
+  const validatedData = { ...validatedFields.data, password: hashedPassword };
   // insert the validated data to the database using prisma
   await prisma.members
     .create({

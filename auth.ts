@@ -1,12 +1,26 @@
 // Purpose: This file is responsible for handling authentication and authorization logic in the application. It uses NextAuth to provide authentication services to the application, including sign-in, sign-out, and session management. It also defines the authentication providers, such as Google and custom credentials, and sets up callbacks for JWT token and session management
-
-import NextAuth from 'next-auth';
+import NextAuth, { DefaultSession } from 'next-auth';
 import Google from 'next-auth/providers/google';
 import Credentials from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import prisma from '@/prisma/prisma';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
+
+declare module 'next-auth' {
+  /**
+   * Extends the built-in session/user types to include the role property
+   */
+  interface User {
+    role?: string;
+  }
+
+  interface Session {
+    user: {
+      role?: string;
+    } & DefaultSession['user'];
+  }
+}
 
 export const {
   handlers: { GET, POST },
@@ -16,10 +30,10 @@ export const {
 } = NextAuth({
   session: {
     strategy: 'jwt',
-    maxAge: 1 * 60 * 60, // 1 hour
+    maxAge: 60 * 60 * 60, // 2.5 days
   },
   jwt: {
-    maxAge: 1 * 60 * 60, // 1 hour
+    maxAge: 60 * 60 * 60, // 2.5 days
   },
   adapter: PrismaAdapter(prisma),
   pages: {
@@ -29,11 +43,13 @@ export const {
     jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.role = user.role;
       }
       return token;
     },
     session({ session, token }) {
       session.user.id = token.id as string;
+      session.user.role = token.role as string;
       return session;
     },
     async redirect({ url, baseUrl }) {
