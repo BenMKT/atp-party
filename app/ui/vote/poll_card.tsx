@@ -56,11 +56,17 @@ const PollCard = ({ poll }: { poll: Poll }) => {
             <h1 className="text-[18px] font-[600px]">{poll.title}</h1>
 
             {/* delete button */}
-            <button onClick={() => handleDeletePoll(poll_id)}>
-              <BsFillTrash3Fill
-                size={15}
-                className="text-end text-[#1B5CFE] transition-all duration-300 hover:scale-150 hover:text-indigo-400"
-              />
+            <button
+              disabled={session?.user?.role === 'MEMBER'} // Disable button based on user role
+              className={clsx('transition-all duration-300', {
+                'text-end text-[#1B5CFE] hover:scale-150 hover:text-indigo-400':
+                  session?.user?.role !== 'MEMBER', // Active styles
+                'cursor-not-allowed text-red-500':
+                  session?.user?.role === 'MEMBER', // Disabled styles
+              })}
+              onClick={() => handleDeletePoll(poll_id)}
+            >
+              <BsFillTrash3Fill size={18} />
             </button>
           </div>
           {/* poll description */}

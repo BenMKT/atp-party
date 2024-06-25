@@ -255,17 +255,34 @@ const Contestant = ({
             </h1>
             <div className="flex gap-[2px]">
               {/* edit button */}
-              <button onClick={openUpdateContestantModal}>
+              <button
+                disabled={session?.user?.id !== contestant.userId}
+                onClick={openUpdateContestantModal}
+              >
                 <MdModeEdit
                   size={20}
-                  className="text-[#1B5CFE] transition-all duration-300 hover:scale-150 hover:text-indigo-400"
+                  className={clsx('transition-all duration-300', {
+                    'text-[#1B5CFE] hover:scale-150 hover:text-indigo-400':
+                      session?.user?.id === contestant.userId, // Active styles
+                    'cursor-not-allowed text-red-500':
+                      session?.user?.id !== contestant.userId, // Disabled styles
+                  })}
                 />
               </button>
               {/* delete button */}
-              <button onClick={onDelete}>
+              <button
+                onClick={onDelete}
+                disabled={session?.user?.role === 'MEMBER'} // Disable button based on user role
+                className={clsx('transition-all duration-300', {
+                  'text-[#1B5CFE] hover:scale-150 hover:text-indigo-400':
+                    session?.user?.role !== 'MEMBER', // Active styles
+                  'cursor-not-allowed text-red-500':
+                    session?.user?.role === 'MEMBER', // Disabled styles
+                })}
+              >
                 <BsFillTrash3Fill
                   size={20}
-                  className="text-[#1B5CFE] transition-all duration-300 hover:scale-150 hover:text-indigo-400"
+                  className="transition-all duration-300"
                 />
               </button>
             </div>

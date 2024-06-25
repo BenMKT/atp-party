@@ -14,8 +14,7 @@ const HomePage = async () => {
           <div
             className={`${lusitana.className} mb-3 flex items-center gap-1 font-semibold`}>
             <div className="h-[32px] w-[32px] rounded-full bg-green-400" />
-            Welcome ambassador {session?.user?.name} to our ATP revolutionary
-            App!
+            Welcome, Ambassador {session?.user?.name}, to the future!
           </div>
         )}
 

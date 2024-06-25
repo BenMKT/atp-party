@@ -1,6 +1,5 @@
 // Purpose: This file is responsible for handling authentication and authorization logic in the application. It uses NextAuth to provide authentication services to the application, including sign-in, sign-out, and session management. It also defines the authentication providers, such as Google and custom credentials, and sets up callbacks for JWT token and session management
 import NextAuth, { DefaultSession } from 'next-auth';
-import Google from 'next-auth/providers/google';
 import Credentials from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import prisma from '@/prisma/prisma';
@@ -60,17 +59,6 @@ export const {
     },
   },
   providers: [
-    // Google({
-    //   clientId: process.env.GOOGLE_CLIENT_ID,
-    //   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    //   authorization: {
-    //     params: {
-    //       prompt: 'consent',
-    //       access_type: 'offline',
-    //       response_type: 'code',
-    //     },
-    //   },
-    // }),
     Credentials({
       authorize: async (credentials) => {
         // logic to verify if user exists in the database
