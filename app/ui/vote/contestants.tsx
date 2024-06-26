@@ -7,6 +7,7 @@ import { MdModeEdit } from 'react-icons/md';
 import { TfiAnnouncement } from 'react-icons/tfi';
 import { BsFillTrash3Fill } from 'react-icons/bs';
 import {
+  contestantsVotes,
   fetchContestants,
   fetchPollById,
   totalContestantVotes,
@@ -163,6 +164,21 @@ const Contestant = ({
     // get initial votes count on page load
     fetchTotalContestantVotes();
 
+    // fetch the list of votes for the contestant using the contestant id
+    const fetchContestantVotes = async () => {
+      const fetchedVotes = await contestantsVotes(contestantid);
+      // Check if the current session user has already voted for this contestant
+      const hasCurrentUserVoted = fetchedVotes.some(
+        (vote) => vote.userId === session?.user?.id,
+      );
+
+      if (hasCurrentUserVoted) {
+        setHasVoted(true); // Disable the vote button since the user has already voted
+      }
+    };
+    // get initial votes list on page load
+    fetchContestantVotes();
+
     const fetchPoll = async () => {
       const fetchedPoll = await fetchPollById(id);
       setPoll(fetchedPoll);
@@ -181,7 +197,7 @@ const Contestant = ({
     return () => {
       subscription.unsubscribe();
     };
-  }, [id, contestantid]);
+  }, [id, contestantid, session?.user?.id, setHasVoted]);
 
   // create a vote object
   const vote = {

@@ -57,9 +57,9 @@ model Polls {
 
 model Votes {
   id           String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  pollId       String      @db.Uuid
-  userId       String      @db.VarChar(255)
-  contestantId String      @db.Uuid
+  pollId       String      @unique @db.Uuid
+  userId       String      @unique @db.VarChar(255) // links to the 'member.id' who voted due Auth
+  contestantId String      @unique @db.Uuid
   createdAt    DateTime    @default(now())
   poll         Polls       @relation(fields: [pollId], references: [id], onDelete: Cascade)
   contestant   Contestants @relation(fields: [contestantId], references: [id], onDelete: Cascade)
@@ -70,10 +70,10 @@ model Contestants {
   name      String    @db.VarChar(255)
   slogan    String?   @db.VarChar(255)
   avatar    String    @db.VarChar(255)
-  userId    String    @db.VarChar(255)
+  userId    String    @db.VarChar(255) // links to the 'member.id' who created the contestant due Auth
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
-  vote      Votes[]
+  votes     Votes[]
   poll      Polls     @relation(fields: [pollId], references: [id], onDelete: Cascade)
   pollId    String    @db.Uuid
 }

@@ -57,6 +57,7 @@ export type PollContestant = {
   createdAt: Date;
   updatedAt: Date | null;
   userId: string;
+  vote?: Votes[];
 };
 
 export type EditPoll = {
