@@ -43,7 +43,7 @@ const OverdueBills = async () => {
                       {/* mobile number */}
                       <p className="hidden gap-1 text-sm text-gray-500 sm:inline-flex">
                         <PhoneArrowUpRightIcon className="h-4 w-4 text-gray-500" />
-                        {bill.Member.mobileNumber}
+                        {bill.Member.phone}
                       </p>
                       {/* due date */}
                       <p
