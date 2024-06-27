@@ -29,10 +29,10 @@ export const {
 } = NextAuth({
   session: {
     strategy: 'jwt',
-    maxAge: 60 * 60 * 24 * 2.5, // 2.5 days
+    maxAge: 60 * 60 * 2, // 2 hours
   },
   jwt: {
-    maxAge: 60 * 60 * 24 * 2.5, // 2.5 days
+    maxAge: 60 * 60 * 2, // 2 hours
   },
   adapter: PrismaAdapter(prisma),
   pages: {
