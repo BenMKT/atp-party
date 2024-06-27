@@ -1,10 +1,16 @@
+import { auth } from '@/auth';
 import NavBar from '../ui/top-navbar';
 import Banner from '../ui/vote/banner';
 import DisplayPolls from '../ui/vote/polls';
 import Footer from '@/app/ui/vote/footer';
+import { redirect } from 'next/navigation';
 
-// create a voting page component to display the voting page 
-const VotingPage = () => {
+// create a voting page component to display the voting page
+const VotingPage = async () => {
+  // get the session data from the auth function
+  const session = await auth();
+  if (!session?.user) redirect('/login');
+
   return (
     <main className="bg-[url('/register.jpeg')]">
       <div className="relative min-h-screen backdrop-blur">

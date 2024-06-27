@@ -183,7 +183,7 @@ export const fetchContestants = async (id: string) => {
       where: { pollId: id },
       include: {
         poll: true,
-        vote: true,
+        votes: true,
       },
     });
     return contestants;
@@ -204,5 +204,19 @@ export const totalContestantVotes = async (contestantid: string) => {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to count contestant votes.');
+  }
+};
+
+// get all votes by contestant id from the database
+export const contestantsVotes = async (contestantid: string) => {
+  noStore();
+  try {
+    const votes = await prisma.votes.findMany({
+      where: { contestantId: contestantid },
+    });
+    return votes;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch contestant votes.');
   }
 };

@@ -11,6 +11,9 @@ import {
   UpdateContestant,
   Vote,
 } from './definitions';
+import { signIn, signOut } from '@/auth';
+import { AuthError } from 'next-auth';
+import bcrypt from 'bcryptjs';
 
 // create a member schema that matches database schema to validate the user input data
 const MemberFormSchema = z.object({
@@ -18,10 +21,12 @@ const MemberFormSchema = z.object({
   nationalId: z.string(),
   name: z.string(),
   dateOfBirth: z.coerce.date().max(new Date('2008-01-01')),
-  mobileNumber: z.string().min(13),
+  phone: z.string().min(12),
+  password: z.string().min(6),
   email: z.string().email(),
   gender: z.enum(['MALE', 'FEMALE']),
   isDisabled: z.enum(['TRUE', 'FALSE']),
+  role: z.enum(['ADMIN', 'STAFF', 'MEMBER']),
   religion: z.string().optional(),
   county: z.string(),
   constituency: z.string(),
@@ -42,8 +47,10 @@ const RegisterMember = MemberFormSchema.omit({
 
 // Derive an UpdateMember schema from the MemberFormSchema
 const UpdateMember = MemberFormSchema.pick({
+  name: true,
   email: true,
-  mobileNumber: true,
+  phone: true,
+  password: true,
   county: true,
   constituency: true,
   ward: true,
@@ -103,6 +110,7 @@ const ContestantFormSchema = z.object({
   id: z.string(),
   name: z.string(),
   slogan: z.string().optional(),
+  userId: z.string(),
   avatar: z.string(),
   pollId: z.string(),
   createdAt: z.coerce.date(),
@@ -122,10 +130,14 @@ export const registerMember = async (formData: FormData) => {
   const rawFormData = Object.fromEntries(formData.entries());
   // validate the user input data using the schema
   const validatedFields = RegisterMember.safeParse(rawFormData);
-  // if the validation is successful, proceed to insert the data to the database or else display the error messages
-  const validatedData = validatedFields.success
-    ? validatedFields.data
-    : validatedFields.error.flatten().fieldErrors;
+
+  if (!validatedFields.success) {
+    return validatedFields.error.flatten().fieldErrors;
+  }
+  // Hash the password
+  const hashedPassword = bcrypt.hashSync(validatedFields.data.password, 10);
+  // if the validation is successful, proceed to insert the data to the database with hashed password
+  const validatedData = { ...validatedFields.data, password: hashedPassword };
   // insert the validated data to the database using prisma
   await prisma.members
     .create({
@@ -262,7 +274,6 @@ export const createPoll = async (data: Data, formData: FormData) => {
       startDate,
       endDate,
       banner: bannerURL,
-      userId: '0ed219b4-895a-4fd9-a3ad-2d41fa500406', // TODO remove after adding authentication to get the user id from the session
     },
   });
   console.log('Poll created successfully');
@@ -335,4 +346,30 @@ export const createVote = async (vote: Vote) => {
   await prisma.votes.create({
     data: vote,
   });
+};
+
+// define a function to authenticate a user using the credentials provider
+export const authenticate = async (
+  prevState: string | undefined,
+  formData: FormData,
+) => {
+  try {
+    // sign in the user using the credentials provider
+    await signIn('credentials', formData, { callbackUrl: '/' });
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case 'CredentialsSignin':
+          return 'Invalid credentials.';
+        default:
+          return 'Invalid password or credentials. Try again!';
+      }
+    }
+    throw error;
+  }
+};
+
+// define a function to sign out a user
+export const logOut = async () => {
+  await signOut({ redirectTo: '/' });
 };

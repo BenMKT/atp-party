@@ -1,45 +1,11 @@
 const { PrismaClient } = require('@prisma/client');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
-const {
-  users,
-  members,
-  bills,
-  polls,
-  contestants,
-  votes,
-} = require('./seedData.js');
+const { members, bills, polls, contestants, votes } = require('./seedData.js');
 
 const prisma = new PrismaClient();
 
 // logic to seed data into database
-
-async function seedUsers() {
-  try {
-    const hashedUsers = await Promise.all(
-      users.map(async (user) => {
-        const hashedPassword = await bcrypt.hash(user.password, 10);
-        return {
-          ...user,
-          password: hashedPassword,
-        };
-      }),
-    );
-
-    const insertedUsers = await prisma.users.createMany({
-      data: hashedUsers,
-      skipDuplicates: true,
-    });
-
-    console.log(`Seeded ${insertedUsers.count} users`);
-
-    return insertedUsers;
-  } catch (error) {
-    console.error('Error seeding users:', error);
-    throw error;
-  }
-}
-
 async function seedBills() {
   try {
     const insertedBills = await prisma.bills.createMany({
@@ -58,8 +24,18 @@ async function seedBills() {
 
 async function seedMembers() {
   try {
+    const hashedMembers = await Promise.all(
+      members.map(async (member) => {
+        const hashedPassword = bcrypt.hashSync(member.password, 10);
+        return {
+          ...member,
+          password: hashedPassword,
+        };
+      }),
+    );
+
     const insertedMembers = await prisma.members.createMany({
-      data: members,
+      data: hashedMembers,
       skipDuplicates: true,
     });
 
@@ -124,7 +100,6 @@ async function main() {
   try {
     await prisma.$connect();
 
-    await seedUsers();
     await seedMembers();
     await seedPolls();
     await seedContestants();

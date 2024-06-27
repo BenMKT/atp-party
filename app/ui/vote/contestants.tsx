@@ -7,6 +7,7 @@ import { MdModeEdit } from 'react-icons/md';
 import { TfiAnnouncement } from 'react-icons/tfi';
 import { BsFillTrash3Fill } from 'react-icons/bs';
 import {
+  contestantsVotes,
   fetchContestants,
   fetchPollById,
   totalContestantVotes,
@@ -22,9 +23,12 @@ import {
 } from '@/app/lib/realtime';
 import { motion } from 'framer-motion';
 import clsx from 'clsx';
+import { useSession } from 'next-auth/react';
 
 // display a list of contestants
 const Contestants = () => {
+  // get the session object from the useSession hook
+  const session = useSession().data;
   // get the id from the URL params
   const pageParams = useParams();
   // get the id from the URL params as a string
@@ -54,11 +58,19 @@ const Contestants = () => {
     // call subscribeToPollContestants function to subscribe to Contestants table
     const subscription = subscribeToPollContestants(id, handleNewContestant);
 
+    // Retrieve vote state from localStorage
+    const voteState = localStorage.getItem(
+      `hasVoted_${session?.user?.id}-${id}`,
+    );
+    if (voteState === 'true') {
+      setHasVoted(true);
+    }
+
     // Cleanup subscription on unmount
     return () => {
       subscription.unsubscribe();
     };
-  }, [id, contestantCount]);
+  }, [id, contestantCount, session?.user?.id]);
 
   // call the deleteContestant action to delete contestant when delete button is clicked
   const handleDeleteContestant = (contestantId: string) => {
@@ -127,13 +139,15 @@ const Contestant = ({
   hasVoted: boolean;
   setHasVoted: (value: boolean) => void;
 }) => {
+  // get the session object from the useSession hook
+  const session = useSession().data;
   // add state variable to store the total number of contestant votes
   const [contestantVotes, setContestantVotes] = useState(0);
   // add state variable to track whether the modal should be shown
   const [showUpdateContestantModal, setShowUpdateContestantModal] =
     useState(false);
   // add state variable to store the poll object
-  const [poll, setPoll] = useState<Poll | undefined>(undefined);
+  const [poll, setPoll] = useState<Poll | undefined | null>(undefined);
   // get the contestant id from the contestant object
   const contestantid = contestant.id;
   // get the id from the URL params
@@ -149,6 +163,21 @@ const Contestant = ({
     };
     // get initial votes count on page load
     fetchTotalContestantVotes();
+
+    // fetch the list of votes for the contestant using the contestant id
+    const fetchContestantVotes = async () => {
+      const fetchedVotes = await contestantsVotes(contestantid);
+      // Check if the current session user has already voted for this contestant
+      const hasCurrentUserVoted = fetchedVotes.some(
+        (vote) => vote.userId === session?.user?.id,
+      );
+
+      if (hasCurrentUserVoted) {
+        setHasVoted(true); // Disable the vote button since the user has already voted
+      }
+    };
+    // get initial votes list on page load
+    fetchContestantVotes();
 
     const fetchPoll = async () => {
       const fetchedPoll = await fetchPollById(id);
@@ -168,20 +197,22 @@ const Contestant = ({
     return () => {
       subscription.unsubscribe();
     };
-  }, [id, contestantid]);
+  }, [id, contestantid, session?.user?.id, setHasVoted]);
+
+  // create a vote object
+  const vote = {
+    contestantId: contestantid,
+    pollId: id,
+    userId: session?.user?.id as string,
+  };
 
   // call the createVote action to create a vote for the contestant when vote button is clicked
-  const handleVote = (contestantid: string, id: string) => {
-    const vote = {
-      contestantId: contestantid,
-      pollId: id,
-      userId: 'cff96f8a-da40-47b7-a8f3-9446376376c9',
-    };
-
+  const handleVote = () => {
     createVote(vote)
       .then(() => {
         toast.success('Vote submitted successfully!!');
         setHasVoted(true);
+        localStorage.setItem(`hasVoted_${session?.user?.id}-${id}`, 'true'); // store vote state in localStorage
       })
       .catch((error: Error) => {
         toast.error('Error submitting vote!');
@@ -189,10 +220,12 @@ const Contestant = ({
       });
   };
 
-  const isDisabled =
+  // variable to track whether the vote button should be disabled
+  const isDisabled: boolean = !!(
     hasVoted ||
     (poll && new Date() < new Date(poll.startDate)) ||
-    (poll && new Date() > new Date(poll.endDate));
+    (poll && new Date() > new Date(poll.endDate))
+  );
 
   // when button is clicked, this state variable should be set to true and when the modal is closed, it should be set back to false
   const openUpdateContestantModal = () => {
@@ -205,9 +238,10 @@ const Contestant = ({
 
   return (
     <main>
-      <motion.div className="mt-5 flex grow items-center space-x-2 md:mx-auto md:space-x-8"
-        initial={{opacity: 0}}
-        animate={{ opacity: 1}}
+      <motion.div
+        className="mt-5 flex grow items-center space-x-2 md:mx-auto md:space-x-8"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
         transition={{
           delay: 5,
           duration: 10,
@@ -237,17 +271,34 @@ const Contestant = ({
             </h1>
             <div className="flex gap-[2px]">
               {/* edit button */}
-              <button onClick={openUpdateContestantModal}>
+              <button
+                disabled={session?.user?.id !== contestant.userId}
+                onClick={openUpdateContestantModal}
+              >
                 <MdModeEdit
                   size={20}
-                  className="text-[#1B5CFE] transition-all duration-300 hover:scale-150 hover:text-indigo-400"
+                  className={clsx('transition-all duration-300', {
+                    'text-[#1B5CFE] hover:scale-150 hover:text-indigo-400':
+                      session?.user?.id === contestant.userId, // Active styles
+                    'cursor-not-allowed text-red-500':
+                      session?.user?.id !== contestant.userId, // Disabled styles
+                  })}
                 />
               </button>
               {/* delete button */}
-              <button onClick={onDelete}>
+              <button
+                onClick={onDelete}
+                disabled={session?.user?.role === 'MEMBER'} // Disable button based on user role
+                className={clsx('transition-all duration-300', {
+                  'text-[#1B5CFE] hover:scale-150 hover:text-indigo-400':
+                    session?.user?.role !== 'MEMBER', // Active styles
+                  'cursor-not-allowed text-red-500':
+                    session?.user?.role === 'MEMBER', // Disabled styles
+                })}
+              >
                 <BsFillTrash3Fill
                   size={20}
-                  className="text-[#1B5CFE] transition-all duration-300 hover:scale-150 hover:text-indigo-400"
+                  className="transition-all duration-300"
                 />
               </button>
             </div>
@@ -263,7 +314,7 @@ const Contestant = ({
           {/* vote button */}
           <button
             disabled={isDisabled}
-            onClick={() => handleVote(contestantid, id)}
+            onClick={() => handleVote()}
             className={clsx(
               'z-10 flex h-10 w-[95%] items-center justify-center rounded-full bg-green-500 hover:text-xl',
               {

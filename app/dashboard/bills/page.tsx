@@ -2,6 +2,8 @@ import { PrismaClient } from '@prisma/client';
 import BillsTable from './bills-table';
 import { CreateBill } from './buttons';
 import Search from '@/app/ui/search';
+import { auth } from '@/auth';
+import { redirect } from 'next/navigation';
 
 const prisma = new PrismaClient();
 
@@ -11,6 +13,9 @@ const BillsPage = async ({
 }: {
   searchParams?: { query?: string; page?: string };
 }) => {
+  // authenticate the user before rendering the protected bills page
+  const session = await auth();
+  if (!session?.user) redirect('/login');
   // update the table component to reflect the search query
   const query = searchParams?.query || '';
   const currentPage = Number(searchParams?.page) || 1;
@@ -21,9 +26,10 @@ const BillsPage = async ({
         <Search placeholder="Filter Bills" />
         <CreateBill />
       </div>
-      <p className="text-md text-red-500 -mb-8">
+      <p className="text-md -mb-8 text-red-500">
         N/B: This bills/invoices result list is based on the search criteria
-        input above, otherwise, it will display all invoices/bills in the party database:
+        input above, otherwise, it will display all invoices/bills in the party
+        database:
       </p>
       <BillsTable query={query} currentPage={currentPage} />
     </main>

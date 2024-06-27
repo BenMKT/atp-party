@@ -9,9 +9,12 @@ import UpdatePollModal from './update_poll';
 import { subscribeToPolls, subscribeToPollVotes } from '@/app/lib/realtime';
 import { motion } from 'framer-motion';
 import clsx from 'clsx';
+import { useSession } from 'next-auth/react';
 
 // create a component to display specific poll details using id
 const PollDetails = ({ id }: { id: string }) => {
+  // get the session data from the useSession hook
+  const session = useSession().data;
   // add state variable to store the poll details
   const [pollData, setPollData] = useState<any>({});
   // add state variable to store the total number of poll votes
@@ -25,7 +28,7 @@ const PollDetails = ({ id }: { id: string }) => {
       (1000 * 60 * 60 * 24),
   );
   // Determine when the contest button should be disabled based on the days to the poll's start date
-  const isDisabled = daysToStartDate <= 3;
+  const isDisabled = daysToStartDate <= 7;
 
   // fetch the poll details using the id passed to the component and set the poll state variable with the fetched data
   useEffect(() => {
@@ -132,7 +135,7 @@ const PollDetails = ({ id }: { id: string }) => {
           </div>
           {/* user name */}
           <div
-            className="flex h-[32px] w-[133px] items-center justify-center
+            className="flex h-[32px] items-center justify-center
                  gap-[12px] rounded-[10px] py-[20px]"
           >
             <div
@@ -144,7 +147,7 @@ const PollDetails = ({ id }: { id: string }) => {
                 'bg-red-500': new Date() > new Date(pollData?.endDate),
               })}
             />
-            <p className="text-[14px] font-[500px]">user.name</p>
+            <p className="text-[14px] font-[500px]">{session?.user?.name}</p>
           </div>
           {/* poll contestant votes info */}
           <div className="flex h-[36px] items-center justify-center gap-[4px]">
@@ -156,9 +159,16 @@ const PollDetails = ({ id }: { id: string }) => {
             </button>
             <button
               onClick={openUpdatePollModal}
-              className="flex items-center 
-                    justify-center gap-[8px] rounded-full border border-gray-400 
-                    bg-white bg-opacity-20 px-[12px] py-[6px] text-[12px] transition-all duration-300 hover:bg-white hover:bg-opacity-50 hover:text-[#1B5CFE] md:text-[16px]"
+              disabled={session?.user?.role === 'MEMBER'} // Disable button based on user role
+              className={`flex items-center justify-center gap-[8px] rounded-full border ${
+                session?.user?.role === 'MEMBER'
+                  ? 'hidden'
+                  : 'border-gray-400 bg-white bg-opacity-20'
+              } px-[12px] py-[6px] text-[12px] transition-all duration-300 ${
+                session?.user?.role !== 'MEMBER'
+                  ? 'hover:bg-white hover:bg-opacity-50 hover:text-[#1B5CFE]'
+                  : ''
+              } md:text-[16px]`}
             >
               <MdModeEdit size={20} className="text-[#1B5CFE]" />
               Edit poll

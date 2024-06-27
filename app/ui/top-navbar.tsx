@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Menu from './top-nav-links';
 import React from 'react';
 import ATPLogo from './atp-logo';
+import SignOut from './signout';
 
 // create a top navigation bar component with the ATP logo and menu items
 const NavBar = () => {
@@ -10,7 +11,10 @@ const NavBar = () => {
       <Link href="/">
         <ATPLogo />
       </Link>
-      <Menu />
+      <div className="flex items-center gap-1">
+        <Menu />
+        <SignOut />
+      </div>
     </nav>
   );
 };

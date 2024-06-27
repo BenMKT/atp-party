@@ -3,12 +3,15 @@
 import { useState } from 'react';
 import CreatePollModal from './create_poll';
 import ShimmerButton from '../magicui/shimmer-button';
+import { useSession } from 'next-auth/react';
+import clsx from 'clsx';
 
 // create a banner component to display the page title, a brief description and a button to create a poll
 const Banner = () => {
   // add a state variable to track whether the modal should be shown
   const [showModal, setShowModal] = useState(false);
-
+  // get the session object from the useSession hook
+  const session = useSession().data;
   // when button is clicked, this state variable should be set to true and when the modal is closed, it should be set back to false
   const openModal = () => {
     setShowModal(true);
@@ -37,8 +40,12 @@ const Banner = () => {
         {/* create poll button */}
         <ShimmerButton
           onClick={openModal}
-          className="mx-auto h-[45px] w-[148px] rounded-full bg-[#1B5CFE]
-             transition-all duration-300 hover:text-xl"
+          disabled={session?.user?.role === 'MEMBER'} // Disable button based on user role
+          className={clsx('mx-auto transition-all duration-300', {
+            ' h-[45px] w-[148px] rounded-full':
+              session?.user?.role !== 'MEMBER', // Active styles
+            hidden: session?.user?.role === 'MEMBER', // Disabled styles
+          })}
         >
           <span className="text-white">Create Poll</span>
         </ShimmerButton>

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Button } from '@/app/ui/button';
 import { registerMember } from '@/app/lib/actions';
 
+// create a registration form component to capture user registration details
 const RegistrationForm = () => {
   return (
     <form action={registerMember}>
@@ -15,7 +16,8 @@ const RegistrationForm = () => {
             type="number"
             placeholder="12345678"
             required
-            className="input input-bordered input-info w-full max-w-xl" />
+            className="input input-bordered input-info w-full max-w-xl"
+          />
         </label>
         {/* Name */}
         <span className="label-text">What is your name?*</span>
@@ -26,7 +28,8 @@ const RegistrationForm = () => {
             type="text"
             placeholder="Full Names"
             required
-            className="input input-bordered input-info w-full max-w-xl" />
+            className="input input-bordered input-info w-full max-w-xl"
+          />
         </label>
         {/* Date of Birth */}
         <span className="label-text">Date of Birth*</span>
@@ -37,18 +40,20 @@ const RegistrationForm = () => {
             type="date"
             placeholder="Date of Birth"
             required
-            className="input input-bordered input-info w-full max-w-xl" />
+            className="input input-bordered input-info w-full max-w-xl"
+          />
         </label>
-        {/* Mobile Number */}
+        {/* Phone */}
         <span className="label-text">Enter your mobile number*</span>
-        <label htmlFor="mobileNumber">
+        <label htmlFor="phone">
           <input
-            id="mobileNumber"
-            name="mobileNumber"
+            id="phone"
+            name="phone"
             type="text"
-            placeholder="+254700000000"
+            placeholder="254700000000"
             required
-            className="input input-bordered input-info w-full max-w-xl" />
+            className="input input-bordered input-info w-full max-w-xl"
+          />
         </label>
         {/* Email */}
         <span className="label-text">Email*</span>
@@ -62,6 +67,18 @@ const RegistrationForm = () => {
             className="input input-bordered input-info w-full max-w-xl"
           />
         </label>
+        {/* Password */}
+        <span className="label-text">Password*</span>
+        <label htmlFor="password">
+          <input
+            id="password"
+            name="password"
+            type="password"
+            placeholder="Enter your Password"
+            required
+            className="input input-bordered input-info w-full max-w-xl"
+          />
+        </label>
         {/* Gender */}
         <span className="label-text">Gender*</span>
         <label htmlFor="gender">
@@ -69,7 +86,8 @@ const RegistrationForm = () => {
             id="gender"
             name="gender"
             required
-            className="input input-bordered input-info w-full max-w-xl">
+            className="input input-bordered input-info w-full max-w-xl"
+          >
             <option disabled selected value="">
               Choose your Gender
             </option>
@@ -84,12 +102,34 @@ const RegistrationForm = () => {
             id="isDisabled"
             name="isDisabled"
             required
-            className="input input-bordered input-info w-full max-w-xl">
+            className="input input-bordered input-info w-full max-w-xl"
+          >
             <option disabled selected value="">
-              Select One
+              Please select an option
             </option>
             <option value="TRUE">TRUE</option>
             <option value="FALSE">FALSE</option>
+          </select>
+        </label>
+        {/* Role */}
+        <span className="label-text">Role*</span>
+        <label htmlFor="role">
+          <select
+            id="role"
+            name="role"
+            required
+            className="input input-bordered input-info w-full max-w-xl"
+          >
+            <option disabled selected value="">
+              Please select an option
+            </option>
+            <option disabled value="ADMIN">
+              ADMIN
+            </option>
+            <option disabled value="STAFF">
+              STAFF
+            </option>
+            <option value="MEMBER">MEMBER</option>
           </select>
         </label>
         {/* Religion */}
