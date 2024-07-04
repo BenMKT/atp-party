@@ -1,4 +1,4 @@
-'use client'; // makes this a client-side component
+'use client';
 
 import clsx from 'clsx';
 import { useState } from 'react';
@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { SlMenu } from 'react-icons/sl';
 import Link from 'next/link';
 import React from 'react';
+import { motion } from 'framer-motion';
 
 // create a top-nav links component with a dropdown menu for small screens
 const Menu = () => {
@@ -17,7 +18,7 @@ const Menu = () => {
   const links = [
     { label: 'Home', href: '/' },
     { label: 'Dashboard', href: '/dashboard' },
-    { label: 'News', href: '/news' },
+    // { label: 'News', href: '/news' },
     { label: 'Vote', href: '/vote' },
     { label: 'About', href: '/about' },
     { label: 'Contact', href: '/contact' },
@@ -33,19 +34,49 @@ const Menu = () => {
     setIsOpen(false);
   };
 
+  // Define framer-motion variants for the parent
+  const variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1, // Delay between each child animation
+      },
+    },
+  };
+
+  // Define variants for the children
+  const itemVariants = {
+    hidden: { opacity: 0, y: -20 },
+    visible: { opacity: 1, y: 0 },
+  };
+
   // function to render the menu links dynamically
   const renderMenuLinks = () => {
     return links.map((link) => (
-      <li key={link.href}>
+      <motion.li
+        key={link.href}
+        variants={itemVariants}
+        whileHover={{
+          scale: 1.1,
+          transition: { duration: 0.3 },
+        }}
+        whileTap={{ scale: 0.9 }}
+      >
         <Link
           href={link.href}
-          className={clsx('text-zinc-500', {
-            'font-bold text-black': currentPath === link.href,
-          })}
-          onClick={closeDropdown}>
+          className={clsx(
+            'rounded-md text-white md:p-3 md:text-zinc-600 md:hover:bg-sky-100 md:hover:text-blue-600',
+            {
+              'bg-blue-500 bg-opacity-50 font-bold md:bg-sky-300':
+                currentPath === link.href,
+            },
+          )}
+          onClick={closeDropdown}
+        >
           {link.label}
         </Link>
-      </li>
+      </motion.li>
     ));
   };
 
@@ -53,16 +84,23 @@ const Menu = () => {
     <main>
       <div className="dropdown dropdown-end sm:hidden">
         {/* button to toggle the dropdown menu */}
-        <button className="btn m-3" onClick={toggleDropdown}>
-          <SlMenu />
+        <button
+          className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-sky-100 p-3 text-sm font-medium text-zinc-600 transition-transform duration-75 ease-in-out hover:scale-110 hover:bg-sky-300 hover:text-blue-600 active:scale-90 md:flex-none md:justify-start md:p-2 md:px-3"
+          onClick={toggleDropdown}
+        >
+          <SlMenu className="size-5" />
         </button>
         {/* if the dropdown menu `isOpen`, render the menu links */}
         {isOpen && (
-          <ul
-            className="menu dropdown-content z-[1] w-52 rounded-box bg-emerald-200 p-2 shadow"
-            onClick={closeDropdown}>
+          <motion.ul
+            className="menu dropdown-content z-[1] rounded-box bg-black bg-opacity-50 p-2 shadow-lg shadow-[#1B5CFE]"
+            onClick={closeDropdown}
+            variants={variants} // Apply the defined variants
+            initial="hidden" // Initial state before animation
+            animate="visible" // Animate to this state
+          >
             {renderMenuLinks()}
-          </ul>
+          </motion.ul>
         )}
       </div>
       <div>
