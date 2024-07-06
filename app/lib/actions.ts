@@ -22,7 +22,7 @@ const MemberFormSchema = z.object({
   name: z.string(),
   dateOfBirth: z.coerce.date().max(new Date('2008-01-01')),
   phone: z.string().min(12),
-  password: z.string().min(6),
+  password: z.string().min(4),
   email: z.string().email(),
   gender: z.enum(['MALE', 'FEMALE']),
   isDisabled: z.enum(['TRUE', 'FALSE']),
