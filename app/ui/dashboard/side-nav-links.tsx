@@ -32,10 +32,11 @@ const NavLinks = () => {
             key={link.name}
             href={link.href}
             className={clsx(
-              'flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-sky-50 p-3 text-sm font-medium transition-transform duration-300 hover:bg-sky-100 hover:text-base hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3',
+              'flex h-[48px] grow items-center justify-center gap-2 rounded-md p-3 text-sm font-medium transition-transform duration-300 md:flex-none md:justify-start md:p-2 md:px-3',
               {
-                'bg-sky-100 text-blue-600': pathname === link.href,
-                'transform hover:scale-110': pathname !== link.href,
+                'bg-sky-200 text-blue-600': pathname === link.href,
+                'transform bg-sky-50 hover:scale-110 hover:bg-sky-100 hover:text-base hover:text-blue-600':
+                  pathname !== link.href,
               },
             )}
           >

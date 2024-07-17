@@ -160,10 +160,13 @@ export const updateMember = async (id: string, formData: FormData) => {
   const rawFormData = Object.fromEntries(formData.entries());
   // validate the data using Zod
   const validatedFields = UpdateMember.safeParse(rawFormData);
-  // if validation successful, proceed to update database or display error
-  const validatedData = validatedFields.success
-    ? validatedFields.data
-    : validatedFields.error.flatten().fieldErrors;
+  if (!validatedFields.success) {
+    return validatedFields.error.flatten().fieldErrors;
+  }
+  // Hash the password
+  const hashedPassword = bcrypt.hashSync(validatedFields.data.password, 10);
+  // if the validation is successful, proceed to insert the data to the database with hashed password
+  const validatedData = { ...validatedFields.data, password: hashedPassword };
   // update member records in the database using prisma 'update'
   await prisma.members
     .update({
