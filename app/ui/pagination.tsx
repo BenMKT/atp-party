@@ -22,26 +22,35 @@ const Pagination = ({ totalPages }: { totalPages: number }) => {
     <main>
       <div className="pagination join">
         {/* Previous page button */}
-        <Link
-          href={createPageURL(currentPage - 1)}
-          className={`btn join-item ${currentPage === 1 ? 'disabled cursor-not-allowed' : ''}`}>
-          <FaAngleLeft />
-        </Link>
+        <button
+          type="button"
+          disabled={currentPage === 1}
+          className="btn join-item hover:scale-105 active:scale-90"
+        >
+          <Link href={createPageURL(currentPage - 1)}>
+            <FaAngleLeft />
+          </Link>
+        </button>
         {/* Page numbers */}
         {Array.from({ length: totalPages }, (_, i) => (
           <Link
             key={i + 1}
             href={createPageURL(i + 1)}
-            className={`btn join-item ${currentPage === i + 1 ? 'btn-active' : ''}`}>
+            className={`btn join-item hover:scale-105 active:scale-90 ${currentPage === i + 1 ? 'btn-active' : ''}`}
+          >
             {i + 1}
           </Link>
         ))}
         {/* Next page button */}
-        <Link
-          href={createPageURL(currentPage + 1)}
-          className={`btn join-item ${currentPage === totalPages ? 'disabled cursor-not-allowed' : ''}`}>
-          <FaAngleRight />
-        </Link>
+        <button
+          type="button"
+          disabled={currentPage === totalPages}
+          className="btn join-item hover:scale-105 active:scale-90"
+        >
+          <Link href={createPageURL(currentPage + 1)}>
+            <FaAngleRight />
+          </Link>
+        </button>
       </div>
     </main>
   );

@@ -17,3 +17,22 @@ input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+/* This CSS hides everything in the body during printing, except for the table and its children. It also ensures the print button is not visible in the print preview */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .table,
+  .table * {
+    visibility: visible;
+  }
+  .table {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  .print-button {
+    display: none;
+  }
+}

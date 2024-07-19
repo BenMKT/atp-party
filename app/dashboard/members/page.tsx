@@ -3,6 +3,7 @@ import Search from '@/app/ui/search';
 import MembersTable from './members-table';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
+import { Button } from '@/app/ui/button';
 
 const MembersPage = async ({
   searchParams,
@@ -20,23 +21,18 @@ const MembersPage = async ({
   const currentPage = Number(searchParams?.page) || 1;
 
   return (
-    <main className="prose flex flex-col sm:mx-auto sm:max-w-6xl">
-      <h1>ATP Membership List</h1>
-      <Search placeholder="Filter Members..." />
-      <p className="text-md text-red-500">
-        N/B: This membership result list is based on the search criteria input
-        above, otherwise, it will display all members in the party database:
+    <main className="prose -m-8 flex min-h-screen max-w-none flex-col bg-sky-50 p-6 sm:-m-12 md:p-12 ">
+      <h1 className="text-center">ATP Membership List</h1>
+      <Search placeholder="Search Members..." />
+      <p className="text-md text-center font-semibold text-red-500">
+        N/B: Below membership list is based on the search query specified above,
+        otherwise, all members in the party database will be displayed
       </p>
       <MembersTable query={query} currentPage={currentPage} />
-      <div className="flex justify-end">
-        <button>
-          <Link
-            href="./members/register"
-            className="flex h-10 items-center rounded-lg bg-blue-600 px-4 text-sm font-medium text-white no-underline transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-          >
-            Register New Member
-          </Link>
-        </button>
+      <div className="not-prose flex justify-end">
+        <Link href="./members/register">
+          <Button>Register New Member</Button>
+        </Link>
       </div>
     </main>
   );
