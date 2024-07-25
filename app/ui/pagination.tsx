@@ -25,7 +25,7 @@ const Pagination = ({ totalPages }: { totalPages: number }) => {
         <button
           type="button"
           disabled={currentPage === 1}
-          className="btn join-item hover:scale-105 active:scale-90"
+          className="btn join-item hover:scale-105 hover:bg-gray-400 active:scale-90"
         >
           <Link href={createPageURL(currentPage - 1)}>
             <FaAngleLeft />
@@ -36,7 +36,7 @@ const Pagination = ({ totalPages }: { totalPages: number }) => {
           <Link
             key={i + 1}
             href={createPageURL(i + 1)}
-            className={`btn join-item hover:scale-105 active:scale-90 ${currentPage === i + 1 ? 'btn-active' : ''}`}
+            className={`btn join-item hover:scale-105 hover:bg-gray-400 active:scale-90 ${currentPage === i + 1 ? 'btn-active' : ''}`}
           >
             {i + 1}
           </Link>
@@ -45,7 +45,7 @@ const Pagination = ({ totalPages }: { totalPages: number }) => {
         <button
           type="button"
           disabled={currentPage === totalPages}
-          className="btn join-item hover:scale-105 active:scale-90"
+          className="btn join-item hover:scale-105 hover:bg-gray-400 active:scale-90"
         >
           <Link href={createPageURL(currentPage + 1)}>
             <FaAngleRight />

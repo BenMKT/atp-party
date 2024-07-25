@@ -18,10 +18,15 @@ const UpdateBillPage = async ({ params }: { params: { id: string } }) => {
   }
 
   return (
-    <main className='prose max-w-none'>
-      <h2 className="text-center">Update Bill Details</h2>
-      {/* Pass the bill object as a prop to prefill the form fields with the specific bill details */}
-      <EditBillForm bill={bill} />
+    <main className="prose -m-8 flex min-h-screen max-w-none md:-m-12">
+      <div className=" hidden bg-[url('/editBillBG.jpg')] bg-cover bg-no-repeat md:block md:w-1/2">
+        {' '}
+      </div>
+      <div className="w-full overflow-hidden bg-sky-50 p-7 md:w-1/2">
+        <h2 className="-mt-2 text-center md:mt-48">Update Bill Details</h2>
+        {/* Pass the bill object as a prop to prefill the form fields with the specific bill details */}
+        <EditBillForm bill={bill} />
+      </div>
     </main>
   );
 };
