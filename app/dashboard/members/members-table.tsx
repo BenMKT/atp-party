@@ -80,7 +80,7 @@ const MembersTable = async ({
     <main className="-mt-8">
       {/* Conditionally render Print Button unless session.user.role is MEMBER */}
       {session?.user?.role !== 'MEMBER' && (
-        <div className="-mb-8 mt-6">
+        <div className="-mb-8 mt-11">
           <PrintButton />
         </div>
       )}
@@ -88,7 +88,7 @@ const MembersTable = async ({
       <h2>{`Total Members: ${totalCount}`}</h2>
       {/* Table to display members */}
       <div className="mb-2 overflow-x-auto">
-        <table className="table rounded-lg bg-sky-100">
+        <table className="table rounded-lg bg-sky-100 bg-opacity-60">
           {/* Table headers */}
           <thead>
             <tr className="text-base">
