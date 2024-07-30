@@ -72,7 +72,6 @@ export const fetchOverdueBills = async () => {
       orderBy: {
         dueDate: 'asc',
       },
-      take: 5,
     });
 
     // console.log('Data fetch completed after 3 seconds.');
@@ -100,7 +99,6 @@ export const fetchPendingBills = async () => {
       },
       where: { status: 'Pending' },
       orderBy: { dueDate: 'asc' },
-      take: 5,
     });
     // console.log('Data fetch completed after 3 seconds.');
 

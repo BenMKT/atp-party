@@ -2,22 +2,29 @@ import { CardWrapper } from '../ui/dashboard/cards';
 import OverdueBills from '../ui/dashboard/overdue-bills';
 import PendingBills from '../ui/dashboard/pending-bills';
 import { lusitana } from '../ui/fonts';
+import { auth } from '@/auth';
 
 // create a dashboard page component to display the dashboard content
-const DashboardPage = () => {
+const DashboardPage = async () => {
+  // get the session data from the auth function
+  const session = await auth();
   return (
-    <main>
+    <main className="-m-8 min-h-screen bg-sky-50 p-6 sm:-m-12 md:p-12">
       <h1
-        className={`${lusitana.className} mb-4 text-xl font-bold md:text-4xl`}>
+        className={`${lusitana.className} mb-4 text-xl font-bold md:text-4xl`}
+      >
         Dashboard
       </h1>
       <div>
         <CardWrapper />
       </div>
-      <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <OverdueBills />
-        <PendingBills />
-      </div>
+      {/* display the overdue and pending bills if the user is a staff or admin */}
+      {(session?.user?.role === 'STAFF' || session?.user?.role === 'ADMIN') && (
+        <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <OverdueBills />
+          <PendingBills />
+        </div>
+      )}
     </main>
   );
 };
