@@ -36,3 +36,13 @@ input[type='number']::-webkit-outer-spin-button {
     display: none;
   }
 }
+
+/* This CSS is used to style the date input field */
+.date-input::-webkit-calendar-picker-indicator {
+  filter: invert(100%);
+}
+
+/* This CSS is used to disable scrolling when modals are open */
+.no-scroll {
+  overflow: hidden;
+}

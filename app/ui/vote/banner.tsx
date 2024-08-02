@@ -29,19 +29,21 @@ const Banner = () => {
           Vote Without Rigging
         </h1>
         <p className="text-center text-[16px] font-semibold">
-          <span className="block">
-            Vote for Progress. Vote for Innovation. Vote for Your Future
+          <span className="mb-3 block">
+            Vote for Transparency, Vote for Innovation, Vote for Your Future.
           </span>
           {/* eslint-disable-next-line react/no-unescaped-entities */}
           Join us, lead the charge, and together, let's build a future that's as
-          bold and innovative as the youth driving it. Your ballot is your tool
-          to craft the tomorrow you deserve.
+          bold and innovative as the youth driving it.
+          <span className="mt-3 block">
+            Your ballot is your tool to craft the tomorrow you deserve.
+          </span>
         </p>
         {/* create poll button */}
         <ShimmerButton
           onClick={openModal}
           disabled={session?.user?.role === 'MEMBER'} // Disable button based on user role
-          className={clsx('mx-auto transition-all duration-300', {
+          className={clsx('mx-auto hover:scale-110 active:scale-90', {
             ' h-[45px] w-[148px] rounded-full':
               session?.user?.role !== 'MEMBER', // Active styles
             hidden: session?.user?.role === 'MEMBER', // Disabled styles

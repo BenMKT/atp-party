@@ -8,17 +8,17 @@ const DisplayPolls = async () => {
   const polls = await fetchPolls();
 
   return (
-    <div>
+    <main>
       <h1 className="mb-5 text-center text-[34px] font-[550px]">
         Start Voting
       </h1>
       {/* map through polls table to display all polls */}
-      <div className="mx-auto grid grid-cols-1 gap-16 pb-7 sm:w-2/3 xl:grid-cols-2">
+      <div className="mx-auto grid grid-cols-1 gap-16 pb-7 sm:w-2/3 md:grid-cols-2">
         {polls.map((poll: Poll) => (
           <PollCard key={poll.id} poll={poll} />
         ))}
       </div>
-    </div>
+    </main>
   );
 };
 

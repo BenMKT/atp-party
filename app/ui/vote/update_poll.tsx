@@ -5,7 +5,7 @@ import { supabase } from '@/app/lib/supabase';
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'react-toastify';
 import { updatePoll } from '@/app/lib/actions';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { EditPoll, Poll } from '@/app/lib/definitions';
 
 // create a modal to capture the user's input and pass the form action to be called when the form is submitted
@@ -19,6 +19,17 @@ const UpdatePollModal = ({
   // create a state to hold the file object from the file form input field
   const [file, setFile] = useState<File | null>(null);
   const poll_id = poll_data.id;
+
+  useEffect(() => {
+    // Scroll to the top of the page
+    window.scrollTo(0, 0);
+    // Add the no-scroll class to the body when the modal is open
+    document.body.classList.add('no-scroll');
+    return () => {
+      // Remove the no-scroll class from the body when the modal is closed
+      document.body.classList.remove('no-scroll');
+    };
+  }, []);
 
   // handle the file change event and set the file state to the selected file
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -126,7 +137,7 @@ const UpdatePollModal = ({
               <input
                 id="startDate"
                 defaultValue={formatDate(new Date(poll_data.startDate))}
-                className="w-full bg-transparent text-sm placeholder-transparent outline-none"
+                className="date-input w-full bg-transparent text-sm outline-none"
                 name="startDate"
                 type="datetime-local"
                 placeholder="Poll Start Date and Time"
@@ -144,7 +155,7 @@ const UpdatePollModal = ({
               </span>
               <input
                 id="endDate"
-                className="w-full bg-transparent text-sm placeholder-[#929292] outline-none"
+                className="date-input w-full bg-transparent text-sm outline-none"
                 name="endDate"
                 defaultValue={formatDate(new Date(poll_data.endDate))}
                 placeholder="Poll End Date and Time"
@@ -156,6 +167,7 @@ const UpdatePollModal = ({
               <input
                 id="banner"
                 type="file"
+                required
                 placeholder="Poll Banner"
                 className="w-full bg-transparent text-sm placeholder-[#929292] outline-none"
                 name="banner"
@@ -176,7 +188,7 @@ const UpdatePollModal = ({
             <button
               type="submit"
               className="mt-2 block h-[48px] w-full rounded-full bg-[#1B5CFE] px-3 text-sm
-                font-bold transition-all duration-300 hover:bg-blue-500"
+                font-bold hover:scale-105 active:scale-95"
             >
               Update Poll
             </button>

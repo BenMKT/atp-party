@@ -29,7 +29,7 @@ const PollCard = ({ poll }: { poll: Poll }) => {
   };
 
   return (
-    <div className="mx-auto grid grid-cols-1 md:grid-cols-2">
+    <main className="mx-auto grid grid-cols-1 md:grid-cols-2">
       <div
         className="grid h-[392px] w-full grid-cols-1
             justify-start gap-[10px] md:flex md:h-[280px] md:w-[580px]"
@@ -98,13 +98,13 @@ const PollCard = ({ poll }: { poll: Poll }) => {
 
           {/* redirect button */}
           <Link href={`/vote/polls/${poll.id}`}>
-            <ShimmerButton className="mt-5 h-[44px] w-full rounded-full bg-[#1B5CFE] transition-all duration-300 hover:bg-blue-500">
+            <ShimmerButton className="mt-5 h-[44px] w-full rounded-full hover:scale-110 active:scale-90">
               <span className=" text-center text-white">Enter</span>
             </ShimmerButton>
           </Link>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 
