@@ -61,34 +61,40 @@ export const {
   providers: [
     Credentials({
       authorize: async (credentials) => {
-        // logic to verify if user exists in the database
-        const parsedCredentials = z
-          .object({ nationalId: z.string(), password: z.string().min(6) })
-          .safeParse(credentials);
+        try {
+          // logic to verify if user exists in the database
+          const parsedCredentials = z
+            .object({ nationalId: z.string(), password: z.string().min(4) })
+            .safeParse(credentials);
 
-        if (parsedCredentials.success) {
-          const { nationalId, password } = parsedCredentials.data;
-          const member = await prisma.members.findUnique({
-            where: {
-              nationalId: nationalId,
-            },
-          });
-          if (!member) {
-            throw new Error('Member not found. Please register to continue.');
-          } else {
-            // member found, check if passwords match
-            const passwordsMatch = bcrypt.compareSync(
-              password,
-              member.password,
-            );
+          if (parsedCredentials.success) {
+            const { nationalId, password } = parsedCredentials.data;
+            const member = await prisma.members.findUnique({
+              where: {
+                nationalId: nationalId,
+              },
+            });
 
-            if (passwordsMatch) {
-              return member;
+            if (!member) {
+              throw new Error('Member not found. Please register to continue.');
+            } else {
+              // member found, check if passwords match
+              const passwordsMatch = bcrypt.compareSync(
+                password,
+                member.password,
+              );
+
+              if (passwordsMatch) {
+                return member;
+              }
+              throw new Error('Invalid password!');
             }
-            throw new Error('Invalid password or credentials');
           }
+          return null;
+        } catch (error) {
+          console.error('Error in authorize function:', error);
+          throw error;
         }
-        return null;
       },
     }),
   ],
