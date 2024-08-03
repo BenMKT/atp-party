@@ -51,6 +51,7 @@ const UpdateMember = MemberFormSchema.pick({
   email: true,
   phone: true,
   password: true,
+  role: true,
   county: true,
   constituency: true,
   ward: true,

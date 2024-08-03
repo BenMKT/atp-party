@@ -348,7 +348,11 @@ const RegistrationForm = () => {
             Signature*
           </label>
           <div className="h-24 w-full overflow-hidden rounded-md border border-zinc-500">
-            <SignatureCanvas penColor="black" ref={signaturePad} />
+            <SignatureCanvas
+              penColor="black"
+              ref={signaturePad}
+              canvasProps={{ className: 'w-full h-full' }}
+            />
           </div>
           <button
             className="flex h-10 items-center rounded-lg bg-gray-200 bg-opacity-60 px-4 text-sm font-medium text-gray-600 transition-colors hover:scale-110 hover:bg-gray-100 active:scale-95"
