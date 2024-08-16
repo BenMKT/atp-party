@@ -17,8 +17,8 @@ const EditBillForm = ({ bill }: { bill: Bill }) => {
   const updateBillWithId = updateBill.bind(null, bill.id);
 
   return (
-    <form action={updateBillWithId} className="max-w-5xl sm:mx-auto">
-      <div className="form-control rounded-md bg-gray-50 p-4 md:p-6">
+    <form action={updateBillWithId} className="max-w-3xl sm:mx-auto">
+      <div className="form-control rounded-lg bg-sky-100 p-4 md:p-6">
         {/* Member Name */}
         <div className="mb-4">
           <label htmlFor="member" className="mb-2 block text-sm font-medium">
@@ -29,7 +29,7 @@ const EditBillForm = ({ bill }: { bill: Bill }) => {
             <input
               id="member"
               name="memberId"
-              className="peer block w-full cursor-not-allowed rounded-md border border-gray-200 py-2 pl-10 text-sm text-gray-400 outline-2 "
+              className="peer block w-full cursor-not-allowed rounded-md border border-gray-200 bg-sky-50 py-2 pl-10 text-sm text-gray-400 outline-2 "
               defaultValue={bill.Member.name}
               readOnly
               disabled
@@ -51,7 +51,7 @@ const EditBillForm = ({ bill }: { bill: Bill }) => {
                 step="1"
                 defaultValue={bill.amount}
                 required
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm text-gray-400 outline-2 focus:text-gray-800"
+                className="peer block w-full rounded-md border border-gray-200 bg-sky-50 py-2 pl-10 text-sm text-gray-400 outline-2 focus:text-gray-800"
               />
               <GiMoneyStack className="pointer-events-none absolute ml-2 mt-2 size-5 text-gray-400 peer-focus:text-gray-800" />
             </div>
@@ -73,7 +73,7 @@ const EditBillForm = ({ bill }: { bill: Bill }) => {
                 name="description"
                 defaultValue={bill.description}
                 required
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm text-gray-400 outline-2 focus:text-gray-800"
+                className="peer block w-full rounded-md border border-gray-200 bg-sky-50 py-2 pl-10 text-sm text-gray-400 outline-2 focus:text-gray-800"
               />
               <MdOutlineDescription className="pointer-events-none absolute ml-2 mt-2 size-5 text-gray-400 peer-focus:text-gray-800" />
             </div>
@@ -85,8 +85,8 @@ const EditBillForm = ({ bill }: { bill: Bill }) => {
           <legend className="mb-2 block text-sm font-medium">
             Bill status
           </legend>
-          <div className="rounded-md border border-gray-200 bg-white px-[14px] py-3">
-            <div className="flex gap-4">
+          <div className="rounded-md border border-gray-200 bg-sky-50 px-[14px] py-3">
+            <div className="flex flex-wrap gap-4">
               <div className="flex items-center">
                 <input
                   id="pending"
@@ -153,7 +153,7 @@ const EditBillForm = ({ bill }: { bill: Bill }) => {
                 type="date"
                 defaultValue={bill.dueDate.toISOString().split('T')[0]}
                 required
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm text-gray-400 outline-2 focus:text-gray-800"
+                className="peer block w-full rounded-md border border-gray-200 bg-sky-50 py-2 pl-10 text-sm text-gray-400 outline-2 focus:text-gray-800"
               />
               <TbCalendarTime className="pointer-events-none absolute ml-2 mt-2 size-5 text-gray-400 peer-focus:text-gray-800" />
             </div>
@@ -162,12 +162,9 @@ const EditBillForm = ({ bill }: { bill: Bill }) => {
       </div>
 
       {/* Buttons */}
-      <div className="mt-6 flex justify-end gap-4">
-        <Link
-          href="/dashboard/bills"
-          className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 no-underline transition-colors hover:bg-gray-200"
-        >
-          Cancel
+      <div className="not-prose mt-6 flex justify-end gap-4">
+        <Link href="/dashboard/bills">
+          <Button>Cancel</Button>
         </Link>
         <Button type="submit">Update Bill</Button>
       </div>

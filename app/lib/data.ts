@@ -72,7 +72,6 @@ export const fetchOverdueBills = async () => {
       orderBy: {
         dueDate: 'asc',
       },
-      take: 5,
     });
 
     // console.log('Data fetch completed after 3 seconds.');
@@ -100,7 +99,6 @@ export const fetchPendingBills = async () => {
       },
       where: { status: 'Pending' },
       orderBy: { dueDate: 'asc' },
-      take: 5,
     });
     // console.log('Data fetch completed after 3 seconds.');
 
@@ -161,17 +159,20 @@ export const totalPollContestants = async (id: string) => {
   }
 };
 
-// count all votes from the database by poll id
-export const totalPollVotes = async (id: string) => {
+// fetch all contestants from the database
+export const fetchAllContestants = async () => {
   noStore();
   try {
-    const votes = await prisma.votes.count({
-      where: { pollId: id },
+    const contestants = await prisma.contestants.findMany({
+      include: {
+        poll: true,
+        votes: true,
+      },
     });
-    return votes;
+    return contestants;
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error('Failed to count poll votes in real-time!!');
+    throw new Error('Failed to fetch all contestants.');
   }
 };
 
@@ -190,6 +191,20 @@ export const fetchContestants = async (id: string) => {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch poll contestants.');
+  }
+};
+
+// count all votes from the database by poll id
+export const totalPollVotes = async (id: string) => {
+  noStore();
+  try {
+    const votes = await prisma.votes.count({
+      where: { pollId: id },
+    });
+    return votes;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to count poll votes in real-time!!');
   }
 };
 

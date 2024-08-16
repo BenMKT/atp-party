@@ -4,7 +4,11 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { MdModeEdit } from 'react-icons/md';
 import ContestantModal from './create_contestant';
-import { fetchPollById, totalPollVotes } from '@/app/lib/data';
+import {
+  fetchAllContestants,
+  fetchPollById,
+  totalPollVotes,
+} from '@/app/lib/data';
 import UpdatePollModal from './update_poll';
 import { subscribeToPolls, subscribeToPollVotes } from '@/app/lib/realtime';
 import { motion } from 'framer-motion';
@@ -19,6 +23,8 @@ const PollDetails = ({ id }: { id: string }) => {
   const [pollData, setPollData] = useState<any>({});
   // add state variable to store the total number of poll votes
   const [pollVotes, setPollVotes] = useState(0);
+  // add state variable to store the contesting status
+  const [contesting, setIsContesting] = useState(false);
   // add state variables to track whether the modals should be shown
   const [showContestantModal, setShowContestantModal] = useState(false);
   const [showUpdatepollModal, setShowUpdatePollModal] = useState(false);
@@ -27,8 +33,8 @@ const PollDetails = ({ id }: { id: string }) => {
     (new Date(pollData?.startDate).getTime() - new Date().getTime()) /
       (1000 * 60 * 60 * 24),
   );
-  // Determine when the contest button should be disabled based on the days to the poll's start date
-  const isDisabled = daysToStartDate <= 7;
+  // Determine when the contest button should be disabled based on the days to the poll's start date or the contesting status
+  const isDisabled = daysToStartDate <= 7 || contesting;
 
   // fetch the poll details using the id passed to the component and set the poll state variable with the fetched data
   useEffect(() => {
@@ -44,6 +50,20 @@ const PollDetails = ({ id }: { id: string }) => {
       setPollVotes(fetchedVotes);
     };
     fetchTotalVotes();
+
+    // fetch list of all contestants
+    const fetchContestants = async () => {
+      // fetch all contestants for the poll
+      const contestants = await fetchAllContestants();
+      // check if the current user is contesting and set the contesting state variable using double negation to convert the value to a boolean type
+      setIsContesting(
+        !!contestants.find(
+          (contestant) => contestant.userId === session?.user?.id,
+        ),
+      );
+    };
+    fetchContestants();
+
     // handle real-time updates for poll votes
     const handleNewVote = async () => {
       fetchTotalVotes();
@@ -62,6 +82,7 @@ const PollDetails = ({ id }: { id: string }) => {
       subscription.unsubscribe();
       pollsSubscription.unsubscribe();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, pollVotes]);
 
   // when respective buttons are clicked, these state variables should be set to true and when the modals are closed, it should be set back to false
@@ -150,7 +171,7 @@ const PollDetails = ({ id }: { id: string }) => {
             <p className="text-[14px] font-[500px]">{session?.user?.name}</p>
           </div>
           {/* poll contestant votes info */}
-          <div className="flex h-[36px] items-center justify-center gap-[4px]">
+          <div className="flex h-[36px] items-center justify-center gap-2">
             <button
               className="rounded-full border border-gray-400 bg-white bg-opacity-20 px-[12px]
               py-[6px] text-[12px] md:text-[16px]"
@@ -164,9 +185,9 @@ const PollDetails = ({ id }: { id: string }) => {
                 session?.user?.role === 'MEMBER'
                   ? 'hidden'
                   : 'border-gray-400 bg-white bg-opacity-20'
-              } px-[12px] py-[6px] text-[12px] transition-all duration-300 ${
+              } px-[12px] py-[6px] text-[12px] ${
                 session?.user?.role !== 'MEMBER'
-                  ? 'hover:bg-white hover:bg-opacity-50 hover:text-[#1B5CFE]'
+                  ? 'hover:scale-110 hover:bg-sky-300 hover:text-[#1B5CFE] active:scale-90'
                   : ''
               } md:text-[16px]`}
             >
@@ -179,7 +200,7 @@ const PollDetails = ({ id }: { id: string }) => {
             onClick={openContestantModal}
             disabled={isDisabled}
             className={clsx(
-              'min-h-11 w-[148px] rounded-full border border-gray-400 bg-green-500 py-2 text-white transition-all duration-300 hover:text-xl',
+              'min-h-11 w-[148px] rounded-full border border-gray-400 bg-green-500 py-2 text-white hover:scale-110 active:scale-90',
               { 'cursor-not-allowed bg-red-500': isDisabled },
             )}
           >

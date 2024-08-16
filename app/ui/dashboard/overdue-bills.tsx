@@ -18,21 +18,23 @@ const OverdueBills = async () => {
     <main>
       <div className="flex flex-col">
         <h2
-          className={`${lusitana.className} my-4 text-xl font-semibold md:text-2xl`}>
+          className={`${lusitana.className} my-4 text-xl font-semibold md:text-2xl`}
+        >
           Overdue Invoices
         </h2>
         <div className="flex grow flex-col justify-between rounded-xl bg-red-300 p-4">
-          <div className="bg-white px-6">
+          <div className="max-h-[calc(8*4rem)] overflow-y-auto rounded-lg bg-sky-50 px-6">
             {overdueBills.map((bill: Bill, i: number) => {
               return (
                 <div
                   key={bill.id}
                   className={clsx(
-                    'flex flex-row items-center justify-between py-4',
+                    'flex flex-row items-center justify-between py-4 hover:bg-sky-100',
                     {
                       'border-t': i !== 0,
                     },
-                  )}>
+                  )}
+                >
                   <div className="flex items-center">
                     <UserIcon className="size-16" />
                     <div className="flex min-w-0 flex-col">
@@ -47,7 +49,8 @@ const OverdueBills = async () => {
                       </p>
                       {/* due date */}
                       <p
-                        className={`${lusitana.className} inline-flex gap-1 truncate align-text-bottom text-sm font-semibold md:text-base`}>
+                        className={`${lusitana.className} inline-flex gap-1 truncate align-text-bottom text-sm font-semibold md:text-base`}
+                      >
                         <LuCalendarClock className="h-5 w-4 text-gray-500 sm:hidden" />
                         <span className="hidden sm:inline">Due Date:</span>
                         {bill.dueDate.toLocaleDateString()}

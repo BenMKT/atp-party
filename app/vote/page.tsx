@@ -14,12 +14,9 @@ const VotingPage = async () => {
   return (
     <main className="bg-[url('/register.jpeg')]">
       <div className="relative min-h-screen backdrop-blur">
-        <div
-          className="absolute inset-0 before:absolute before:inset-0
-        before:z-[-1] before:h-full before:w-full
-        before:bg-[url('/assets/images/bg.jpeg')] before:bg-cover before:bg-no-repeat before:blur-sm"
-        />
-        <section className="relative space-y-16 px-5 py-10 text-white sm:p-10">
+        {/* Overlay to ensure content is visible on top of the background */}
+        <div className="absolute z-10 min-h-full w-full bg-black bg-opacity-50" />
+        <section className="relative z-20 space-y-16 px-5 py-10 text-white sm:p-10">
           <NavBar />
           <Banner />
           <DisplayPolls />

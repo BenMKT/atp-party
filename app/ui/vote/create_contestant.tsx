@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import { supabase } from '@/app/lib/supabase';
 import { v4 as uuidv4 } from 'uuid';
@@ -25,6 +25,18 @@ const ContestantModal = ({ onClose }: { onClose: () => void }) => {
       setFile(selectedFile);
     }
   };
+
+  // prevent scrolling when the modal is open
+  useEffect(() => {
+    // Scroll to the top of the page
+    window.scrollTo(0, 0);
+    // Add the no-scroll class to the body when the modal is open
+    document.body.classList.add('no-scroll');
+    return () => {
+      // Remove the no-scroll class from the body when the modal is closed
+      document.body.classList.remove('no-scroll');
+    };
+  }, []);
 
   // handle the form submission event
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -94,7 +106,8 @@ const ContestantModal = ({ onClose }: { onClose: () => void }) => {
           <form
             id="contestantForm"
             className="mb-5 mt-5 flex flex-col items-start justify-center rounded-xl"
-            onSubmit={handleSubmit}>
+            onSubmit={handleSubmit}
+          >
             {/* contestant name field */}
             <div className="mb-3 mt-2 flex w-full items-center rounded-full border border-[#212D4A] px-4 py-4">
               <input
@@ -130,7 +143,7 @@ const ContestantModal = ({ onClose }: { onClose: () => void }) => {
             <button
               type="submit"
               className="mt-2 block h-[48px] w-full rounded-full bg-[#1B5CFE] px-3 text-sm
-                font-bold transition-all duration-300 hover:bg-blue-500"
+                font-bold hover:scale-105 active:scale-95"
             >
               Contest
             </button>

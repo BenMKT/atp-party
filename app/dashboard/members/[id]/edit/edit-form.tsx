@@ -20,102 +20,171 @@ const EditMemberForm = async ({ member }: { member: Member }) => {
   }
 
   return (
-    <form action={updateMemberWithId}>
-      <div className="form-control max-w-xl space-y-5 sm:mx-auto">
+    <main className="z-30 w-full max-w-md rounded-lg bg-white bg-opacity-60 p-8 shadow-xl shadow-[#1B5CFE]">
+      <form action={updateMemberWithId} className="space-y-4">
+        <h2 className="mb-6 text-center text-2xl font-bold text-primary">
+          Update Member Details
+        </h2>
+        <p className="font-semibold text-red-700">
+          N/B: For security reasons whenever updating member details, if
+          updating password, please enter new password otherwise must re-enter
+          the original password to update successfully.
+        </p>
         {/* Name */}
-        <label htmlFor="name">Name</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          defaultValue={member.name}
-          className="input input-bordered input-disabled w-full max-w-xl"
-        />
+        <div>
+          <label
+            htmlFor="name"
+            className="block text-sm font-medium text-zinc-700 md:text-base"
+          >
+            Name
+          </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            defaultValue={member.name}
+            className="mt-1 block w-full rounded-md border border-zinc-500 bg-transparent px-3 py-2 text-zinc-800 shadow-sm focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
+          />
+        </div>
         {/* Email */}
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          defaultValue={member.email}
-          className="input input-bordered input-info w-full max-w-xl"
-        />
+        <div>
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-zinc-700 md:text-base"
+          >
+            Email
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            defaultValue={member.email}
+            className="mt-1 block w-full rounded-md border border-zinc-500 bg-transparent px-3 py-2 text-zinc-800 shadow-sm focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
+          />
+        </div>
         {/* Password */}
-        <span className="label-text">Password*</span>
-        <label htmlFor="password">
+        <div>
+          <label
+            htmlFor="password"
+            className="block text-sm font-medium text-zinc-700 md:text-base"
+          >
+            Password*
+          </label>
           <input
             id="password"
             name="password"
             type="password"
-            defaultValue={member.password}
-            className="input input-bordered input-info w-full max-w-xl"
+            required
+            minLength={4}
+            placeholder="Enter new password or re-enter original password"
+            className="mt-1 block w-full rounded-md border border-zinc-500 bg-transparent px-3 py-2 text-zinc-800 shadow-sm placeholder:text-xs focus:border-primary focus:outline-none focus:ring-primary sm:text-sm md:placeholder:text-sm"
           />
-        </label>
+        </div>
         {/* Phone */}
-        <label htmlFor="phone">Mobile Number</label>
-        <input
-          type="text"
-          id="phone"
-          name="phone"
-          defaultValue={member.phone}
-          className="input input-bordered input-info w-full max-w-xl"
-        />
+        <div>
+          <label
+            htmlFor="phone"
+            className="block text-sm font-medium text-zinc-700 md:text-base"
+          >
+            Mobile Number
+          </label>
+          <input
+            type="text"
+            id="phone"
+            name="phone"
+            defaultValue={member.phone}
+            className="mt-1 block w-full rounded-md border border-zinc-500 bg-transparent px-3 py-2 text-zinc-800 shadow-sm focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
+          />
+        </div>
         {/* Role */}
-        <span className="label-text">Role*</span>
-        <label htmlFor="role">
+        <div>
+          <label
+            htmlFor="role"
+            className="block text-sm font-medium text-zinc-700 md:text-base"
+          >
+            Role
+          </label>
           <select
             id="role"
             name="role"
             required
             defaultValue={member.role}
-            className="input input-bordered input-info w-full max-w-xl"
+            className="mt-1 block w-full rounded-md border border-zinc-500 bg-transparent px-3 py-2 text-zinc-800 shadow-sm focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
           >
             <option disabled selected value="">
               Please select an option
             </option>
-            <option value="ADMIN">ADMIN</option>
-            <option value="STAFF">STAFF</option>
+            <option value="ADMIN" disabled={session?.user?.role === 'MEMBER'}>
+              ADMIN
+            </option>
+            <option value="STAFF" disabled={session?.user?.role === 'MEMBER'}>
+              STAFF
+            </option>
             <option value="MEMBER">MEMBER</option>
           </select>
-        </label>
+        </div>
         {/* County */}
-        <label htmlFor="county">County</label>
-        <input
-          type="text"
-          id="county"
-          name="county"
-          defaultValue={member.county}
-          className="input input-bordered input-info w-full max-w-xl"
-        />
-        {/* Constituncy */}
-        <label htmlFor="constituency">Constituency</label>
-        <input
-          type="text"
-          id="constituency"
-          name="constituency"
-          defaultValue={member.constituency}
-          className="input input-bordered input-info w-full max-w-xl"
-        />
+        <div>
+          <label
+            htmlFor="county"
+            className="block text-sm font-medium text-zinc-700 md:text-base"
+          >
+            County
+          </label>
+          <input
+            type="text"
+            id="county"
+            name="county"
+            defaultValue={member.county}
+            className="mt-1 block w-full rounded-md border border-zinc-500 bg-transparent px-3 py-2 text-zinc-800 shadow-sm focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
+          />
+        </div>
+        {/* Constituency */}
+        <div>
+          <label
+            htmlFor="constituency"
+            className="block text-sm font-medium text-zinc-700 md:text-base"
+          >
+            Constituency
+          </label>
+          <input
+            type="text"
+            id="constituency"
+            name="constituency"
+            defaultValue={member.constituency}
+            className="mt-1 block w-full rounded-md border border-zinc-500 bg-transparent px-3 py-2 text-zinc-800 shadow-sm focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
+          />
+        </div>
         {/* Ward */}
-        <label htmlFor="ward">Ward</label>
-        <input
-          type="text"
-          id="ward"
-          name="ward"
-          defaultValue={member.ward}
-          className="input input-bordered input-info w-full max-w-xl"
-        />
-      </div>
-      <div className="mt-6 flex justify-end gap-4">
-        <Link
-          href="/dashboard/members"
-          className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 no-underline transition-colors hover:bg-gray-200"
-        >
-          Cancel
-        </Link>
-        <Button type="submit">Update</Button>
-      </div>
-    </form>
+        <div>
+          <label
+            htmlFor="ward"
+            className="block text-sm font-medium text-zinc-700 md:text-base"
+          >
+            Ward
+          </label>
+          <input
+            type="text"
+            id="ward"
+            name="ward"
+            defaultValue={member.ward}
+            className="mt-1 block w-full rounded-md border border-zinc-500 bg-transparent px-3 py-2 text-zinc-800 shadow-sm focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
+          />
+        </div>
+        {/* footer buttons */}
+        <div className="mt-6 flex justify-end gap-4">
+          <Link
+            href="/dashboard/members"
+            className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 no-underline transition-colors hover:scale-110 hover:bg-gray-200 active:scale-95"
+          >
+            Cancel
+          </Link>
+          <Button className="hover:scale-110 active:scale-95" type="submit">
+            Update
+          </Button>
+        </div>
+      </form>
+    </main>
   );
 };
 

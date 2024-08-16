@@ -22,7 +22,7 @@ const MemberFormSchema = z.object({
   name: z.string(),
   dateOfBirth: z.coerce.date().max(new Date('2008-01-01')),
   phone: z.string().min(12),
-  password: z.string().min(6),
+  password: z.string().min(4),
   email: z.string().email(),
   gender: z.enum(['MALE', 'FEMALE']),
   isDisabled: z.enum(['TRUE', 'FALSE']),
@@ -51,6 +51,7 @@ const UpdateMember = MemberFormSchema.pick({
   email: true,
   phone: true,
   password: true,
+  role: true,
   county: true,
   constituency: true,
   ward: true,
@@ -160,10 +161,13 @@ export const updateMember = async (id: string, formData: FormData) => {
   const rawFormData = Object.fromEntries(formData.entries());
   // validate the data using Zod
   const validatedFields = UpdateMember.safeParse(rawFormData);
-  // if validation successful, proceed to update database or display error
-  const validatedData = validatedFields.success
-    ? validatedFields.data
-    : validatedFields.error.flatten().fieldErrors;
+  if (!validatedFields.success) {
+    return validatedFields.error.flatten().fieldErrors;
+  }
+  // Hash the password
+  const hashedPassword = bcrypt.hashSync(validatedFields.data.password, 10);
+  // if the validation is successful, proceed to insert the data to the database with hashed password
+  const validatedData = { ...validatedFields.data, password: hashedPassword };
   // update member records in the database using prisma 'update'
   await prisma.members
     .update({

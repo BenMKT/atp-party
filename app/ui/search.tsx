@@ -31,21 +31,24 @@ const Search = ({ placeholder }: { placeholder: string }) => {
   }, 700);
 
   return (
-    <div className="relative flex flex-1 flex-shrink-0">
+    <main>
       <label htmlFor="search" className="sr-only">
         Search
       </label>
-      <input
-        placeholder={placeholder}
-        // get the search query param from the URL ensuring the input field is always in sync with the URL
-        defaultValue={searchParams.get('query')?.toString()}
-        onChange={(e) => {
-          handlesearch(e.target.value);
-        }}
-        className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
-      />
-      <MagnifyingGlassIcon className="absolute left-3 top-1/4 h-5 w-5 text-gray-400 peer-focus:text-gray-800" />
-    </div>
+      <div className="relative flex flex-1 flex-shrink-0">
+        <input
+          id="search"
+          placeholder={placeholder}
+          // get the search query param from the URL ensuring the input field is always in sync with the URL
+          defaultValue={searchParams.get('query')?.toString()}
+          onChange={(e) => {
+            handlesearch(e.target.value);
+          }}
+          className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+        />
+        <MagnifyingGlassIcon className="absolute left-3 top-1/4 h-5 w-5 text-gray-400 peer-focus:text-gray-800" />
+      </div>
+    </main>
   );
 };
 

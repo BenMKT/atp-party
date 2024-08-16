@@ -23,13 +23,13 @@ const PendingBills = async () => {
           Pending Invoices
         </h2>
         <div className="flex grow flex-col justify-between rounded-xl bg-amber-300 p-4">
-          <div className="bg-white px-6">
+          <div className="max-h-[calc(8*4rem)] overflow-y-auto rounded-lg bg-sky-50 px-6">
             {pendingBills.map((bill: Bill, i: number) => {
               return (
                 <div
                   key={bill.id}
                   className={clsx(
-                    'flex flex-row items-center justify-between py-4',
+                    'flex flex-row items-center justify-between py-4 hover:bg-sky-100',
                     {
                       'border-t': i !== 0,
                     },

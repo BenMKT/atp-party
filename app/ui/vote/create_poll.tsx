@@ -5,12 +5,11 @@ import { supabase } from '@/app/lib/supabase';
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'react-toastify';
 import { createPoll } from '@/app/lib/actions';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // create a modal to capture the user's input and pass the form action to be called when the form is submitted
 const CreatePollModal = ({ onClose }: { onClose: () => void }) => {
-
-  // create a state to hold the file object from the file form input field  
+  // create a state to hold the file object from the file form input field
   const [file, setFile] = useState<File | null>(null);
 
   // handle the file change event and set the file state to the selected file
@@ -20,6 +19,18 @@ const CreatePollModal = ({ onClose }: { onClose: () => void }) => {
       setFile(selectedFile);
     }
   };
+
+  // prevent scrolling when the modal is open
+  useEffect(() => {
+    // Scroll to the top of the page
+    window.scrollTo(0, 0);
+    // Add the no-scroll class to the body when the modal is open
+    document.body.classList.add('no-scroll');
+    return () => {
+      // Remove the no-scroll class from the body when the modal is closed
+      document.body.classList.remove('no-scroll');
+    };
+  }, []);
 
   // handle the form submission event
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -95,11 +106,12 @@ const CreatePollModal = ({ onClose }: { onClose: () => void }) => {
               <span
                 className="absolute left-[2.5px] w-48
                 rounded-full bg-[#1B5CFE] bg-opacity-20 px-5 py-3 text-[#4C6AD7]"
-              >.
+              >
+                .
               </span>
               <input
                 id="startDate"
-                className="w-full bg-transparent text-sm placeholder-transparent outline-none"
+                className="date-input w-full bg-transparent text-sm outline-none"
                 name="startDate"
                 type="datetime-local"
                 placeholder="Start Date and Time"
@@ -114,11 +126,12 @@ const CreatePollModal = ({ onClose }: { onClose: () => void }) => {
               <span
                 className="absolute left-[2.5px] w-48
                 rounded-full bg-[#1B5CFE] bg-opacity-20 px-5 py-3 text-[#4C6AD7]"
-              >.
+              >
+                .
               </span>
               <input
                 id="endDate"
-                className="w-full bg-transparent text-sm placeholder-[#929292] outline-none"
+                className="date-input w-full bg-transparent text-sm outline-none"
                 name="endDate"
                 placeholder="End Date and Time"
                 type="datetime-local"
@@ -151,7 +164,7 @@ const CreatePollModal = ({ onClose }: { onClose: () => void }) => {
             <button
               type="submit"
               className="mt-2 block h-[48px] w-full rounded-full bg-[#1B5CFE] px-3 text-sm
-                font-bold transition-all duration-300 hover:bg-blue-500"
+                font-bold hover:scale-105 active:-scale-95"
             >
               Create Poll
             </button>

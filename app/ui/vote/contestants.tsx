@@ -111,7 +111,7 @@ const Contestants = () => {
           Contestants: {contestantCount}
         </motion.h1>
         {/* map through the list of contestants and display each contestant */}
-        <div className="mx-auto grid grid-cols-1 gap-10 py-2.5 pb-10 md:justify-between xl:flex">
+        <div className="container mx-auto grid grid-cols-1 gap-10 pb-10 md:grid-cols-2">
           {contestants.map((contestant: PollContestant, i) => (
             <Contestant
               key={i}
@@ -315,8 +315,9 @@ const Contestant = ({
           <button
             disabled={isDisabled}
             onClick={() => handleVote()}
+            style={{ transformOrigin: 'left' }}
             className={clsx(
-              'z-10 flex h-10 w-[95%] items-center justify-center rounded-full bg-green-500 hover:text-xl',
+              'z-10 flex h-10 w-[95%] items-center justify-center rounded-full bg-green-500 hover:scale-105 active:scale-95',
               {
                 'cursor-not-allowed bg-red-500 ': isDisabled,
               },
