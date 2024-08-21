@@ -1,8 +1,13 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/prisma/prisma';
 import EditMemberForm from './edit-form';
+import type { Metadata } from 'next';
 
-const prisma = new PrismaClient();
+// add metadata title for the edit member page
+export const metadata: Metadata = {
+  title: 'Edit Member',
+};
 
+// Create a page component to update a member's details
 const UpdateMemberPage = async ({ params }: { params: { id: string } }) => {
   // Retrieve the member id from the page URL or page params
   const id = params.id;

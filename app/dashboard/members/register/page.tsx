@@ -1,5 +1,12 @@
 import RegistrationForm from './registration-form';
+import type { Metadata } from 'next';
 
+// add metadata title for the registration page
+export const metadata: Metadata = {
+  title: 'Registration',
+};
+
+// create a register member page component with a registration form
 const RegisterMember = () => {
   return (
     <main className="relative -m-6 flex min-h-screen items-center justify-center bg-[url('/register.jpeg')] bg-cover bg-center bg-no-repeat p-8 md:-m-12">

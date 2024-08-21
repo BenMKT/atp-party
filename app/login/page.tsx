@@ -1,5 +1,11 @@
 import LoginForm from '../ui/login-form';
 import NavBar from '../ui/top-navbar';
+import type { Metadata } from 'next';
+
+// add metadata title for the login page
+export const metadata: Metadata = {
+  title: 'Login',
+};
 
 // create a login page component to display the login form
 export default function LoginPage() {

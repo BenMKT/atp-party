@@ -4,6 +4,12 @@ import Search from '@/app/ui/search';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import BillsForm from './bills-form';
+import type { Metadata } from 'next';
+
+// add metadata title for the bills page 
+export const metadata: Metadata = {
+  title: 'Bills',
+}
 
 // create a bills home page component to display the bills in a table
 const BillsPage = async ({

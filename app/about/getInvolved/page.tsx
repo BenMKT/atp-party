@@ -1,6 +1,12 @@
 import { Button } from '@/app/ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
+import type { Metadata } from 'next';
+
+// add metadata title for the get involved page
+export const metadata: Metadata = {
+  title: 'Get Involved',
+};
 
 // create a component for the get involved page
 const GetInvolved = () => {

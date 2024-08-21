@@ -4,6 +4,12 @@ import MembersTable from './members-table';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { Button } from '@/app/ui/button';
+import type { Metadata } from 'next';
+
+// add metadata title for the members page 
+export const metadata: Metadata = {
+  title: 'Members',
+}
 
 const MembersPage = async ({
   searchParams,
