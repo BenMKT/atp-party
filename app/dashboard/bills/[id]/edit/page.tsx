@@ -1,8 +1,13 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/prisma/prisma';
 import EditBillForm from './edit-bill';
+import type { Metadata } from 'next';
 
-const prisma = new PrismaClient();
+// add metadata title for the edit bill page 
+export const metadata: Metadata = {
+  title: 'Edit Bill',
+}
 
+// create a page component to update a bill's details 
 const UpdateBillPage = async ({ params }: { params: { id: string } }) => {
   // Retrieve the bill id from the page URL or page params
   const id = params.id;

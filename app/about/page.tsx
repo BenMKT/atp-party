@@ -1,4 +1,10 @@
 import AboutPageWidget from '../ui/about/aboutPage';
+import type { Metadata } from 'next';
+
+// add metadata title for the about page
+export const metadata: Metadata = {
+  title: 'About',
+};
 
 // create a component for the about page
 const AboutPage = () => {

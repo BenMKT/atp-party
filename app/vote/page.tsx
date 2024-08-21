@@ -4,6 +4,12 @@ import Banner from '../ui/vote/banner';
 import DisplayPolls from '../ui/vote/polls';
 import Footer from '@/app/ui/vote/footer';
 import { redirect } from 'next/navigation';
+import type { Metadata } from 'next';
+
+// add metadata title for the vote page
+export const metadata: Metadata = {
+  title: 'Vote',
+};
 
 // create a voting page component to display the voting page
 const VotingPage = async () => {

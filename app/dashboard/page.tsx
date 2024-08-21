@@ -3,6 +3,12 @@ import OverdueBills from '../ui/dashboard/overdue-bills';
 import PendingBills from '../ui/dashboard/pending-bills';
 import { lusitana } from '../ui/fonts';
 import { auth } from '@/auth';
+import type { Metadata } from 'next';
+
+// add metadata title for the dashboard page
+export const metadata: Metadata = {
+  title: 'Dashboard',
+};
 
 // create a dashboard page component to display the dashboard content
 const DashboardPage = async () => {
@@ -19,7 +25,7 @@ const DashboardPage = async () => {
         <CardWrapper />
       </div>
       {/* display the overdue and pending bills if the user is a staff or admin */}
-      {(session?.user?.role === 'STAFF' || session?.user?.role === 'ADMIN') && (
+      {session?.user?.role !== 'MEMBER' && (
         <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
           <OverdueBills />
           <PendingBills />
