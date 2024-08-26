@@ -49,7 +49,6 @@ After you're finished please remove all the comments and instructions!
     - [Setup](#setup)
     - [Install](#install)
     - [Usage](#usage)
-    - [Run tests](#run-tests)
     - [Deployment](#deployment)
   - [👥 Authors ](#-authors-)
   - [🔭 Future Features ](#-future-features-)
@@ -145,50 +144,54 @@ Example command:
  gem install rails
 ```
  -->
+  - [Node.js](https://nodejs.org)
+  - [Supabase](https://supabase.com) as a database hosting service
+  - [Git](https://git-scm.com)
+  
 
 ### Setup
 
 Clone this repository to your desired folder:
 
-<!--
-Example commands:
+ `git clone https://github.com/BenMKT/atp-party.git`
 
-```sh
-  cd my-folder
-  git clone git@github.com:myaccount/my-project.git
-```
---->
+ or
+
+`git clone git@github.com:BenMKT/atp-party.git` <-- _Only if you have [SSH keys configured](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account) on your GitHub account_.
+
 
 ### Install
 
 Install this project with:
 
-<!--
-Example command:
-
-```sh
-  cd my-project
-  gem install
+```bash
+  cd PATH_TO_CLONE
+  npm install
 ```
---->
 
 ### Usage
 
-To run the project, execute the following command:
+First, run the development server:
 
-<!--
-Example command:
-
-```sh
-  rails server
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
---->
 
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+<!--
 ### Run tests
 
 To run tests, run the following command:
 
-<!--
+
 Example command:
 
 ```sh
@@ -200,13 +203,7 @@ Example command:
 
 You can deploy this project using:
 
-<!--
-Example:
-
-```sh
-
-```
- -->
+- [Vercel](https://vercel.com) or any other cloud platform of your choice
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -216,17 +213,10 @@ Example:
 
 > Mention all of the collaborators of this project.
 
-👤 **Author1**
+👤 **Benson Kiai**
 
-- GitHub: [@githubhandle](https://github.com/githubhandle)
-- Twitter: [@twitterhandle](https://twitter.com/twitterhandle)
-- LinkedIn: [LinkedIn](https://linkedin.com/in/linkedinhandle)
-
-👤 **Author2**
-
-- GitHub: [@githubhandle](https://github.com/githubhandle)
-- Twitter: [@twitterhandle](https://twitter.com/twitterhandle)
-- LinkedIn: [LinkedIn](https://linkedin.com/in/linkedinhandle)
+- GitHub: [@mygithubhandle](https://github.com/BenMKT)
+- LinkedIn: [myLinkedIn](https://www.linkedin.com/in/bensonkiai)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
