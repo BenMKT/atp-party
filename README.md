@@ -1,12 +1,11 @@
 <a name="readme-top"></a>
 
-<div align="center">
+<!-- LOGO -->
 
+<div align="center">
   <img src="public/atplogo.png" alt="logo" width="140"  height="auto" />
   <br/>
-
   <h3><b>ATP README Template</b></h3>
-
 </div>
 
 <!-- TABLE OF CONTENTS -->
@@ -36,7 +35,7 @@
 
 # 📖 Accountability & Transparency Party (ATP) App <a name="about-project"></a>
 
-The Accountability & Transparency Party (ATP) App is a platform designed to promote transparency, accountability and enhance public participation in governance by providing real-time updates and insights into political activities and decisions.
+The Accountability & Transparency Party (ATP) App is a digital platform designed to promote transparency, accountability and enhance public participation for good governance by leveraging technology for real-time updates, community engagement, insights into political activities and decisions.
 
 ## 🛠 Built With <a name="built-with"></a>
 
