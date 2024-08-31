@@ -66,8 +66,8 @@ The Accountability & Transparency Party (ATP) App is a digital platform designed
 
 ### Key Features <a name="key-features"></a>
 
-- **Real-Time Voting System:** <br> The app includes a robust digital real-time voting system where users can cast votes on various political issues and choose preferred candidates ensuring transparency and community engagement .
-- **Transparency:**<br> The app provides real-time updates/notifications and insights into party political activities and decisions, ensuring transparency.
+- **Real-Time Voting System:** <br> This App boasts of a robust digital real-time voting system where users can cast votes on various political issues and choose their preferred leaders in real-time ensuring transparency and public participation.
+- **Transparency:**<br> The app provides real-time updates/notifications and insights into party political activities and decisions, ensuring transparency and public awareness.
 - **Accountability:**<br> The app provides an online platform where party elected leaders and officials are frequently engaged directly by the public through recorded zoom meetings, ensuring accountability.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
