@@ -26,7 +26,7 @@ const RegistrationForm = () => {
         .getTrimmedCanvas()
         .toDataURL('image/png');
       // Convert data URL to blob
-      const blob = await (await fetch(signatureImage)).blob();
+      const blob = await fetch(signatureImage).then((res) => res.blob());
       // Generate a unique file name using uuidv4
       const fileName = `${uuidv4()}.png`;
       // Upload the blob to Supabase storage
@@ -69,9 +69,9 @@ const RegistrationForm = () => {
 
     // Manually call registerMember with formData
     try {
-      await registerMember(formData).then(() => {
-        toast.success('Member registered successfully!');
+      registerMember(formData).then(() => {
         // Redirect or perform any action needed after registration
+        toast.success('Member registered successfully!');
       });
     } catch (error) {
       // Use a type guard to check if error is an instance of Error
