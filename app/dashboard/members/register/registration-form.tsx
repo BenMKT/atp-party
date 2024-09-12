@@ -8,9 +8,12 @@ import SignatureCanvas from 'react-signature-canvas';
 import { toast } from 'react-toastify';
 import { supabase } from '@/app/lib/supabase';
 import { v4 as uuidv4 } from 'uuid';
+import { useSession } from 'next-auth/react';
 
 // create a registration form component to capture user registration details
 const RegistrationForm = () => {
+  // get the session object from the useSession hook
+  const session = useSession().data;
   // Create a reference to the SignatureCanvas component
   const signaturePad = useRef<any>(null);
   // Create a function to clear the signature
@@ -26,7 +29,7 @@ const RegistrationForm = () => {
         .getTrimmedCanvas()
         .toDataURL('image/png');
       // Convert data URL to blob
-      const blob = await (await fetch(signatureImage)).blob();
+      const blob = await fetch(signatureImage).then((res) => res.blob());
       // Generate a unique file name using uuidv4
       const fileName = `${uuidv4()}.png`;
       // Upload the blob to Supabase storage
@@ -69,9 +72,9 @@ const RegistrationForm = () => {
 
     // Manually call registerMember with formData
     try {
-      await registerMember(formData).then(() => {
-        toast.success('Member registered successfully!');
+      registerMember(formData).then(() => {
         // Redirect or perform any action needed after registration
+        toast.success('Member registered successfully!');
       });
     } catch (error) {
       // Use a type guard to check if error is an instance of Error
@@ -367,10 +370,17 @@ const RegistrationForm = () => {
           <Link href="/login">
             <Button className="hover:scale-110 active:scale-95">Login</Button>
           </Link>
-          <Button className="hover:scale-110 active:scale-95" type="submit">
-            Register
-          </Button>
+          {!session ? (
+            <Button className="hover:scale-110 active:scale-95" type="submit">
+              Register
+            </Button>
+          ) : null}
         </div>
+        {session ? (
+          <p className="text-center text-sm font-semibold text-red-500">
+            N/B: Please sign out to enable registration!
+          </p>
+        ) : null}
       </form>
     </main>
   );

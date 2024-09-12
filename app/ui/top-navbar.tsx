@@ -13,7 +13,7 @@ const NavBar = () => {
   const session = useSession().data;
 
   return (
-    <nav className=" fixed bottom-0 left-0 right-0 top-0 flex h-16 items-center justify-between border-b bg-sky-50 px-5">
+    <nav className=" fixed bottom-0 left-0 right-0 top-0 z-50 flex h-16 items-center justify-between border-b bg-sky-50 px-5">
       <div className="flex gap-2">
         <Link href="/">
           <ATPLogo />

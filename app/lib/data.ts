@@ -235,3 +235,15 @@ export const contestantsVotes = async (contestantid: string) => {
     throw new Error('Failed to fetch contestant votes.');
   }
 };
+
+// fetch all news from the database
+export const fetchNews = async () => {
+  noStore();
+  try {
+    const news = await prisma.news.findMany();
+    return news;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch news data.');
+  }
+};

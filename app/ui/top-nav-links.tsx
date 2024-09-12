@@ -18,8 +18,8 @@ const Menu = () => {
   const links = [
     { label: 'Home', href: '/' },
     { label: 'Dashboard', href: '/dashboard' },
-    // { label: 'News', href: '/news' },
     { label: 'Vote', href: '/vote' },
+    { label: 'News', href: '/news' },
     { label: 'About', href: '/about' },
     { label: 'Contact', href: '/contact' },
   ];
@@ -82,7 +82,7 @@ const Menu = () => {
 
   return (
     <main>
-      <div className="dropdown dropdown-end sm:hidden">
+      <div className="dropdown dropdown-end md:hidden">
         {/* button to toggle the dropdown menu */}
         <button
           className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-sky-100 p-3 text-sm font-medium text-zinc-600 transition-transform duration-75 ease-in-out hover:scale-110 hover:bg-sky-300 hover:text-blue-600 active:scale-90 md:flex-none md:justify-start md:p-2 md:px-3"
@@ -93,7 +93,7 @@ const Menu = () => {
         {/* if the dropdown menu `isOpen`, render the menu links */}
         {isOpen && (
           <motion.ul
-            className="menu dropdown-content z-[1] rounded-box bg-black bg-opacity-50 p-2 shadow-lg shadow-[#1B5CFE]"
+            className="menu dropdown-content z-50 rounded-box bg-black bg-opacity-50 p-2 shadow-lg shadow-[#1B5CFE]"
             onClick={closeDropdown}
             variants={variants} // Apply the defined variants
             initial="hidden" // Initial state before animation
@@ -105,7 +105,7 @@ const Menu = () => {
       </div>
       <div>
         {/* contains a list of links that is always visible on large screens and hidden on small screens  */}
-        <ul className="hidden space-x-6 sm:flex">{renderMenuLinks()}</ul>
+        <ul className="hidden space-x-5 md:flex">{renderMenuLinks()}</ul>
       </div>
     </main>
   );
