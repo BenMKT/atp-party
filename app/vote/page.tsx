@@ -2,7 +2,7 @@ import { auth } from '@/auth';
 import NavBar from '../ui/top-navbar';
 import Banner from '../ui/vote/banner';
 import DisplayPolls from '../ui/vote/polls';
-import Footer from '@/app/ui/vote/footer';
+import Footer from '@/app/ui/footer';
 import { redirect } from 'next/navigation';
 import type { Metadata } from 'next';
 

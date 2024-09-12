@@ -125,6 +125,20 @@ const CreateContestantSchema = ContestantFormSchema.omit({
   updatedAt: true,
 });
 
+// create a news schema that matches database schema to validate the user input data
+const NewsFormSchema = z.object({
+  id: z.string(),
+  description: z.string().optional(),
+  feed: z.string(),
+  createdAt: z.coerce.date(),
+});
+
+// derive a CreateNews schema from the NewsFormSchema
+const CreateNewsSchema = NewsFormSchema.omit({
+  id: true,
+  createdAt: true,
+});
+
 // define a function/Action to create a member record in the database
 export const registerMember = async (formData: FormData) => {
   // extract the user input data from the form using the formData object and convert it to a plain object
@@ -310,7 +324,6 @@ export const updatePoll = async (poll_id: string, editPoll: EditPoll) => {
   await prisma.polls
     .update({
       where: { id: poll_id },
-
       data: editPoll,
     })
     .then(() => {
@@ -376,4 +389,36 @@ export const authenticate = async (
 // define a function to sign out a user
 export const logOut = async () => {
   await signOut({ redirectTo: '/' });
+};
+
+// define a function to create news feed
+export const createNews = async (fileUrl: string, formData: FormData) => {
+  // extract the user input data from the form and convert it to an object
+  const { description, feed } = CreateNewsSchema.parse({
+    description: formData.get('description'),
+    feed: fileUrl,
+  });
+  // insert the data to the database
+  await prisma.news
+    .create({
+      data: {
+        description,
+        feed,
+      },
+    })
+    .then(() => {
+      console.log('Feed successfully created!');
+    });
+};
+
+// define a function to delete a news feed from the database
+export const deleteNews = async (id: string) => {
+  try {
+    await prisma.news.delete({
+      where: { id },
+    });
+  } catch (error) {
+    console.error('Error deleting news feed from the database', error);
+    throw new Error('Error deleting news feed from the database');
+  }
 };

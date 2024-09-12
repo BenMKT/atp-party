@@ -1,13 +1,13 @@
 import NavBar from '@/app/ui/top-navbar';
 import PollDetails from '@/app/ui/vote/poll_details';
 import Contestants from '@/app/ui/vote/contestants';
-import Footer from '@/app/ui/vote/footer';
+import Footer from '@/app/ui/footer';
 import type { Metadata } from 'next';
 
-// add metadata title for the poll details page 
+// add metadata title for the poll details page
 export const metadata: Metadata = {
   title: 'Poll Details',
-}
+};
 
 // display specific poll details by pollId using page params
 const PollDetailsPage = ({ params }: { params: { id: string } }) => {

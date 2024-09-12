@@ -78,6 +78,13 @@ model Contestants {
   pollId    String    @db.Uuid
 }
 
+model News {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  description String?  @db.VarChar(255)
+  feed        String   @db.VarChar(255)
+  createdAt   DateTime @default(now())
+}
+
 enum Gender {
   MALE
   FEMALE

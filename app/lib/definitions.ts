@@ -79,3 +79,10 @@ export type Vote = {
   contestantId: string;
   userId: string;
 };
+
+export type News = {
+  id: string;
+  description: string | null;
+  feed: string;
+  createdAt: string;
+};
