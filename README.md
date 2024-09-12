@@ -5,7 +5,7 @@
 <div align="center">
   <img src="public/atplogo.png" alt="logo" width="140"  height="auto" />
   <br/>
-  <h3><b>ATP README Template</b></h3>
+  <h3><b>ATP README</b></h3>
 </div>
 
 <!-- TABLE OF CONTENTS -->
@@ -183,7 +183,6 @@ Check out [Next.js deployment documentation](https://nextjs.org/docs/deployment)
 
 ## 🔭 Future Features <a name="future-features"></a>
 
-- [ ] **Add News Feeds route & functionality**
 - [ ] **Add Accountability route & functionality**
 - [ ] **Payment and ORPP API's integration**
 - [ ] **Add real-time App notifications for voting, events, activities and meetings**
