@@ -96,8 +96,10 @@ const ContestantModal = ({ onClose }: { onClose: () => void }) => {
           <div className="flex flex-row items-center justify-between">
             <p className="font-semibold">Fill Contestant Details</p>
             <button
+              type="button"
               onClick={onClose}
               className="border-0 bg-transparent focus:outline-none"
+              aria-label="Close modal"
             >
               <FaTimes />
             </button>
@@ -109,7 +111,9 @@ const ContestantModal = ({ onClose }: { onClose: () => void }) => {
             onSubmit={handleSubmit}
           >
             {/* contestant name field */}
-            <div className="mb-3 mt-2 flex w-full items-center rounded-full border border-[#212D4A] px-4 py-4">
+            <div className="mb-3 mt-2 flex w-full flex-col gap-2">
+              <label htmlFor="name" className="text-sm">Full Name</label>
+              <div className="flex w-full items-center rounded-full border border-[#212D4A] px-4 py-4">
               <input
                 id="name"
                 readOnly
@@ -118,27 +122,36 @@ const ContestantModal = ({ onClose }: { onClose: () => void }) => {
                 name="name"
               />
             </div>
+            </div>
+
             {/* contestant slogan field */}
-            <div className="mb-3 mt-2 flex w-full items-center rounded-full border border-[#212D4A] px-4 py-4">
-              <input
-                id="slogan"
-                placeholder="Contestant Slogan"
-                className="w-full bg-transparent text-sm placeholder-[#929292] outline-none"
-                name="slogan"
-              />
+            <div className="mb-3 mt-2 flex w-full flex-col gap-2">
+              <label htmlFor="slogan" className="text-sm">Slogan</label>
+              <div className="flex w-full items-center rounded-full border border-[#212D4A] px-4 py-4">
+                <input
+                  id="slogan"
+                  placeholder="Enter your campaign slogan"
+                  className="w-full bg-transparent text-sm placeholder-[#929292] outline-none"
+                  name="slogan"
+                />
+              </div>
             </div>
+
             {/* contestant avatar field */}
-            <div className="mb-3 mt-2 flex w-full items-center rounded-full border border-[#212D4A] px-4 py-4">
-              <input
-                id="avatar"
-                placeholder="Passport size Photo"
-                type="file"
-                className="w-full bg-transparent text-sm placeholder-[#929292] outline-none"
-                name="avatar"
-                required
-                onChange={handleFileChange}
-              />
+            <div className="mb-3 mt-2 flex w-full flex-col gap-2">
+              <label htmlFor="avatar" className="text-sm">Profile Photo</label>
+              <div className="flex w-full items-center rounded-full border border-[#212D4A] px-4 py-4">
+                <input
+                  id="avatar"
+                  type="file"
+                  className="w-full bg-transparent text-sm placeholder-[#929292] outline-none"
+                  name="avatar"
+                  required
+                  onChange={handleFileChange}
+                />
+              </div>
             </div>
+
             {/* create contestant button */}
             <button
               type="submit"

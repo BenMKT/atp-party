@@ -102,6 +102,8 @@ const UpdatePollModal = ({
           <div className="flex flex-row items-center justify-between">
             <p className="font-semibold">Edit Poll</p>
             <button
+              type="button"
+              aria-label="Close"
               onClick={onClose}
               className="border-0 bg-transparent focus:outline-none"
             >
