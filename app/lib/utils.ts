@@ -6,3 +6,14 @@ import { twMerge } from 'tailwind-merge';
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+// Format a date string to a human-readable format
+export const formatDate = (dateStr: string) => {
+  return new Date(dateStr).toLocaleString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+  });
+};

@@ -86,3 +86,21 @@ export type News = {
   feed: string;
   createdAt: string;
 };
+
+export type TownHallMeeting = {
+  id: string;
+  topic: string;
+  start_time: string;
+  join_url: string;
+  duration: number;
+  status: string;
+}
+
+export type TownHallBadgeProps = {
+  id: string;
+  topic: string;
+  startTime: string;
+  joinUrl: string;
+  duration: number;
+  status: string;
+}

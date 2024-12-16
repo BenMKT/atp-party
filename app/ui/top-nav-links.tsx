@@ -19,6 +19,7 @@ const Menu = () => {
     { label: 'Home', href: '/' },
     { label: 'Dashboard', href: '/dashboard' },
     { label: 'Vote', href: '/vote' },
+    { label: 'Ajibika', href: '/accountability' },
     { label: 'News', href: '/news' },
     { label: 'About', href: '/about' },
     { label: 'Contact', href: '/contact' },
@@ -87,6 +88,7 @@ const Menu = () => {
         <button
           className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-sky-100 p-3 text-sm font-medium text-zinc-600 transition-transform duration-75 ease-in-out hover:scale-110 hover:bg-sky-300 hover:text-blue-600 active:scale-90 md:flex-none md:justify-start md:p-2 md:px-3"
           onClick={toggleDropdown}
+          aria-label="Toggle navigation menu"
         >
           <SlMenu className="size-5" />
         </button>
