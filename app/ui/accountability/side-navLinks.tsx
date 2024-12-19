@@ -3,7 +3,7 @@
 import {
   HomeIcon,
 } from '@heroicons/react/24/outline';
-import { FaBalanceScale } from 'react-icons/fa';
+import { FaBalanceScale, FaCalendar } from 'react-icons/fa';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 import Link from 'next/link';
@@ -12,6 +12,7 @@ import Link from 'next/link';
 const links = [
   { name: 'Home', href: '/', icon: HomeIcon },
   { name: 'Ajibika', href: '/accountability', icon: FaBalanceScale },
+  { name: 'Attendance', href: '/accountability/attendance', icon: FaCalendar },
 ];
 
 const NavLinks = () => {
