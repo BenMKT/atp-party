@@ -13,8 +13,8 @@ const Accountability = async () => {
         <h1 className={`${lusitana.className} text-4xl text-center font-bold`}>
           ATP Virtual County Hall Meetings
         </h1>
-        <p className="text-muted-foreground mt-2 text-center">
-          Join our virtual county hall meetings to engage with party leadership and fellow members in their various jurisdictions to enhance leadership accessibility and promote accountability.
+        <p className="text-muted-foreground text-lg mt-2 text-center">
+          Join our virtual county town hall meetings to engage with party leadership and fellow members in their various jurisdictions to enhance leadership accessibility and promote accountability.
         </p>
       </div>
 
