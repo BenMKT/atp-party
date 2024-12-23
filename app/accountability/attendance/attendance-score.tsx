@@ -8,7 +8,7 @@ interface AttendanceScoreProps {
   score: number;
 }
 
-export function AttendanceScore({ score }: AttendanceScoreProps) {
+export const AttendanceScore = ({ score }: AttendanceScoreProps) => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {

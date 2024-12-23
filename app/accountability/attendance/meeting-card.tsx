@@ -1,22 +1,15 @@
 import { Card, CardContent } from '@/app/ui/accountability/attendance-ui/card';
 import { Badge } from '@/app/ui/accountability/attendance-ui/badge';
 import { CalendarIcon, ClockIcon } from 'lucide-react';
+import { MeetingCardProps } from '@/app/lib/definitions';
 
-interface MeetingCardProps {
-  topic: string;
-  date: string;
-  time: string;
-  duration: string;
-  status: 'Present' | 'Absent';
-}
-
-export function MeetingCard({
+export const MeetingCard = ({
   topic,
   date,
   time,
   duration,
   status,
-}: MeetingCardProps) {
+}: MeetingCardProps) => {
   return (
     <Card className="overflow-hidden transition-all duration-200 hover:shadow-md">
       <CardContent className="p-4">

@@ -1,6 +1,4 @@
-'use client';
-
-import { useState } from 'react';
+import { getZoomMeetings } from '@/app/lib/zoom-api';
 import { AttendanceScore } from './attendance-score';
 import { MeetingCard } from './meeting-card';
 import { MonthlyAttendanceChart } from './monthly-attendance-chart';
@@ -10,67 +8,21 @@ import {
   CardHeader,
   CardTitle,
 } from '@/app/ui/accountability/attendance-ui/card';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/app/ui/accountability/attendance-ui/select';
 import { DatePickerWithRange } from '@/app/accountability/attendance/date-picker-with-range';
-import { DateRange } from 'react-day-picker';
+import { MeetingTypeSelect } from './meeting-type-select';
 
-const meetingsData = [
-  {
-    id: 1,
-    topic: 'Mombasa County Town Hall meeting',
-    date: '2023-06-01',
-    time: '10:00 AM',
-    duration: '1h',
-    status: 'Present',
-  },
-  {
-    id: 2,
-    topic: 'Mombasa County Town Hall meeting',
-    date: '2023-06-08',
-    time: '09:30 AM',
-    duration: '30m',
-    status: 'Present',
-  },
-  {
-    id: 3,
-    topic: 'Mombasa County Town Hall meeting',
-    date: '2023-06-15',
-    time: '02:00 PM',
-    duration: '1h 30m',
-    status: 'Absent',
-  },
-  {
-    id: 4,
-    topic: 'Mombasa County Projects meetings',
-    date: '2023-06-22',
-    time: '11:00 AM',
-    duration: '2h',
-    status: 'Present',
-  },
-  {
-    id: 5,
-    topic: 'Mombasa County Staff meetings',
-    date: '2023-06-29',
-    time: '03:00 PM',
-    duration: '1h',
-    status: 'Present',
-  },
-] as const;
+export const AttendanceTracker = async () => {
+  const meetings = await getZoomMeetings();
 
-export function AttendanceTracker() {
-  const [dateRange, setDateRange] = useState<DateRange | undefined>({
-    from: new Date(2023, 5, 1),
-    to: new Date(2023, 6, 31),
-  });
-  const [meetingType, setMeetingType] = useState('all');
-
-  const attendanceScore = 85; // This would be calculated based on actual data
+  // Calculate attendance score based on ended meetings
+  const attendanceScore =
+    meetings.length > 0
+      ? Math.round(
+          (meetings.filter((m) => m.status === 'ended').length /
+            meetings.length) *
+            100,
+        )
+      : 0;
 
   return (
     <div className="min-h-screen w-full space-y-8 bg-sky-50 p-4">
@@ -87,35 +39,27 @@ export function AttendanceTracker() {
 
       <div className="flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
         <div className="w-full sm:w-auto">
-          <DatePickerWithRange
-            date={dateRange}
-            setDate={(date) =>
-              setDateRange(date || { from: new Date(), to: new Date() })
-            }
-          />
+          <DatePickerWithRange />
         </div>
         <div className="w-full sm:w-auto">
-          <Select value={meetingType} onValueChange={setMeetingType}>
-            <SelectTrigger className="w-[200px] bg-white">
-              <SelectValue placeholder="Meeting Type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Meetings</SelectItem>
-              <SelectItem value="project">Projects Meetings</SelectItem>
-              <SelectItem value="client">County Hall Meetings</SelectItem>
-              <SelectItem value="team">Staff Meetings</SelectItem>
-            </SelectContent>
-          </Select>
+          <MeetingTypeSelect />
         </div>
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {meetingsData.map((meeting) => (
-          <MeetingCard key={meeting.id} {...meeting} />
+        {meetings.map((meeting) => (
+          <MeetingCard
+            key={meeting.id}
+            topic={meeting.topic}
+            date={new Date(meeting.start_time).toLocaleDateString()}
+            time={new Date(meeting.start_time).toLocaleTimeString()}
+            duration={`${meeting.duration}m`}
+            status={meeting.status === 'ended' ? 'Present' : 'Absent'}
+          />
         ))}
       </div>
 
-      <MonthlyAttendanceChart />
+      <MonthlyAttendanceChart meetings={meetings} />
     </div>
   );
 }

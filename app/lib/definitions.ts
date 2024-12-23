@@ -104,3 +104,11 @@ export type TownHallBadgeProps = {
   duration: number;
   status: string;
 }
+
+export type MeetingCardProps = {
+  topic: string;
+  date: string;
+  time: string;
+  duration: string;
+  status: string;
+};

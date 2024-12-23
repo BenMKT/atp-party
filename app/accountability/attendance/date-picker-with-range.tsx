@@ -3,7 +3,6 @@
 import * as React from 'react';
 import { CalendarIcon } from 'lucide-react';
 import { DateRange } from 'react-day-picker';
-
 import { cn } from '@/app/lib/utils';
 import { Button } from '@/app/ui/accountability/attendance-ui/button';
 import { Calendar } from '@/app/ui/accountability/attendance-ui/calendar';
@@ -13,15 +12,13 @@ import {
   PopoverTrigger,
 } from '@/app/ui/accountability/attendance-ui/popover';
 
-export function DatePickerWithRange({
-  className,
-  date,
-  setDate,
-}: {
-  className?: string;
-  date: DateRange | undefined;
-  setDate: (date: DateRange | undefined) => void;
-}) {
+export const DatePickerWithRange = ({ className }: { className?: string }) => {
+  // Set default date range to current year
+  const [date, setDate] = React.useState<DateRange | undefined>({
+    from: new Date(2024, 0, 1), // January 1, 2024
+    to: new Date(2024, 11, 31), // December 31, 2024
+  });
+
   return (
     <div className={cn('grid gap-2', className)}>
       <Popover>
@@ -61,4 +58,4 @@ export function DatePickerWithRange({
       </Popover>
     </div>
   );
-}
+};
