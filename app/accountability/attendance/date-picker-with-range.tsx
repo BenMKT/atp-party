@@ -12,12 +12,25 @@ import {
   PopoverTrigger,
 } from '@/app/ui/accountability/attendance-ui/popover';
 
-export const DatePickerWithRange = ({ className }: { className?: string }) => {
-  // Set default date range to current year
+interface DatePickerWithRangeProps {
+  className?: string;
+  onDateRangeChange: (range: DateRange | undefined) => void;
+}
+
+export const DatePickerWithRange = ({
+  className,
+  onDateRangeChange,
+}: DatePickerWithRangeProps) => {
   const [date, setDate] = React.useState<DateRange | undefined>({
     from: new Date(2024, 0, 1), // January 1, 2024
-    to: new Date(2024, 11, 31), // December 31, 2024
+    to: new Date(4024, 11, 31), // December 31, 4024
   });
+
+  // Notify parent component when date range changes
+  const handleSelect = (newDate: DateRange | undefined) => {
+    setDate(newDate);
+    onDateRangeChange(newDate);
+  };
 
   return (
     <div className={cn('grid gap-2', className)}>
@@ -51,7 +64,7 @@ export const DatePickerWithRange = ({ className }: { className?: string }) => {
             mode="range"
             defaultMonth={date?.from}
             selected={date}
-            onSelect={setDate}
+            onSelect={handleSelect}
             numberOfMonths={2}
           />
         </PopoverContent>

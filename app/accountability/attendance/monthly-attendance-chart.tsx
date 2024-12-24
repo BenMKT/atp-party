@@ -20,14 +20,14 @@ import { useState, useEffect } from 'react';
 
 export const MonthlyAttendanceChart = ({
   meetings,
+  isLoading,
 }: {
   meetings: TownHallMeeting[];
+  isLoading: boolean;
 }) => {
-  const [isLoading, setIsLoading] = useState(true);
   const [chartData, setChartData] = useState<any[]>([]);
 
   useEffect(() => {
-    setIsLoading(true);
     try {
       // Process meetings into monthly attendance data
       const monthlyData = meetings.reduce((acc: any[], meeting) => {
@@ -62,11 +62,9 @@ export const MonthlyAttendanceChart = ({
       setChartData(data);
     } catch (error) {
       console.error('Error processing chart data:', error);
-    } finally {
-      setIsLoading(false);
     }
   }, [meetings]);
-  
+
   // loading ui with animation
   if (isLoading) {
     return (
