@@ -27,7 +27,7 @@ const NavLinks = () => {
   const pathname = usePathname();
 
   return (
-    <main>
+    <main className="flex grow gap-2 h-full md:flex-col">
       {links.map((link) => {
         const LinkIcon = link.icon;
         return (
@@ -35,10 +35,10 @@ const NavLinks = () => {
             key={link.name}
             href={link.href}
             className={clsx(
-              'flex h-[48px] grow items-center justify-center gap-2 rounded-md p-3 text-sm font-medium transition-transform origin-left duration-300 md:flex-none md:justify-start md:p-2 md:px-3',
+              'flex h-[48px] grow origin-left items-center justify-center gap-2 rounded-md p-3 text-sm font-medium transition-transform duration-300 md:flex-none md:justify-start md:p-2 md:px-3',
               {
                 'bg-sky-200 text-blue-600': pathname === link.href,
-                'transform bg-sky-50 hover:scale-110 hover:bg-sky-100 hover:text-base hover:text-blue-600':
+                'transform bg-sky-50 hover:scale-105 hover:bg-sky-100 hover:text-base hover:text-blue-600':
                   pathname !== link.href,
               },
             )}
@@ -48,6 +48,7 @@ const NavLinks = () => {
           </Link>
         );
       })}
+      <div className="hidden bg-sky-50 rounded-md flex-grow md:flex"></div>
     </main>
   );
 };
