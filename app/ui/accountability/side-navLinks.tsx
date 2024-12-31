@@ -1,9 +1,7 @@
 'use client';
 
-import {
-  HomeIcon,
-} from '@heroicons/react/24/outline';
-import { FaBalanceScale, FaCalendar } from 'react-icons/fa';
+import { HomeIcon } from '@heroicons/react/24/outline';
+import { FaBalanceScale, FaCalendar, FaChartLine } from 'react-icons/fa';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 import Link from 'next/link';
@@ -12,7 +10,16 @@ import Link from 'next/link';
 const links = [
   { name: 'Home', href: '/', icon: HomeIcon },
   { name: 'Ajibika', href: '/accountability', icon: FaBalanceScale },
-  { name: 'Attendance', href: '/accountability/attendance', icon: FaCalendar },
+  {
+    name: 'Attendance Tracker',
+    href: '/accountability/attendance',
+    icon: FaCalendar,
+  },
+  {
+    name: 'Admin Dashboard',
+    href: '/accountability/dashboard',
+    icon: FaChartLine,
+  },
 ];
 
 const NavLinks = () => {
@@ -20,16 +27,15 @@ const NavLinks = () => {
   const pathname = usePathname();
 
   return (
-    <>
+    <main>
       {links.map((link) => {
         const LinkIcon = link.icon;
         return (
           <Link
-            style={{ transformOrigin: 'left' }}
             key={link.name}
             href={link.href}
             className={clsx(
-              'flex h-[48px] grow items-center justify-center gap-2 rounded-md p-3 text-sm font-medium transition-transform duration-300 md:flex-none md:justify-start md:p-2 md:px-3',
+              'flex h-[48px] grow items-center justify-center gap-2 rounded-md p-3 text-sm font-medium transition-transform origin-left duration-300 md:flex-none md:justify-start md:p-2 md:px-3',
               {
                 'bg-sky-200 text-blue-600': pathname === link.href,
                 'transform bg-sky-50 hover:scale-110 hover:bg-sky-100 hover:text-base hover:text-blue-600':
@@ -42,7 +48,7 @@ const NavLinks = () => {
           </Link>
         );
       })}
-    </>
+    </main>
   );
 };
 

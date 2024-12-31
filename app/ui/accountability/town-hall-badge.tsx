@@ -2,8 +2,9 @@
 
 import { CalendarIcon, VideoCameraIcon } from '@heroicons/react/24/outline';
 import { formatDate } from '@/app/lib/utils';
-import { Button } from '@/app/ui/button';
+import { Button } from '@/app/ui/accountability/attendance-ui/button';
 import { TownHallBadgeProps } from '@/app/lib/definitions';
+import { Badge } from '@/app/ui/accountability/attendance-ui/badge';
 
 export const TownHallBadge = ({
   topic,
@@ -12,20 +13,27 @@ export const TownHallBadge = ({
   duration,
   status,
 }: TownHallBadgeProps) => {
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'started':
+        return 'bg-green-500 hover:bg-green-600';
+      case 'waiting':
+        return 'bg-yellow-500 hover:bg-yellow-600';
+      case 'ended':
+        return 'bg-red-500 hover:bg-red-600';
+      default:
+        return 'bg-gray-500 hover:bg-gray-600';
+    }
+  };
+
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition-all hover:shadow-md">
+    <main className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition-all hover:shadow-md">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <VideoCameraIcon className="h-5 w-5 text-blue-500" />
           <h3 className="font-medium text-gray-900">{topic}</h3>
         </div>
-        <span className={`rounded-full px-2 py-1 text-xs ${
-          status === 'waiting' ? 'bg-yellow-100 text-yellow-800' : 
-          status === 'started' ? 'bg-green-100 text-green-800' : 
-          'bg-red-100 text-red-800'
-        }`}>
-          {status}
-        </span>
+        <Badge className={getStatusColor(status)}>{status}</Badge>
       </div>
 
       <div className="mt-4 space-y-2">
@@ -37,11 +45,12 @@ export const TownHallBadge = ({
 
         <Button
           onClick={() => window.open(joinUrl, '_blank')}
-          className="w-full"
+          disabled={status === 'ended'}
+          className="size-sm bg-blue-600 hover:scale-105 text-white hover:bg-blue-700 disabled:bg-gray-300"
         >
           Join Meeting
         </Button>
       </div>
-    </div>
+    </main>
   );
-}
+};

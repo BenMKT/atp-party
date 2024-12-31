@@ -19,7 +19,9 @@
     ],
     "paths": {
       "@/*": ["./*"]
-    }
+    },
+    "target": "ES2017",
+    "forceConsistentCasingInFileNames": true
   },
   "include": [
     "prisma/scripts/seedData.js",

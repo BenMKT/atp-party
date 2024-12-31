@@ -18,14 +18,14 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
   // get the session data from the auth function and pass it to the SessionProvider
   const session = await auth();
   return (
-    <SessionProvider session={session}>
-      <html lang="en">
-        <body className={`${inter.className} antialiased`}>
+    <html lang="en">
+      <body suppressHydrationWarning={true}>
+        <SessionProvider session={session}>
           <main>{children}</main>
           <ToastContainer />
-        </body>
-      </html>
-    </SessionProvider>
+        </SessionProvider>
+      </body>
+    </html>
   );
 };
 

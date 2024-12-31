@@ -247,3 +247,10 @@ export const fetchNews = async () => {
     throw new Error('Failed to fetch news data.');
   }
 };
+
+// fetch all members from the database
+export const fetchMembers = async () => {
+  noStore();
+  const members = await prisma.members.findMany();
+  return members;
+};
