@@ -5,13 +5,13 @@ import { CalendarIcon } from 'lucide-react';
 import { DateRange } from 'react-day-picker';
 
 import { cn } from '@/app/lib/utils';
-import { Button } from '@/app/ui/accountability/ui/button';
-import { Calendar } from '@/app/ui/accountability/ui/calendar';
+import { Button } from '@/app/ui/accountability/attendance-ui/button';
+import { Calendar } from '@/app/ui/accountability/attendance-ui/calendar';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/app/ui/accountability/ui/popover';
+} from '@/app/ui/accountability/attendance-ui/popover';
 
 export function DatePickerWithRange({
   className,

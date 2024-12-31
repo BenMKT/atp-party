@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Progress } from "@/app/ui/accountability/ui/progress"
+import { Progress } from "@/app/ui/accountability/attendance-ui/progress"
 import clsx from 'clsx'
 
 interface AttendanceScoreProps {

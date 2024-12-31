@@ -4,8 +4,8 @@ import { useState } from 'react'
 import { AttendanceScore } from './attendance-score'
 import { MeetingCard } from './meeting-card'
 import { MonthlyAttendanceChart } from './monthly-attendance-chart'
-import { Card, CardContent, CardHeader, CardTitle } from "@/app/ui/accountability/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/app/ui/accountability/ui/select"
+import { Card, CardContent, CardHeader, CardTitle } from "@/app/ui/accountability/attendance-ui/card"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/app/ui/accountability/attendance-ui/select"
 import { DatePickerWithRange } from "@/app/ui/accountability/date-picker-with-range"
 import { DateRange } from "react-day-picker";
 

@@ -3,7 +3,7 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-} from '@/app/ui/accountability/ui/card';
+} from '@/app/ui/accountability/attendance-ui/card';
 import {
   LineChart,
   Line,
@@ -14,6 +14,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 
+// TODO: Replace with actual data from the zoom meeting attendance data
 const data = [
   { name: 'Jan', attendance: 80 },
   { name: 'Feb', attendance: 85 },

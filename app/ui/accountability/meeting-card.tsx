@@ -1,5 +1,5 @@
-import { Card, CardContent } from '@/app/ui/accountability/ui/card';
-import { Badge } from '@/app/ui/accountability/ui/badge';
+import { Card, CardContent } from '@/app/ui/accountability/attendance-ui/card';
+import { Badge } from '@/app/ui/accountability/attendance-ui/badge';
 import { CalendarIcon, ClockIcon } from 'lucide-react';
 
 interface MeetingCardProps {
