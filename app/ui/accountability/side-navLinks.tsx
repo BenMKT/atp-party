@@ -1,7 +1,13 @@
 'use client';
 
 import { HomeIcon } from '@heroicons/react/24/outline';
-import { FaBalanceScale, FaCalendar, FaChartLine } from 'react-icons/fa';
+import {
+  FaBalanceScale,
+  FaCalendar,
+  FaChartLine,
+  FaGavel,
+  FaUserTie,
+} from 'react-icons/fa';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 import Link from 'next/link';
@@ -20,6 +26,11 @@ const links = [
     href: '/accountability/dashboard',
     icon: FaChartLine,
   },
+  {
+    name: 'Wakili',
+    href: '/accountability/wakili',
+    icon: FaUserTie,
+  },
 ];
 
 const NavLinks = () => {
@@ -27,7 +38,7 @@ const NavLinks = () => {
   const pathname = usePathname();
 
   return (
-    <main className="flex grow gap-2 h-full md:flex-col">
+    <main className="flex h-full grow gap-2 md:flex-col">
       {links.map((link) => {
         const LinkIcon = link.icon;
         return (
@@ -48,7 +59,7 @@ const NavLinks = () => {
           </Link>
         );
       })}
-      <div className="hidden bg-sky-50 rounded-md flex-grow md:flex"></div>
+      <div className="hidden flex-grow rounded-md bg-sky-50 md:flex"></div>
     </main>
   );
 };
