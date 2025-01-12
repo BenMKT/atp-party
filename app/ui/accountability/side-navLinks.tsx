@@ -27,6 +27,11 @@ const links = [
     icon: FaChartLine,
   },
   {
+    name: 'Recall',
+    href: '/accountability/recall',
+    icon: FaGavel,
+  },
+  {
     name: 'Wakili',
     href: '/accountability/wakili',
     icon: FaUserTie,

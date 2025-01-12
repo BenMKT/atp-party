@@ -1,6 +1,13 @@
 // This file contains type definitions for your data.
 // It describes the shape of the data, and what data type each property should accept.
-import { Gender, Disabled, Role, Contestants, Votes } from '@prisma/client';
+import {
+  Gender,
+  Disabled,
+  Role,
+  Contestants,
+  Votes,
+  Position,
+} from '@prisma/client';
 
 export type Member = {
   id: string;
@@ -14,6 +21,7 @@ export type Member = {
   isDisabled: Disabled;
   role: Role;
   religion: string | null;
+  position: Position | null;
   county: string;
   constituency: string;
   ward: string;
@@ -94,7 +102,7 @@ export type TownHallMeeting = {
   join_url: string;
   duration: number;
   status: string;
-}
+};
 
 export type TownHallBadgeProps = {
   id: string;
@@ -103,7 +111,7 @@ export type TownHallBadgeProps = {
   joinUrl: string;
   duration: number;
   status: string;
-}
+};
 
 export type MeetingCardProps = {
   topic: string;
@@ -111,4 +119,77 @@ export type MeetingCardProps = {
   time: string;
   duration: string;
   status: string;
+};
+
+export type RecallSubmission = {
+  memberId: string;
+  subject: string;
+  details: string;
+};
+
+export type RecallCount = {
+  subject: string;
+  count: number;
+};
+
+export type RecallStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'COMPLETED';
+
+export type RecallDetails = {
+  id: string;
+  subject: string;
+  details: string;
+  createdAt: Date;
+  status: RecallStatus;
+  member: {
+    id: string;
+    name: string;
+    email: string;
+    phone: string;
+    position: string | null;
+    county: string;
+  };
+};
+
+export type Leader = {
+  id: string;
+  name: string;
+  phone: string;
+  email: string;
+  county: string;
+  constituency: string;
+  ward: string;
+  position: Position | null;
+  role: Role;
+};
+
+export type RegistrationResponse = {
+  success?: boolean;
+  error?: string;
+  fieldErrors?: Record<string, string[]>;
+};
+
+export type Leaders = {
+  id: string;
+  name: string;
+  position: Position;
+  role: Role;
+  email: string;
+  phone: string;
+  county: string;
+  constituency: string;
+  ward: string;
+  totalRecalls: number;
+  lastRecallDate: Date;
+  recallBreakdown: {
+    category: string;
+    count: number;
+  }[];
+};
+
+export type SortField = 'name' | 'position' | 'totalRecalls' | 'lastRecallDate';
+export type SortOrder = 'asc' | 'desc';
+
+export type FilterOptions = {
+  county: string;
+  position: string;
 };

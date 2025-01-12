@@ -36,7 +36,8 @@ export const AdminParticipantsPanel = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-
+  
+  //TODO: get all participants data/list from the zoom api for paid account
   // Modified participant data without join/leave times
   const participants = meetings.map((meeting) => ({
     id: meeting.id,

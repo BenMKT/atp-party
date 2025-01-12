@@ -10,10 +10,14 @@ import {
   PollContestant,
   UpdateContestant,
   Vote,
+  RecallSubmission,
+  RecallDetails,
+  RegistrationResponse,
 } from './definitions';
 import { signIn, signOut } from '@/auth';
 import { AuthError } from 'next-auth';
 import bcrypt from 'bcryptjs';
+import { Role } from '@prisma/client';
 
 // create a member schema that matches database schema to validate the user input data
 const MemberFormSchema = z.object({
@@ -26,8 +30,23 @@ const MemberFormSchema = z.object({
   email: z.string().email(),
   gender: z.enum(['MALE', 'FEMALE']),
   isDisabled: z.enum(['TRUE', 'FALSE']),
-  role: z.enum(['ADMIN', 'STAFF', 'MEMBER']),
+  role: z.enum([
+    'ADMIN',
+    'STAFF',
+    'MEMBER',
+    'ELECTED',
+    'NOMINATED',
+    'ASPIRANT',
+    'RECALLED',
+    'IMPEACHED',
+    'INTERNSHIP',
+    'ATP_STUDENT',
+  ]),
   religion: z.string().optional(),
+  position: z
+    .enum(['PRESIDENT', 'GOVERNOR', 'SENATOR', 'MP', 'MCA', 'WOMAN_REP'])
+    .nullable()
+    .optional(),
   county: z.string(),
   constituency: z.string(),
   ward: z.string(),
@@ -52,6 +71,7 @@ const UpdateMember = MemberFormSchema.pick({
   phone: true,
   password: true,
   role: true,
+  position: true,
   county: true,
   constituency: true,
   ward: true,
@@ -140,32 +160,43 @@ const CreateNewsSchema = NewsFormSchema.omit({
 });
 
 // define a function/Action to create a member record in the database
-export const registerMember = async (formData: FormData) => {
+export const registerMember = async (
+  formData: FormData,
+): Promise<RegistrationResponse> => {
   // extract the user input data from the form using the formData object and convert it to a plain object
   const rawFormData = Object.fromEntries(formData.entries());
-  // validate the user input data using the schema
-  const validatedFields = RegisterMember.safeParse(rawFormData);
+
+  // Convert empty position string to null
+  const formDataWithNullPosition = {
+    ...rawFormData,
+    position: rawFormData.position || null,
+  };
+
+  const validatedFields = RegisterMember.safeParse(formDataWithNullPosition);
 
   if (!validatedFields.success) {
-    return validatedFields.error.flatten().fieldErrors;
+    return { fieldErrors: validatedFields.error.flatten().fieldErrors };
   }
   // Hash the password
   const hashedPassword = bcrypt.hashSync(validatedFields.data.password, 10);
   // if the validation is successful, proceed to insert the data to the database with hashed password
   const validatedData = { ...validatedFields.data, password: hashedPassword };
-  // insert the validated data to the database using prisma
-  await prisma.members
-    .create({
-      // @ts-ignore
+
+  try {
+    const result = await prisma.members.create({
       data: validatedData,
-    })
-    .then(() => {
-      console.log('Member registered successfully');
-      // revalidate the members page to display the newly added member
-      revalidatePath('/dashboard/members');
-      // redirect the user to the members page after successful registration
-      redirect('/dashboard/members');
     });
+
+    if (result) {
+      // Successful registration
+      revalidatePath('/dashboard/members');
+      return { success: true };
+    }
+    return { error: 'Failed to register member. Please try again.' };
+  } catch (error) {
+    console.error('Failed to register member:', error);
+    return { error: 'Failed to register member. Please try again.' };
+  }
 };
 
 // Similarly like above, define a function/Action to update/edit a member record in the database
@@ -173,8 +204,11 @@ export const registerMember = async (formData: FormData) => {
 export const updateMember = async (id: string, formData: FormData) => {
   // extract user input from form
   const rawFormData = Object.fromEntries(formData.entries());
-  // validate the data using Zod
-  const validatedFields = UpdateMember.safeParse(rawFormData);
+  const validatedFields = UpdateMember.safeParse({
+    ...rawFormData,
+    position: rawFormData.position || null,
+  });
+
   if (!validatedFields.success) {
     return validatedFields.error.flatten().fieldErrors;
   }
@@ -420,5 +454,28 @@ export const deleteNews = async (id: string) => {
   } catch (error) {
     console.error('Error deleting news feed from the database', error);
     throw new Error('Error deleting news feed from the database');
+  }
+};
+
+export const initiateRecall = async (
+  leaderId: string,
+  subject: string,
+  details: string,
+) => {
+  try {
+    const recall = await prisma.recalls.create({
+      data: {
+        subject,
+        details,
+        memberId: leaderId,
+        status: 'PENDING',
+      },
+    });
+
+    revalidatePath('/accountability/recall');
+    return recall;
+  } catch (error) {
+    console.error('Error creating recall:', error);
+    throw new Error('Failed to create recall');
   }
 };

@@ -36,10 +36,12 @@ model Members {
   county       String    @db.VarChar(255)
   constituency String    @db.VarChar(255)
   ward         String    @db.VarChar(255)
+  position     Position?
   signature    String    @db.VarChar(255)
   createdAt    DateTime  @default(now())
   updatedAt    DateTime? @updatedAt
   bill         Bills[]
+  recalls      Recalls[]
 }
 
 model Polls {
@@ -85,6 +87,16 @@ model News {
   createdAt   DateTime @default(now())
 }
 
+model Recalls {
+  id        String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  subject   String       @db.VarChar(255)
+  details   String       @db.Text
+  createdAt DateTime     @default(now())
+  member    Members      @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  memberId  String       @db.Uuid
+  status    RecallStatus @default(PENDING)
+}
+
 enum Gender {
   MALE
   FEMALE
@@ -99,4 +111,27 @@ enum Role {
   ADMIN
   STAFF
   MEMBER
+  ELECTED
+  NOMINATED
+  ASPIRANT
+  RECALLED
+  IMPEACHED
+  INTERNSHIP
+  ATP_STUDENT
+}
+
+enum Position {
+  PRESIDENT
+  GOVERNOR
+  SENATOR
+  MP
+  MCA
+  WOMAN_REP
+}
+
+enum RecallStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  COMPLETED
 }

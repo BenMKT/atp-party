@@ -1,13 +1,17 @@
+import { Metadata } from 'next';
+import WakiliAI from './wakili-AI';
+
+export const metadata: Metadata = {
+  title: 'Wakili AI',
+  description: 'Wakili AI Website',
+};
+
+// Wakili AI Page
 const WakiliPage = () => {
   return (
-    <div className="h-[calc(100vh-6rem)] w-full">
-      <iframe
-        src="https://wakili.org"
-        className="h-full w-full border-none"
-        title="Wakili AI Website"
-        sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-      />
-    </div>
+    <main className="bg-sky-50">
+      <WakiliAI />
+    </main>
   );
 };
 

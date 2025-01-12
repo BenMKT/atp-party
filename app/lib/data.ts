@@ -2,6 +2,8 @@
 
 import prisma from '@/prisma/prisma';
 import { unstable_noStore as noStore } from 'next/cache';
+import { Role, Position } from '@prisma/client';
+import { Leader } from './definitions';
 
 // fetch card data from the database
 export const fetchCardData = async () => {
@@ -253,4 +255,88 @@ export const fetchMembers = async () => {
   noStore();
   const members = await prisma.members.findMany();
   return members;
+};
+
+// fetch all leaders from the database
+export const fetchLeaders = async () => {
+  try {
+    noStore();
+    const leaders = await prisma.members.findMany({
+      where: {
+        role: {
+          in: [Role.ELECTED, Role.NOMINATED, Role.RECALLED, Role.IMPEACHED],
+        },
+        position: {
+          not: null,
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        position: true,
+        role: true,
+        email: true,
+        phone: true,
+        county: true,
+        constituency: true,
+        ward: true,
+        recalls: {
+          select: {
+            id: true,
+            subject: true,
+            status: true,
+            createdAt: true,
+          },
+        },
+      },
+    });
+
+    if (!leaders || leaders.length === 0) {
+      return [];
+    }
+
+    return leaders.map((leader) => {
+      // Group recalls by subject and count them
+      const subjectCounts = leader.recalls.reduce(
+        (acc, recall) => {
+          acc[recall.subject] = (acc[recall.subject] || 0) + 1;
+          return acc;
+        },
+        {} as Record<string, number>,
+      );
+
+      // Convert to array format for recallBreakdown
+      const recallBreakdown = Object.entries(subjectCounts).map(
+        ([subject, count]) => ({
+          category: subject,
+          count,
+        }),
+      );
+
+      return {
+        id: leader.id,
+        name: leader.name,
+        position: leader.position!,
+        role: leader.role,
+        email: leader.email,
+        phone: leader.phone,
+        county: leader.county,
+        constituency: leader.constituency,
+        ward: leader.ward,
+        totalRecalls: leader.recalls.length,
+        lastRecallDate:
+          leader.recalls.length > 0
+            ? leader.recalls.reduce(
+                (latest, recall) =>
+                  recall.createdAt > latest ? recall.createdAt : latest,
+                leader.recalls[0].createdAt,
+              )
+            : null,
+        recallBreakdown,
+      };
+    });
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch leader data.');
+  }
 };
