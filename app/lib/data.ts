@@ -2,7 +2,7 @@
 
 import prisma from '@/prisma/prisma';
 import { unstable_noStore as noStore } from 'next/cache';
-import { Role, Position } from '@prisma/client';
+import { Role, Position, RecallStatus } from '@prisma/client';
 import { Leader } from './definitions';
 
 // fetch card data from the database
@@ -340,3 +340,306 @@ export const fetchLeaders = async () => {
     throw new Error('Failed to fetch leader data.');
   }
 };
+
+export async function fetchRecallStats() {
+  noStore();
+  try {
+    const stats = await prisma.$transaction([
+      prisma.recalls.count({ where: { status: 'PENDING' } }),
+      prisma.recalls.count({ where: { status: 'APPROVED' } }),
+      prisma.recalls.count({ where: { status: 'REJECTED' } }),
+      prisma.recalls.count({ where: { status: 'COMPLETED' } }),
+      prisma.members.count({ where: { role: 'RECALLED' } }),
+    ]);
+
+    return {
+      pendingRecalls: stats[0],
+      approvedRecalls: stats[1],
+      rejectedRecalls: stats[2],
+      completedRecalls: stats[3],
+      recalledLeaders: stats[4],
+    };
+  } catch (error) {
+    console.error('Error fetching recall stats:', error);
+    throw new Error('Failed to fetch recall statistics.');
+  }
+}
+
+export async function fetchRecallsByCounty() {
+  noStore();
+  try {
+    const recalls = await prisma.recalls.findMany({
+      include: {
+        member: true,
+      },
+    });
+
+    const countsByCounty = recalls.reduce(
+      (acc: { [key: string]: number }, recall) => {
+        const county = recall.member.county;
+        acc[county] = (acc[county] || 0) + 1;
+        return acc;
+      },
+      {},
+    );
+
+    return Object.entries(countsByCounty).map(([county, count]) => ({
+      county,
+      count,
+    }));
+  } catch (error) {
+    console.error('Error fetching recalls by county:', error);
+    throw new Error('Failed to fetch recall county data.');
+  }
+}
+
+export async function fetchRecallsByPosition() {
+  noStore();
+  try {
+    const recalls = await prisma.recalls.findMany({
+      include: {
+        member: {
+          select: {
+            position: true,
+          },
+        },
+      },
+    });
+
+    const countsByPosition = recalls.reduce(
+      (acc: { [key: string]: number }, recall) => {
+        const position = recall.member.position || 'UNKNOWN';
+        acc[position] = (acc[position] || 0) + 1;
+        return acc;
+      },
+      {},
+    );
+
+    return Object.entries(countsByPosition).map(([position, count]) => ({
+      position,
+      count,
+    }));
+  } catch (error) {
+    console.error('Error fetching recalls by position:', error);
+    throw new Error('Failed to fetch recall position data.');
+  }
+}
+
+export async function fetchRecallTrends() {
+  noStore();
+  try {
+    const recalls = await prisma.recalls.findMany({
+      select: {
+        createdAt: true,
+      },
+      orderBy: {
+        createdAt: 'asc',
+      },
+    });
+
+    const monthlyTrends = recalls.reduce(
+      (acc: { [key: string]: number }, recall) => {
+        const month = recall.createdAt.toISOString().slice(0, 7); // YYYY-MM format
+        acc[month] = (acc[month] || 0) + 1;
+        return acc;
+      },
+      {},
+    );
+
+    return Object.entries(monthlyTrends).map(([month, count]) => ({
+      month,
+      count,
+    }));
+  } catch (error) {
+    console.error('Error fetching recall trends:', error);
+    throw new Error('Failed to fetch recall trends.');
+  }
+}
+
+export async function fetchRecallsWithDetails(
+  page: number = 1,
+  limit: number = 10,
+  search: string = '',
+  statusFilter: string = 'all',
+) {
+  noStore();
+  try {
+    let memberIds: string[] = [];
+
+    if (search) {
+      const matchingMembers = await prisma.members.findMany({
+        where: {
+          name: {
+            contains: search,
+            mode: 'insensitive' as const,
+          },
+        },
+        select: { id: true },
+      });
+      memberIds = matchingMembers.map((m) => m.id);
+    }
+
+    const where = {
+      ...(search
+        ? {
+            OR: [
+              { memberId: { in: memberIds } },
+              { subject: { contains: search, mode: 'insensitive' as const } },
+            ],
+          }
+        : {}),
+      ...(statusFilter !== 'all'
+        ? { status: statusFilter as RecallStatus }
+        : {}),
+    };
+
+    const [recalls, total] = await prisma.$transaction([
+      prisma.recalls.findMany({
+        where,
+        include: {
+          member: {
+            select: {
+              name: true,
+              position: true,
+              county: true,
+              email: true,
+              phone: true,
+            },
+          },
+        },
+        skip: (page - 1) * limit,
+        take: limit,
+        orderBy: {
+          createdAt: 'desc',
+        },
+      }),
+      prisma.recalls.count({ where }),
+    ]);
+
+    return {
+      recalls,
+      total,
+      pages: Math.ceil(total / limit),
+    };
+  } catch (error) {
+    console.error('Error fetching recalls:', error);
+    throw new Error('Failed to fetch recalls.');
+  }
+}
+
+export async function fetchDashboardStats() {
+  noStore();
+  try {
+    const [stats, recalls] = await Promise.all([
+      prisma.$transaction([
+        prisma.recalls.count({ where: { status: 'PENDING' } }),
+        prisma.recalls.count({ where: { status: 'APPROVED' } }),
+        prisma.recalls.count({ where: { status: 'REJECTED' } }),
+        prisma.recalls.count({ where: { status: 'COMPLETED' } }),
+        prisma.members.count({ where: { role: 'RECALLED' } }),
+      ]),
+      prisma.recalls.findMany({
+        include: {
+          member: {
+            select: {
+              county: true,
+              position: true,
+            },
+          },
+        },
+      }),
+    ]);
+
+    // Process county data with subject breakdown
+    const countsByCounty = recalls.reduce(
+      (acc: Record<string, Record<string, number>>, recall) => {
+        const county = recall.member.county;
+        const subject = recall.subject;
+
+        if (!acc[county]) {
+          acc[county] = {};
+        }
+        acc[county][subject] = (acc[county][subject] || 0) + 1;
+        return acc;
+      },
+      {},
+    );
+
+    // Get unique subjects
+    const subjects = [...new Set(recalls.map((r) => r.subject))];
+
+    // Format county data for stacked bar chart
+    const countyData = Object.entries(countsByCounty).map(
+      ([county, subjectCounts]) => ({
+        county,
+        ...subjects.reduce(
+          (acc, subject) => ({
+            ...acc,
+            [subject]: subjectCounts[subject] || 0,
+          }),
+          {},
+        ),
+      }),
+    );
+
+    // Process position data
+    const countsByPosition = recalls.reduce(
+      (acc: Record<string, number>, recall) => {
+        const position = recall.member.position || 'UNKNOWN';
+        acc[position] = (acc[position] || 0) + 1;
+        return acc;
+      },
+      {},
+    );
+
+    // Process subject data
+    const countsBySubject = recalls.reduce(
+      (acc: Record<string, number>, recall) => {
+        acc[recall.subject] = (acc[recall.subject] || 0) + 1;
+        return acc;
+      },
+      {},
+    );
+
+    // Process trends data
+    const monthlyTrends = recalls.reduce(
+      (acc: Record<string, number>, recall) => {
+        const month = recall.createdAt.toISOString().slice(0, 7);
+        acc[month] = (acc[month] || 0) + 1;
+        return acc;
+      },
+      {},
+    );
+
+    return {
+      stats: {
+        pendingRecalls: stats[0],
+        approvedRecalls: stats[1],
+        rejectedRecalls: stats[2],
+        completedRecalls: stats[3],
+        recalledLeaders: stats[4],
+      },
+      countyData,
+      subjects,
+      positionData: Object.entries(countsByPosition).map(
+        ([position, count]) => ({
+          position,
+          count,
+        }),
+      ),
+      subjectData: Object.entries(countsBySubject).map(([subject, count]) => ({
+        subject,
+        count,
+      })),
+      trendsData: Object.entries(monthlyTrends)
+        .sort()
+        .map(([month, count]) => ({
+          month,
+          count,
+        })),
+    };
+  } catch (error) {
+    console.error('Error fetching dashboard stats:', error);
+    throw new Error('Failed to fetch dashboard statistics.');
+  }
+}

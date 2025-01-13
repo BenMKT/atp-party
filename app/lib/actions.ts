@@ -479,3 +479,37 @@ export const initiateRecall = async (
     throw new Error('Failed to create recall');
   }
 };
+
+
+export const updateRecallStatus = async (
+  recallId: string,
+  status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'COMPLETED',
+) => {
+  try {
+    const recall = await prisma.recalls.update({
+      where: { id: recallId },
+      data: { status },
+      include: {
+        member: {
+          select: {
+            id: true,
+            email: true,
+            phone: true,
+          },
+        },
+      },
+    });
+
+    if (status === 'COMPLETED') {
+      await prisma.members.update({
+        where: { id: recall.member.id },
+        data: { role: 'RECALLED' },
+      });
+    }
+
+    return recall;
+  } catch (error) {
+    console.error('Error updating recall status:', error);
+    throw new Error('Failed to update recall status.');
+  }
+};

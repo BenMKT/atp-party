@@ -13,7 +13,6 @@ const config: Config = {
         'spin-around': 'spin-around calc(var(--speed) * 2) infinite linear',
         slide: 'slide var(--speed) ease-in-out infinite alternate',
         'bounce-slow': 'bounce-slow 3s infinite',
-        progress: 'progress 2s ease-in-out infinite',
       },
       keyframes: {
         'spin-around': {
@@ -44,10 +43,6 @@ const config: Config = {
             transform: 'translateY(0)',
             animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)',
           },
-        },
-        progress: {
-          '0%': { transform: 'translateX(-100%)' },
-          '100%': { transform: 'translateX(0)' },
         },
       },
       borderRadius: {

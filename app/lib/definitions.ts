@@ -193,3 +193,24 @@ export type FilterOptions = {
   county: string;
   position: string;
 };
+
+export type RecallData = {
+  id: string;
+  subject: string;
+  details: string;
+  status: RecallStatus;
+  createdAt: Date;
+  member: {
+    name: string;
+    position: string | null;
+    county: string;
+    email: string;
+    phone: string;
+  };
+};
+
+export type RecallResponse = {
+  recalls: RecallData[];
+  total: number;
+  pages: number;
+};
