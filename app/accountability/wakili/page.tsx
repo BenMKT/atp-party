@@ -3,7 +3,7 @@ import WakiliAI from './wakili-AI';
 
 export const metadata: Metadata = {
   title: 'Wakili AI',
-  description: 'Wakili AI Website',
+  description: 'Democratizing legal services to the people',
 };
 
 // Wakili AI Page
