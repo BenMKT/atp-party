@@ -28,7 +28,7 @@ const getAttendanceColor = (percentage: number) => {
 };
 
 export const AdminParticipantsPanel = ({
-  meetings,
+  meetings = [],
   isLoading,
 }: {
   meetings: TownHallMeeting[];
@@ -36,18 +36,21 @@ export const AdminParticipantsPanel = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  
+
+  // Ensure meetings is an array
+  const meetingsArray = Array.isArray(meetings) ? meetings : [];
+
   //TODO: get all participants data/list from the zoom api for paid account
   // Modified participant data without join/leave times
-  const participants = meetings.map((meeting) => ({
+  const participants = meetingsArray.map((meeting) => ({
     id: meeting.id,
     name: 'Participant Name',
     email: 'participant@example.com',
     avatar: '/avatar-placeholder.png',
-    totalDuration: meetings
+    totalDuration: meetingsArray
       .filter((m) => m.status === 'ended')
-      .reduce((total, m) => total + m.duration, 0),
-    attendancePercentage: Math.floor(Math.random() * 40 + 60), // replace with calculated  actual attendance percentage
+      .reduce((total, m) => total + (m.duration || 0), 0),
+    attendancePercentage: Math.floor(Math.random() * 40 + 60), // replace with calculated actual attendance percentage
   }));
 
   // Filter participants based on search term

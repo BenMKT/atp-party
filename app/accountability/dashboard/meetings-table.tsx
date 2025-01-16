@@ -31,7 +31,7 @@ const getStatusVariant = (status: string) => {
 };
 
 export const AdminMeetingsTable = ({
-  meetings,
+  meetings = [],
   isLoading,
 }: {
   meetings: TownHallMeeting[];
@@ -40,16 +40,19 @@ export const AdminMeetingsTable = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
 
+  // Ensure meetings is an array
+  const meetingsArray = Array.isArray(meetings) ? meetings : [];
+
   // Sort meetings by status and date
-  const sortedMeetings = [...meetings].sort((a, b) => {
+  const sortedMeetings = [...meetingsArray].sort((a, b) => {
     // First, sort by status priority (ended -> started -> waiting)
     const statusPriority = { ended: 1, started: 2, waiting: 3 };
-    const statusDiff = 
-      (statusPriority[a.status as keyof typeof statusPriority] || 4) - 
+    const statusDiff =
+      (statusPriority[a.status as keyof typeof statusPriority] || 4) -
       (statusPriority[b.status as keyof typeof statusPriority] || 4);
-    
+
     if (statusDiff !== 0) return statusDiff;
-    
+
     // For same status, sort by date (most recent first)
     return new Date(b.start_time).getTime() - new Date(a.start_time).getTime();
   });
@@ -63,7 +66,7 @@ export const AdminMeetingsTable = ({
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const paginatedMeetings = filteredMeetings.slice(
     startIndex,
-    startIndex + ITEMS_PER_PAGE
+    startIndex + ITEMS_PER_PAGE,
   );
 
   return (
@@ -145,7 +148,9 @@ export const AdminMeetingsTable = ({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+            onClick={() =>
+              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+            }
             disabled={currentPage === totalPages}
           >
             Next
@@ -155,4 +160,4 @@ export const AdminMeetingsTable = ({
       )}
     </main>
   );
-}
+};

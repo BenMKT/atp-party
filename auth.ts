@@ -8,15 +8,21 @@ import { z } from 'zod';
 
 declare module 'next-auth' {
   /**
-   * Extends the built-in session/user types to include the role property
+   * Extends the built-in session/user types to include the role, county, email, and position properties
    */
   interface User {
     role?: string;
+    county?: string;
+    email?: string | null;
+    position?: string | null;
   }
 
   interface Session {
     user: {
       role?: string;
+      county?: string;
+      email?: string | null;
+      position?: string | null;
     } & DefaultSession['user'];
   }
 }
@@ -43,12 +49,18 @@ export const {
       if (user) {
         token.id = user.id;
         token.role = user.role;
+        token.county = user.county;
+        token.email = user.email;
+        token.position = user.position;
       }
       return token;
     },
     session({ session, token }) {
       session.user.id = token.id as string;
-      session.user.role = token.role as string;
+      session.user.role = (token.role as string);
+      session.user.county = (token.county as string) ?? '';
+      session.user.email = (token.email as string) ?? null;
+      session.user.position = (token.position as string) ?? null;
       return session;
     },
     async redirect({ url, baseUrl }) {

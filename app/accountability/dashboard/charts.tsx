@@ -49,15 +49,17 @@ const CustomTooltip = ({ active, payload }: any) => {
 };
 
 export const AdminCharts = ({
-  meetings,
+  meetings = [],
   isLoading,
 }: {
   meetings: TownHallMeeting[];
   isLoading: boolean;
 }) => {
+  const meetingsArray = Array.isArray(meetings) ? meetings : [];
+
   const years = Array.from(
     new Set(
-      meetings.map((m) => new Date(m.start_time).getFullYear().toString()),
+      meetingsArray.map((m) => new Date(m.start_time).getFullYear().toString()),
     ),
   ).sort((a, b) => b.localeCompare(a));
 
@@ -66,8 +68,8 @@ export const AdminCharts = ({
   // Filter meetings by year
   const filteredMeetings =
     selectedYear === 'all'
-      ? meetings
-      : meetings.filter(
+      ? meetingsArray
+      : meetingsArray.filter(
           (m) =>
             new Date(m.start_time).getFullYear().toString() === selectedYear,
         );
@@ -79,9 +81,10 @@ export const AdminCharts = ({
     const getMembers = async () => {
       try {
         const membersData = await fetchMembers();
-        setMembers(membersData);
+        setMembers(Array.isArray(membersData) ? membersData : []);
       } catch (error) {
         console.error('Error fetching members:', error);
+        setMembers([]);
       }
     };
     getMembers();
@@ -91,26 +94,41 @@ export const AdminCharts = ({
   const endedMeetings = filteredMeetings.filter((m) => m.status === 'ended');
 
   // Process data for monthly trend chart - using only ended meetings
-  const monthlyData = endedMeetings.reduce((acc: any[], meeting) => {
-    const date = new Date(meeting.start_time);
-    const monthYear = date.toLocaleString('en-US', {
-      month: 'short',
-      year: '2-digit',
-    });
-
-    const existingMonth = acc.find((item) => item.name === monthYear);
-    if (existingMonth) {
-      existingMonth.total += 1;
-      if (meeting.status === 'ended') existingMonth.completed += 1;
-    } else {
-      acc.push({
-        name: monthYear,
-        total: 1,
-        completed: meeting.status === 'ended' ? 1 : 0,
+  const monthlyData = endedMeetings
+    .reduce((acc: any[], meeting) => {
+      const date = new Date(meeting.start_time);
+      const monthYear = date.toLocaleString('en-US', {
+        month: 'short',
+        year: '2-digit',
       });
-    }
-    return acc;
-  }, []);
+
+      const existingMonth = acc.find((item) => item.name === monthYear);
+      if (existingMonth) {
+        existingMonth.total += 1;
+        if (meeting.status === 'ended') existingMonth.completed += 1;
+      } else {
+        acc.push({
+          name: monthYear,
+          total: 1,
+          completed: meeting.status === 'ended' ? 1 : 0,
+        });
+      }
+      return acc;
+    }, [])
+    .sort((a, b) => {
+      // Sort by date to ensure chronological order
+      const [aMonth, aYear] = a.name.split(' ');
+      const [bMonth, bYear] = b.name.split(' ');
+      const dateA = new Date(
+        2000 + parseInt(aYear),
+        new Date(Date.parse(`${aMonth} 1, 2000`)).getMonth(),
+      );
+      const dateB = new Date(
+        2000 + parseInt(bYear),
+        new Date(Date.parse(`${bMonth} 1, 2000`)).getMonth(),
+      );
+      return dateA.getTime() - dateB.getTime();
+    });
 
   // Pie chart data - using only ended meetings vs all meetings
   const pieData = [

@@ -18,9 +18,11 @@ export const AdminDashboard = () => {
         const response = await fetch('/api/zoom/meetings');
         if (!response.ok) throw new Error('Failed to fetch meetings');
         const data = await response.json();
-        setMeetings(data);
+        const meetingsArray = Array.isArray(data.meetings) ? data.meetings : [];
+        setMeetings(meetingsArray);
       } catch (error) {
         console.error('Error:', error);
+        setMeetings([]);
       } finally {
         setIsLoading(false);
       }

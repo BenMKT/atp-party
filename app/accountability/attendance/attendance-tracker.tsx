@@ -34,10 +34,15 @@ export const AttendanceTracker = () => {
           throw new Error('Failed to fetch meetings');
         }
         const data = await response.json();
-        setMeetings(data);
-        setFilteredMeetings(data);
+        // Ensure we're setting arrays even if the response is unexpected
+        const meetingsArray = Array.isArray(data.meetings) ? data.meetings : [];
+        setMeetings(meetingsArray);
+        setFilteredMeetings(meetingsArray);
       } catch (error) {
         console.error('Error fetching meetings:', error);
+        // Set empty arrays on error
+        setMeetings([]);
+        setFilteredMeetings([]);
       } finally {
         setIsLoading(false);
       }
@@ -51,6 +56,9 @@ export const AttendanceTracker = () => {
     type: string,
     range: DateRange | undefined,
   ) => {
+    // Ensure meetings is an array
+    if (!Array.isArray(meetings)) return [];
+
     let filtered = [...meetings];
 
     // Apply date range filter

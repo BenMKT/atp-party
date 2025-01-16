@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import { Leaders } from '../../lib/definitions';
 import { Button } from '@/app/ui/accountability/recall-ui/button';
@@ -12,10 +14,16 @@ import {
 interface LeaderCardProps {
   leader: Leaders;
   onOpenModal: (leader: Leaders) => void;
+  contestantAvatar?: string | null;
 }
 
-export function LeaderCard({ leader, onOpenModal }: LeaderCardProps) {
+export function LeaderCard({
+  leader,
+  onOpenModal,
+  contestantAvatar,
+}: LeaderCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
   const getInitials = (name: string) => {
     return name
@@ -24,6 +32,9 @@ export function LeaderCard({ leader, onOpenModal }: LeaderCardProps) {
       .join('')
       .toUpperCase();
   };
+
+  // Use contestant avatar if available, otherwise fallback to leader's avatar in Supabase
+  const avatarUrl = contestantAvatar || '';
 
   return (
     <Card
@@ -36,8 +47,9 @@ export function LeaderCard({ leader, onOpenModal }: LeaderCardProps) {
           <div className="relative mb-4 h-24 w-24 overflow-hidden rounded-full">
             <Avatar className="h-24 w-24">
               <AvatarImage
-                src={`/avatars/${leader.id}.jpg`}
+                src={imageError ? undefined : avatarUrl}
                 alt={leader.name}
+                onError={() => setImageError(true)}
               />
               <AvatarFallback>{getInitials(leader.name)}</AvatarFallback>
             </Avatar>

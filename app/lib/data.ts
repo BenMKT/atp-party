@@ -2,8 +2,7 @@
 
 import prisma from '@/prisma/prisma';
 import { unstable_noStore as noStore } from 'next/cache';
-import { Role, Position, RecallStatus } from '@prisma/client';
-import { Leader } from './definitions';
+import { Role, RecallStatus } from '@prisma/client';
 
 // fetch card data from the database
 export const fetchCardData = async () => {
@@ -295,7 +294,25 @@ export const fetchLeaders = async () => {
       return [];
     }
 
-    return leaders.map((leader) => {
+    // Fetch all contestants in a single query
+    const contestants = await prisma.contestants.findMany({
+      where: {
+        userId: {
+          in: leaders.map((leader) => leader.id),
+        },
+      },
+      select: {
+        userId: true,
+        avatar: true,
+      },
+    });
+
+    // Create a map of userId to contestant avatar
+    const contestantAvatarMap = new Map(
+      contestants.map((contestant) => [contestant.userId, contestant.avatar]),
+    );
+
+    const mappedLeaders = leaders.map((leader) => {
       // Group recalls by subject and count them
       const subjectCounts = leader.recalls.reduce(
         (acc, recall) => {
@@ -333,15 +350,18 @@ export const fetchLeaders = async () => {
               )
             : null,
         recallBreakdown,
+        contestantAvatar: contestantAvatarMap.get(leader.id) || null,
       };
     });
+    return mappedLeaders;
   } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch leader data.');
+    console.error('Failed to fetch leaders:', error);
+    throw new Error('Failed to fetch leaders. Please try again.');
   }
 };
 
-export async function fetchRecallStats() {
+// fetch recall status stats
+export const fetchRecallStats = async () => {
   noStore();
   try {
     const stats = await prisma.$transaction([
@@ -363,9 +383,10 @@ export async function fetchRecallStats() {
     console.error('Error fetching recall stats:', error);
     throw new Error('Failed to fetch recall statistics.');
   }
-}
+};
 
-export async function fetchRecallsByCounty() {
+// fetch recalls by county stats
+export const fetchRecallsByCounty = async () => {
   noStore();
   try {
     const recalls = await prisma.recalls.findMany({
@@ -391,9 +412,10 @@ export async function fetchRecallsByCounty() {
     console.error('Error fetching recalls by county:', error);
     throw new Error('Failed to fetch recall county data.');
   }
-}
+};
 
-export async function fetchRecallsByPosition() {
+// fetch recalls by position stats
+export const fetchRecallsByPosition = async () => {
   noStore();
   try {
     const recalls = await prisma.recalls.findMany({
@@ -423,9 +445,10 @@ export async function fetchRecallsByPosition() {
     console.error('Error fetching recalls by position:', error);
     throw new Error('Failed to fetch recall position data.');
   }
-}
+};
 
-export async function fetchRecallTrends() {
+// fetch recalls by trend stats
+export const fetchRecallTrends = async () => {
   noStore();
   try {
     const recalls = await prisma.recalls.findMany({
@@ -454,14 +477,15 @@ export async function fetchRecallTrends() {
     console.error('Error fetching recall trends:', error);
     throw new Error('Failed to fetch recall trends.');
   }
-}
+};
 
-export async function fetchRecallsWithDetails(
+// fetch recall details stats
+export const fetchRecallsWithDetails = async (
   page: number = 1,
   limit: number = 10,
   search: string = '',
   statusFilter: string = 'all',
-) {
+) => {
   noStore();
   try {
     let memberIds: string[] = [];
@@ -525,9 +549,10 @@ export async function fetchRecallsWithDetails(
     console.error('Error fetching recalls:', error);
     throw new Error('Failed to fetch recalls.');
   }
-}
+};
 
-export async function fetchDashboardStats() {
+// fetch all recall dashboard stats
+export const fetchDashboardStats = async () => {
   noStore();
   try {
     const [stats, recalls] = await Promise.all([
@@ -642,4 +667,4 @@ export async function fetchDashboardStats() {
     console.error('Error fetching dashboard stats:', error);
     throw new Error('Failed to fetch dashboard statistics.');
   }
-}
+};

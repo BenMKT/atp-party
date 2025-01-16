@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/app/ui/accountability/recall-ui/select';
+import { toast } from 'react-toastify';
 
 const ITEMS_PER_PAGE = 8;
 
@@ -35,12 +36,14 @@ export function RecallPage() {
     position: '',
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   useEffect(() => {
     async function loadLeaders() {
       try {
         setIsLoading(true);
+        setError(null);
         const data = await fetchLeaders();
         const validLeaders = data.filter(
           (leader): leader is Leaders => leader.position !== null,
@@ -48,6 +51,8 @@ export function RecallPage() {
         setLeaders(validLeaders);
       } catch (error) {
         console.error('Failed to fetch leaders:', error);
+        setError('Failed to load leaders. Please try again.');
+        toast.error('Failed to load leaders. Please try again.');
       } finally {
         setIsLoading(false);
       }
@@ -80,6 +85,10 @@ export function RecallPage() {
     setCurrentPage(1);
   };
 
+  const handleRetry = () => {
+    setRefreshTrigger((prev) => prev + 1);
+  };
+
   const filteredAndSortedLeaders = filterLeaders(
     sortLeaders(leaders, sortField, sortOrder),
     filters,
@@ -98,6 +107,28 @@ export function RecallPage() {
           <span className="animate-pulse text-3xl font-semibold text-blue-600">
             Loading...
           </span>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-sky-50">
+        <div className="flex flex-col items-center gap-6">
+          <p className="text-xl text-red-600">{error}</p>
+          <Button onClick={handleRetry}>Retry</Button>
+        </div>
+      </div>
+    );
+  }
+
+  if (leaders.length === 0) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-sky-50">
+        <div className="flex flex-col items-center gap-6">
+          <p className="text-xl text-gray-600">No leaders found</p>
+          <Button onClick={handleRetry}>Refresh</Button>
         </div>
       </div>
     );
@@ -148,6 +179,7 @@ export function RecallPage() {
             key={leader.id}
             leader={leader}
             onOpenModal={handleOpenModal}
+            contestantAvatar={leader.contestantAvatar}
           />
         ))}
       </div>

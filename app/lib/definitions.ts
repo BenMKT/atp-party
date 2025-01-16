@@ -184,6 +184,7 @@ export type Leaders = {
     category: string;
     count: number;
   }[];
+  contestantAvatar: string | null;
 };
 
 export type SortField = 'name' | 'position' | 'totalRecalls' | 'lastRecallDate';

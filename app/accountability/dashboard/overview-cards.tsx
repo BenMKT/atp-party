@@ -12,16 +12,19 @@ import { VideoIcon, TrendingUpIcon } from 'lucide-react';
 import { YearFilter } from './year-filter';
 
 export const AdminOverviewCards = ({
-  meetings,
+  meetings = [],
   isLoading,
 }: {
   meetings: TownHallMeeting[];
   isLoading: boolean;
 }) => {
+  // Ensure meetings is an array before using map
+  const meetingsArray = Array.isArray(meetings) ? meetings : [];
+
   // Get unique years from meetings
   const years = Array.from(
     new Set(
-      meetings.map((m) => new Date(m.start_time).getFullYear().toString()),
+      meetingsArray.map((m) => new Date(m.start_time).getFullYear().toString()),
     ),
   ).sort((a, b) => b.localeCompare(a)); // Sort descending
 
@@ -30,8 +33,8 @@ export const AdminOverviewCards = ({
   // Filter meetings by year if a specific year is selected
   const filteredMeetings =
     selectedYear === 'all'
-      ? meetings
-      : meetings.filter(
+      ? meetingsArray
+      : meetingsArray.filter(
           (m) =>
             new Date(m.start_time).getFullYear().toString() === selectedYear,
         );
@@ -71,8 +74,8 @@ export const AdminOverviewCards = ({
         ).length,
       },
     },
-    completionRate: endedMeetings.length
-      ? Math.round((endedMeetings.length / meetings.length) * 100)
+    completionRate: meetingsArray.length
+      ? Math.round((endedMeetings.length / meetingsArray.length) * 100)
       : 0,
     totalDuration: endedMeetings.reduce(
       (acc, meeting) => acc + (meeting.duration || 0),
