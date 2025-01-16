@@ -1,11 +1,10 @@
-import { Disabled, Gender, Role, PrismaClient } from '@prisma/client';
+import { Disabled, Gender, Role, Position } from '@prisma/client';
 import { UpdateMember, DeleteMember } from './buttons';
 import Pagination from '@/app/ui/pagination';
 import { auth } from '@/auth';
 import PrintButton from '@/app/ui/print-button';
 import Image from 'next/image';
-
-const prisma = new PrismaClient();
+import prisma from '@/prisma/prisma';
 // create a members table component to display the members in a table
 const MembersTable = async ({
   query,
@@ -36,6 +35,7 @@ const MembersTable = async ({
           { ward: { contains: query, mode: 'insensitive' } },
           { gender: Gender[query as keyof typeof Gender] },
           { role: Role[query as keyof typeof Role] },
+          { position: Position[query as keyof typeof Position] },
           { isDisabled: Disabled[query as keyof typeof Disabled] },
         ],
       },
@@ -55,6 +55,7 @@ const MembersTable = async ({
           { ward: { contains: query, mode: 'insensitive' } },
           { gender: Gender[query as keyof typeof Gender] },
           { role: Role[query as keyof typeof Role] },
+          { position: Position[query as keyof typeof Position] },
           { isDisabled: Disabled[query as keyof typeof Disabled] },
         ],
       },
@@ -98,12 +99,13 @@ const MembersTable = async ({
               <th>County</th>
               <th>Constituency</th>
               <th>Ward</th>
+              <th>Position</th>
               <th>ID</th>
               <th>Phone</th>
               <th>Gender</th>
               <th>Role</th>
               <th>Email</th>
-              {session?.user?.role === 'ADMIN' && <th>Signature</th>}
+              <th>Signature</th>
               <th className="sr-only">Edit</th>
             </tr>
           </thead>
@@ -123,6 +125,7 @@ const MembersTable = async ({
                   <td>{member.county}</td>
                   <td>{member.constituency}</td>
                   <td>{member.ward}</td>
+                  <td>{member.position}</td>
                   {/* conditionally render the 'email', 'phone', 'gender', and 'role' columns if the session user is the member themselves, a staff member, or an admin. */}
                   {(session?.user?.id === member.id ||
                     session?.user?.role === 'STAFF' ||
@@ -133,19 +136,16 @@ const MembersTable = async ({
                       <td>{member.gender}</td>
                       <td>{member.role}</td>
                       <td>{member.email}</td>
+                      <td>
+                        <Image
+                          src={member.signature}
+                          alt="Signature"
+                          width={80}
+                          height={40}
+                          className="w-15 h-10"
+                        />
+                      </td>
                     </>
-                  )}
-                  {/* conditionally render the signature column only if the session user is an admin. */}
-                  {session?.user?.role === 'ADMIN' && (
-                    <td>
-                      <Image
-                        src={member.signature}
-                        alt="Signature"
-                        width={80}
-                        height={40}
-                        className="w-15 h-10"
-                      />
-                    </td>
                   )}
                   <td className="flex justify-end gap-2">
                     {/* conditionally render the 'edit' and 'delete' buttons if the session user is the member themselves, a staff member, or an admin. */}

@@ -93,6 +93,8 @@ const UpdateContestantModal = ({
             <p className="font-semibold">Edit Contestant Details</p>
             <button
               onClick={onClose}
+              type="button"
+              aria-label="close modal"
               className="border-0 bg-transparent focus:outline-none"
             >
               <FaTimes />

@@ -57,6 +57,8 @@ const PollCard = ({ poll }: { poll: Poll }) => {
 
             {/* delete button */}
             <button
+              aria-label="Delete Poll"
+              type='button'
               disabled={session?.user?.role === 'MEMBER'} // Disable button based on user role
               className={clsx('transition-all duration-300', {
                 'text-end text-[#1B5CFE] hover:scale-150 hover:text-indigo-400':

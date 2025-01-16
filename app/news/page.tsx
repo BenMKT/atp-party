@@ -229,6 +229,7 @@ const NewsPage = () => {
                   <button
                     onClick={() => handleDelete(newsItem.id)}
                     className="text-[#1B5CFE] hover:scale-150"
+                    aria-label="delete news feed"
                   >
                     <BsFillTrash3Fill size={20} />
                   </button>
@@ -241,6 +242,7 @@ const NewsPage = () => {
                 src={getEmbedUrl(newsItem.feed)}
                 allow="autoplay; encrypted-media"
                 allowFullScreen
+                title={`News Feed ${newsItem.id}`}
               ></iframe>
               <p className="font-semibold text-gray-700">
                 {newsItem.description}

@@ -25,6 +25,7 @@ const Pagination = ({ totalPages }: { totalPages: number }) => {
         <button
           type="button"
           disabled={currentPage === 1}
+          aria-label="Previous page"
           className="btn join-item hover:scale-105 hover:bg-gray-400 active:scale-90"
         >
           <Link href={createPageURL(currentPage - 1)}>
@@ -45,6 +46,7 @@ const Pagination = ({ totalPages }: { totalPages: number }) => {
         <button
           type="button"
           disabled={currentPage === totalPages}
+          aria-label="Next page"
           className="btn join-item hover:scale-105 hover:bg-gray-400 active:scale-90"
         >
           <Link href={createPageURL(currentPage + 1)}>

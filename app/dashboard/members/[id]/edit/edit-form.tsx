@@ -4,6 +4,7 @@ import { Member } from '@/app/lib/definitions';
 import { updateMember } from '@/app/lib/actions';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
+import { Role, Position } from '@prisma/client';
 
 // receive the member object as a prop and prefill the form fields with the specific member details
 
@@ -19,10 +20,13 @@ const EditMemberForm = async ({ member }: { member: Member }) => {
     redirect('/login');
   }
 
+  const isAdminOrStaff =
+    session.user?.role === 'ADMIN' || session.user?.role === 'STAFF';
+
   return (
     <main className="z-30 w-full max-w-md rounded-lg bg-white bg-opacity-60 p-8 shadow-xl shadow-[#1B5CFE]">
       <form action={updateMemberWithId} className="space-y-4">
-        <h2 className="mb-6 text-center text-2xl font-bold text-primary">
+        <h2 className="mb-6 text-center text-2xl font-bold text-blue-700">
           Update Member Details
         </h2>
         <p className="font-semibold text-red-700">
@@ -109,19 +113,56 @@ const EditMemberForm = async ({ member }: { member: Member }) => {
             name="role"
             required
             defaultValue={member.role}
-            className="mt-1 block w-full rounded-md border border-zinc-500 bg-transparent px-3 py-2 text-zinc-800 shadow-sm focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
+            className="mt-1 block w-full rounded-md border border-zinc-500 bg-transparent px-3 py-2 text-zinc-800 shadow-sm focus:border-primary focus:outline-none focus:ring-primary disabled:bg-gray-100 disabled:text-gray-500 sm:text-sm"
           >
-            <option disabled selected value="">
-              Please select an option
-            </option>
-            <option value="ADMIN" disabled={session?.user?.role === 'MEMBER'}>
-              ADMIN
-            </option>
-            <option value="STAFF" disabled={session?.user?.role === 'MEMBER'}>
-              STAFF
-            </option>
-            <option value="MEMBER">MEMBER</option>
+            {Object.values(Role).map((role) => (
+              <option
+                key={role}
+                value={role}
+                disabled={!isAdminOrStaff && role !== member.role}
+              >
+                {role}
+              </option>
+            ))}
           </select>
+          {!isAdminOrStaff && (
+            <p className="mt-1 text-sm text-gray-500">
+              Only admins and staff can change roles
+            </p>
+          )}
+        </div>
+
+        {/* Position */}
+        <div className="mb-4">
+          <label
+            htmlFor="position"
+            className="block text-sm font-medium text-zinc-700 md:text-base"
+          >
+            Position
+          </label>
+          <select
+            id="position"
+            name="position"
+            defaultValue={member.position || ''}
+            className="mt-1 block w-full rounded-md border border-zinc-500 bg-transparent px-3 py-2 text-zinc-800 shadow-sm focus:border-primary focus:outline-none focus:ring-primary disabled:bg-transparent disabled:text-gray-500 sm:text-sm"
+            disabled={!isAdminOrStaff && member.position !== null}
+          >
+            <option value="">No Position</option>
+            {Object.values(Position).map((position) => (
+              <option
+                key={position}
+                value={position}
+                disabled={!isAdminOrStaff && position !== member.position}
+              >
+                {position}
+              </option>
+            ))}
+          </select>
+          {!isAdminOrStaff && (
+            <p className="mt-1 text-sm text-gray-500">
+              Only admins and staff can change positions
+            </p>
+          )}
         </div>
         {/* County */}
         <div>

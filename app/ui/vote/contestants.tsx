@@ -274,6 +274,7 @@ const Contestant = ({
               <button
                 disabled={session?.user?.id !== contestant.userId}
                 onClick={openUpdateContestantModal}
+                aria-label="Edit contestant"
               >
                 <MdModeEdit
                   size={20}
@@ -289,6 +290,7 @@ const Contestant = ({
               <button
                 onClick={onDelete}
                 disabled={session?.user?.role === 'MEMBER'} // Disable button based on user role
+                aria-label="Delete contestant"
                 className={clsx('transition-all duration-300', {
                   'text-[#1B5CFE] hover:scale-150 hover:text-indigo-400':
                     session?.user?.role !== 'MEMBER', // Active styles
@@ -315,9 +317,8 @@ const Contestant = ({
           <button
             disabled={isDisabled}
             onClick={() => handleVote()}
-            style={{ transformOrigin: 'left' }}
             className={clsx(
-              'z-10 flex h-10 w-[95%] items-center justify-center rounded-full bg-green-500 hover:scale-105 active:scale-95',
+              'z-10 flex h-10 w-[95%] items-center justify-center rounded-full bg-green-500 hover:scale-105 active:scale-95 origin-left',
               {
                 'cursor-not-allowed bg-red-500 ': isDisabled,
               },

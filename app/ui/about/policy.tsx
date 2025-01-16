@@ -39,7 +39,11 @@ const Policies = () => {
       {/* render the pdf in an iframe when a file is selected */}
       {pdfSrc && (
         <div className="mt-8 h-3/4 w-3/4">
-          <iframe src={pdfSrc} className="h-full w-full rounded-lg" />
+          <iframe 
+            src={pdfSrc} 
+            className="h-full w-full rounded-lg"
+            title="Party Documentation Viewer"
+          />
         </div>
       )}
     </main>

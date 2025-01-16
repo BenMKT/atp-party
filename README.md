@@ -66,6 +66,7 @@ The Accountability & Transparency Party (ATP) App is a digital platform designed
 
 ### Key Features <a name="key-features"></a>
 
+- **Role-based features and functionality:** <br> This App features a robust role-based access control system powered by NextAuth. Depending on the user's role, certain features are only visible and specific functions can be executed. For instance, administrators & staff have access to user management actions, members can participate in voting on political issues and choose their preferred leaders in real-time, while regular users have access to general features, ensuring transparency and public participation.
 - **Real-Time Voting System:** <br> This App boasts of a robust digital real-time voting system where users can cast votes on various political issues and choose their preferred leaders in real-time ensuring transparency and public participation.
 - **Transparency:**<br> The app provides real-time updates/notifications and insights into party political activities and decisions, ensuring transparency and public awareness.
 - **Accountability:**<br> The app provides an online platform where party elected leaders and officials are frequently engaged directly by the public through recorded zoom meetings, ensuring accountability.
