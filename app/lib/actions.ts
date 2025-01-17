@@ -406,7 +406,7 @@ export const authenticate = async (
 ) => {
   try {
     // sign in the user using the credentials provider
-    await signIn('credentials', formData, { callbackUrl: '/' });
+    await signIn('credentials', formData);
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {

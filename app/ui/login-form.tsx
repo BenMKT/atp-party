@@ -8,13 +8,55 @@ import { Button } from '@/app/ui/button';
 import { useFormState, useFormStatus } from 'react-dom';
 import { authenticate } from '@/app/lib/actions';
 import Link from 'next/link';
+import { useState, useRef, useEffect } from 'react';
+import { CheckCircleIcon } from '@heroicons/react/24/solid';
 
 // create a login form component to capture user login details
 const LoginForm = () => {
-  const [errorMessage, dispatch] = useFormState(authenticate, undefined);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [localError, setLocalError] = useState<string | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const [errorMessage, dispatch] = useFormState(
+    async (prevState: any, formData: FormData) => {
+      try {
+        setShowSuccess(false);
+        setLocalError(null);
+        const result = await authenticate(prevState, formData);
+        if (!result) {
+          setShowSuccess(true);
+          // Clear form immediately after successful login
+          formRef.current?.reset();
+          // Add 1.5s delay before redirecting to display the success message
+          await new Promise((resolve) => setTimeout(resolve, 1500));
+        } else {
+          // Set local error state
+          setLocalError(result);
+          // Clear form on error as well
+          formRef.current?.reset();
+        }
+        return result;
+      } catch (error) {
+        return 'An error occurred during login.';
+      }
+    },
+    undefined,
+  );
+
+  // Clear error message after 4 seconds
+  useEffect(() => {
+    if (localError) {
+      const timer = setTimeout(() => {
+        setLocalError(null);
+      }, 3000);
+
+      // Cleanup timer if component unmounts or error message changes
+      return () => clearTimeout(timer);
+    }
+  }, [localError]);
 
   return (
-    <form action={dispatch} className="space-y-3 ">
+    <form ref={formRef} action={dispatch} className="space-y-3">
       <div className="flex-1 rounded-lg bg-gray-50 bg-opacity-70 px-6 pb-2 pt-8">
         <h1 className={`${lusitana.className} text-center text-2xl`}>
           Already a member?
@@ -86,10 +128,19 @@ const LoginForm = () => {
           aria-live="polite"
           aria-atomic="true"
         >
-          {errorMessage && (
+          {showSuccess && (
+            <div className="mx-auto flex items-center text-green-600">
+              <CheckCircleIcon className="h-5 w-5" />
+              <p className="text-base flex items-center gap-2">
+                <span>Login successfull.</span>
+                <span className="inline-flex animate-pulse">Redirecting...</span>
+              </p>
+            </div>
+          )}
+          {localError && (
             <>
-              <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
-              <p className="text-sm text-red-500">{errorMessage}</p>
+              <ExclamationCircleIcon className="h-5 w-5 text-red-600" />
+              <p className="text-base text-red-600">{localError}</p>
             </>
           )}
         </div>
