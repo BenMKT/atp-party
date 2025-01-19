@@ -1,4 +1,4 @@
-import LoginForm from '../ui/login-form';
+import LoginForm from './login-form';
 import NavBar from '../ui/top-navbar';
 import type { Metadata } from 'next';
 
@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 // create a login page component to display the login form
-export default function LoginPage() {
+const LoginPage = () => {
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden">
       <video
@@ -30,4 +30,6 @@ export default function LoginPage() {
       </div>
     </main>
   );
-}
+};
+
+export default LoginPage;

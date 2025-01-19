@@ -3,6 +3,8 @@
 import prisma from '@/prisma/prisma';
 import { unstable_noStore as noStore } from 'next/cache';
 import { Role, RecallStatus } from '@prisma/client';
+import { generateOTP, sendOTP } from './twilio';
+import { storeOTP, verifyOTP as verifyStoredOTP } from './redis';
 
 // fetch card data from the database
 export const fetchCardData = async () => {
@@ -666,5 +668,87 @@ export const fetchDashboardStats = async () => {
   } catch (error) {
     console.error('Error fetching dashboard stats:', error);
     throw new Error('Failed to fetch dashboard statistics.');
+  }
+};
+
+// function to request a password reset
+  // Store OTPs in memory with expiration (in production environment, use Redis)
+// const otpStore = new Map<string, { otp: string; expires: number }>();
+  
+export const requestPasswordReset = async (formData: FormData) => {
+  const nationalId = formData.get('nationalId') as string;
+
+  try {
+    // Find user by national ID
+    const user = await prisma.members.findUnique({
+      where: { nationalId },
+      select: { phone: true },
+    });
+
+    if (!user) {
+      return { error: 'No account found with this National ID.' };
+    }
+
+    // Generate OTP
+    const otp = generateOTP();
+
+    // Store OTP in Redis
+    await storeOTP(nationalId, otp);
+
+    // Store OTP with 5-minute expiration
+    // otpStore.set(nationalId, {
+    //   otp,
+    //   expires: Date.now() + 5 * 60 * 1000, // 5 minutes
+    // });
+
+    // Send OTP via SMS
+    const result = await sendOTP(user.phone, otp);
+
+    if (!result.success) {
+      return { error: 'Failed to send OTP. Please try again.' };
+    }
+
+    return { success: true, phone: user.phone };
+  } catch (error) {
+    console.error('Password reset request error:', error);
+    return { error: 'Failed to process password reset request.' };
+  }
+};
+
+// function to verify the OTP
+export const verifyOTP = async (formData: FormData) => {
+  const nationalId = formData.get('nationalId') as string;
+  const submittedOTP = formData.get('otp') as string;
+
+  // const storedData = otpStore.get(nationalId);
+
+  // if (!storedData) {
+  //   return { error: 'OTP expired or invalid. Please request a new one.' };
+  // }
+
+  // if (Date.now() > storedData.expires) {
+  //   otpStore.delete(nationalId);
+  //   return { error: 'OTP has expired. Please request a new one.' };
+  // }
+
+  // if (submittedOTP !== storedData.otp) {
+  //   return { error: 'Invalid OTP. Please try again.' };
+  // }
+
+  // // OTP is valid - delete it so it can't be reused
+  // otpStore.delete(nationalId);
+  // return { success: true };
+
+  try {
+    const isValid = await verifyStoredOTP(nationalId, submittedOTP);
+
+    if (!isValid) {
+      return { error: 'Invalid or expired OTP. Please request a new one.' };
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error('OTP verification error:', error);
+    return { error: 'Failed to verify OTP. Please try again.' };
   }
 };

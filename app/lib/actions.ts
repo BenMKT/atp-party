@@ -17,7 +17,6 @@ import {
 import { signIn, signOut } from '@/auth';
 import { AuthError } from 'next-auth';
 import bcrypt from 'bcryptjs';
-import { Role } from '@prisma/client';
 
 // create a member schema that matches database schema to validate the user input data
 const MemberFormSchema = z.object({
@@ -200,7 +199,6 @@ export const registerMember = async (
 };
 
 // Similarly like above, define a function/Action to update/edit a member record in the database
-
 export const updateMember = async (id: string, formData: FormData) => {
   // extract user input from form
   const rawFormData = Object.fromEntries(formData.entries());
@@ -231,8 +229,8 @@ export const updateMember = async (id: string, formData: FormData) => {
       redirect('/dashboard/members');
     });
 };
-// define a function/action to delete a member record from the database
 
+// define a function/action to delete a member record from the database
 export const deleteMember = async (id: string) => {
   await prisma.members.delete({
     where: { id: id },
@@ -243,7 +241,6 @@ export const deleteMember = async (id: string) => {
 };
 
 // define a function/Action to create a bill record in the database
-
 export const createBill = async (formData: FormData) => {
   // extract the user input data from the form and convert it to an object
   const rawFormData = Object.fromEntries(formData.entries());
@@ -269,7 +266,6 @@ export const createBill = async (formData: FormData) => {
 };
 
 // define a function/Action to update/edit a bill record in the database
-
 export const updateBill = async (id: string, formData: FormData) => {
   // extract user input from form
   const rawFormData = Object.fromEntries(formData.entries());
@@ -296,7 +292,6 @@ export const updateBill = async (id: string, formData: FormData) => {
 };
 
 // define a function/action to delete a bill record from the database
-
 export const deleteBill = async (id: string) => {
   await prisma.bills.delete({
     where: { id: id },
@@ -307,7 +302,6 @@ export const deleteBill = async (id: string) => {
 };
 
 // define a function/Action to create a poll record in the database
-
 export const createPoll = async (data: Data, formData: FormData) => {
   // extract user input data using destucturing from the form and validate it
   const { title, description, startDate, endDate } = CreatePollSchema.parse({
@@ -457,6 +451,7 @@ export const deleteNews = async (id: string) => {
   }
 };
 
+// function to initiate a recall
 export const initiateRecall = async (
   leaderId: string,
   subject: string,
@@ -480,7 +475,7 @@ export const initiateRecall = async (
   }
 };
 
-
+// function to update the recall status
 export const updateRecallStatus = async (
   recallId: string,
   status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'COMPLETED',
@@ -511,5 +506,27 @@ export const updateRecallStatus = async (
   } catch (error) {
     console.error('Error updating recall status:', error);
     throw new Error('Failed to update recall status.');
+  }
+};
+
+// function to reset the password
+export const resetPassword = async (formData: FormData) => {
+  const nationalId = formData.get('nationalId') as string;
+  const newPassword = formData.get('newPassword') as string;
+
+  try {
+    // Hash the new password
+    const hashedPassword = bcrypt.hashSync(newPassword, 10);
+
+    // Update the password
+    await prisma.members.update({
+      where: { nationalId },
+      data: { password: hashedPassword },
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error('Password reset error:', error);
+    return { error: 'Failed to reset password. Please try again.' };
   }
 };
