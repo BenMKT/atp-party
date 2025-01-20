@@ -48,7 +48,7 @@ const NavLinks = () => {
   const pathname = usePathname();
 
   return (
-    <main className="flex h-full grow gap-2 md:flex-col">
+    <main className="flex h-full w-full grow flex-wrap gap-1 md:flex-col md:gap-2">
       {links.map((link) => {
         const LinkIcon = link.icon;
         return (
@@ -56,7 +56,7 @@ const NavLinks = () => {
             key={link.name}
             href={link.href}
             className={clsx(
-              'flex h-[48px] grow origin-left items-center justify-center gap-2 rounded-md p-3 text-sm font-medium transition-transform duration-300 md:flex-none md:justify-start md:p-2 md:px-3',
+              'flex h-[48px] grow items-center justify-center gap-2 rounded-md p-2 text-sm font-medium transition-transform duration-300 md:flex-none md:justify-start md:p-2 md:px-3',
               {
                 'bg-sky-200 text-blue-600': pathname === link.href,
                 'transform bg-sky-50 hover:scale-105 hover:bg-sky-100 hover:text-base hover:text-blue-600':
